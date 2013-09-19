@@ -1,3 +1,12 @@
 #!/usr/bin/env ruby
 
-puts "git contest init"
+require 'git/contest/version'
+require 'trollop'
+
+SUB_COMMANDS = %w()
+global_opts = Trollop::options do
+  version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
+  banner "help"
+  stop_on SUB_COMMANDS
+end
+

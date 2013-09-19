@@ -3,11 +3,19 @@
 require 'git/contest/version'
 require 'trollop'
 
-Trollop::options do
+SUB_COMMANDS = %w(init start finish submit)
+global_opts = Trollop::options do
   version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
+  stop_on SUB_COMMANDS
 end
 
-puts <<-EOF
+cmd = ARGV.shift
+case cmd
+when "init", "start"
+  puts "git-contest-#{cmd} #{ARGV}"
+  system "git-contest-#{cmd} #{ARGV.join(' ')}"
+else
+  puts <<-EOF
 usage: git contest <subcommand>
 
 Available subcommands are:
@@ -18,4 +26,6 @@ Available subcommands are:
 
 Try 'git contest <subcommand> help' for details.
 EOF
+end
+
 
