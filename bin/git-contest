@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'trollop'
+
+puts <<-EOF
+usage: git contest <subcommand>
+
+Available subcommands are:
+  init        Initialize a new git repo.
+  start       Start a new feature branch.
+  finish      Finish a feature branch.
+  submit      Submit a solution.
+
+Try 'git contest <subcommand> help' for details.
+EOF
+

@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Git::Contest::VERSION
   spec.authors       = ["Hiroyuki Sano"]
   spec.email         = ["sh19910711@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{git extension for programming contest (Codeforces, Google Codejam, ICPC, etc...)}
+  spec.summary       = %q{git extension for programming contest}
   spec.homepage      = ""
   spec.license       = "MIT"
 
