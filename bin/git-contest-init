@@ -8,5 +8,5 @@ global_opts = Trollop::options do
   stop_on SUB_COMMANDS
 end
 
-git_do
+git_do 'init'
 

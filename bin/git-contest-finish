@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require File.dirname(__FILE__) + '/./common'
+require 'trollop'
+
+SUB_COMMANDS = %w()
+global_opts = Trollop::options do
+  stop_on SUB_COMMANDS
+end
+
+puts "git contest finish"
+
