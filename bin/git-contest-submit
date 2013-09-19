@@ -2,13 +2,18 @@
 
 require 'git/contest/common'
 require 'git/contest/driver/codeforces'
+require 'trollop'
 
 SUB_COMMANDS = %w()
-global_opts = Trollop::options do
-  opt :contest_id
-  opt :problem_id
+opts = Trollop::options do
+  opt :contest_id, "", :type => :string, :required => true
+  opt :problem_id, "", :type => :string, :required => true
   stop_on SUB_COMMANDS
 end
 
-puts "hello"
+puts opts[:contest_id]
+puts opts[:problem_id]
+
+contest = Git::Contest::Driver::Codeforces.new
+contest.submit get_config()["sites"]["codeforces"], "tmp/test_submit.rb", opts[:contest_id], opts[:problem_id]
 

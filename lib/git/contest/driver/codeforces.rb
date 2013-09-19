@@ -20,7 +20,7 @@ module Git
           custom_test = @client.get "http://codeforces.com/contest/#{contest_id}/submit"
           res_page = custom_test.form_with(:class => 'submit-form') do |form|
             form.submittedProblemIndex = problem_id
-            form.programTypeId = "6"
+            form.programTypeId = "8"
             form.source = File.read(source_path)
           end.submit
 
