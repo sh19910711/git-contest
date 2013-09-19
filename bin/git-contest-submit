@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require 'git/contest/common'
+require 'git/contest/driver/codeforces'
+
+SUB_COMMANDS = %w()
+global_opts = Trollop::options do
+  opt :contest_id
+  opt :problem_id
+  stop_on SUB_COMMANDS
+end
+
+puts "hello"
+
