@@ -1,6 +1,11 @@
 #!/usr/bin/env ruby
 
+require 'git/contest/version'
 require 'trollop'
+
+Trollop::options do
+  version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
+end
 
 puts <<-EOF
 usage: git contest <subcommand>
