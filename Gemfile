@@ -5,4 +5,3 @@ gemspec
 
 gem "bundler", "~> 1.3"
 gem "trollop"
-gem "yaml"
