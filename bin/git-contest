@@ -1,7 +1,20 @@
 #!/usr/bin/env ruby
 
+require File.dirname(__FILE__) + '/./common'
 require 'git/contest/version'
 require 'trollop'
+
+def usage
+  puts "usage: git contest <subcommand>"
+  puts ""
+  puts "Available subcommands are:"
+  puts "  init        Initialize a new git repo."
+  puts "  start       Start a new feature branch."
+  puts "  finish      Finish a feature branch."
+  puts "  submit      Submit a solution."
+  puts ""
+  puts "Try 'git contest <subcommand> help' for details."
+end
 
 SUB_COMMANDS = %w(init start finish submit)
 global_opts = Trollop::options do
@@ -11,21 +24,11 @@ end
 
 cmd = ARGV.shift
 case cmd
-when "init", "start"
+when "init", "start", "finish", "submit"
   puts "git-contest-#{cmd} #{ARGV}"
   system "git-contest-#{cmd} #{ARGV.join(' ')}"
 else
-  puts <<-EOF
-usage: git contest <subcommand>
-
-Available subcommands are:
-  init        Initialize a new git repo.
-  start       Start a new feature branch.
-  finish      Finish a feature branch.
-  submit      Submit a solution.
-
-Try 'git contest <subcommand> help' for details.
-EOF
+  usage
 end
 
 
