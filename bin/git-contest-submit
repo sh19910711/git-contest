@@ -1,19 +1,70 @@
 #!/usr/bin/env ruby
 
 require 'git/contest/common'
-require 'git/contest/driver/codeforces'
 require 'trollop'
 
-SUB_COMMANDS = %w()
-opts = Trollop::options do
-  opt :contest_id, "", :type => :string, :required => true
-  opt :problem_id, "", :type => :string, :required => true
+$config = get_config()
+$sites = $config["sites"]
+$drivers = {}
+$drivers["codeforces"] = Git::Contest::Driver::Codeforces
+
+def usage
+  puts "usage: git contest submit <site>"
+  puts ""
+  puts "Available sites are:"
+  $sites.keys().each do |site|
+    driver = $drivers[$sites[site]["driver"]].new
+    puts "  %-12s\t#{driver.get_desc}" % [site]
+  end
+  puts ""
+  puts "Try 'git contest submit <site> --help' for details."
+  return 0
+end
+
+def get_banner
+  res = ""
+  res += "usage: git contest submit <site>\n"
+  res += "\n"
+  res += "Available sites are:\n"
+  $sites.keys().each do |site|
+    driver = $drivers[$sites[site]["driver"]].new
+    res += "  #{site}\t#{driver.get_desc}\n"
+  end
+  res += "\n"
+  res += "Try 'git contest submit <site> --help' for details.\n"
+  res += " "
+  return res
+end
+
+# check options
+SUB_COMMANDS = $sites.keys
+global_opts = Trollop::options do
+  version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
+  banner get_banner
   stop_on SUB_COMMANDS
 end
 
-puts opts[:contest_id]
-puts opts[:problem_id]
+# detect site
+site = ARGV.shift.to_s.strip
 
-contest = Git::Contest::Driver::Codeforces.new
-contest.submit get_config()["sites"]["codeforces"], "tmp/test_submit.rb", opts[:contest_id], opts[:problem_id]
+unless $sites.has_key?(site)
+  if site != ""
+    puts "site not found"
+  else
+    usage
+  end
+  exit 0
+end
+
+# detect driver
+driver_name = $sites[site]["driver"]
+
+unless $drivers.has_key?(driver_name)
+  puts "driver not found"
+  exit
+end
+
+driver = $drivers[driver_name].new
+opts = driver.get_opts()
+driver.submit $sites[site], "tmp/test_submit.rb", opts
 

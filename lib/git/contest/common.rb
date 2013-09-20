@@ -1,3 +1,5 @@
+require 'git/contest/version'
+require 'git/contest/driver/codeforces'
 require 'yaml'
 
 def get_config

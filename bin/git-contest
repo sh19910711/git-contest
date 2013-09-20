@@ -1,17 +1,16 @@
 #!/usr/bin/env ruby
 
 require 'git/contest/common'
-require 'git/contest/version'
 require 'trollop'
 
 def usage
   puts "usage: git contest <subcommand>"
   puts ""
   puts "Available subcommands are:"
-  puts "  init        Initialize a new git repo."
-  puts "  start       Start a new feature branch."
-  puts "  finish      Finish a feature branch."
-  puts "  submit      Submit a solution."
+  puts "  %-12s Initialize a new git repo." % ["init"]
+  puts "  %-12s Start a new feature branch." % ["start"]
+  puts "  %-12s Finish a feature branch." % ["finish"]
+  puts "  %-12s Submit a solution." % ["submit"]
   puts ""
   puts "Try 'git contest <subcommand> help' for details."
 end
@@ -25,7 +24,6 @@ end
 cmd = ARGV.shift
 case cmd
 when "init", "start", "finish", "submit"
-  puts "git-contest-#{cmd} #{ARGV}"
   system "git-contest-#{cmd} #{ARGV.join(' ')}"
 else
   usage

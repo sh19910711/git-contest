@@ -1,12 +1,38 @@
+require 'git/contest/common'
 require 'mechanize'
 require 'nokogiri'
-require 'git/contest/common'
+require 'trollop'
 
 module Git
   module Contest
     module Driver
       class Codeforces
-        def submit(config, source_path, contest_id, problem_id)
+        def get_opts
+          opts = Trollop::options do
+            opt(
+              :contest_id,
+              "Contest ID (Ex: 100, 234, etc...)",
+              :type => :string,
+              :required => true,
+            )
+            opt(
+              :problem_id,
+              "Problem ID (Ex: A, B, etc...)",
+              :type => :string,
+              :required => true,
+            )
+          end
+          return opts
+        end
+
+        def get_desc
+          "Codeforces (URL: http://codeforces.com/)"
+        end
+
+        def submit(config, source_path, options)
+          contest_id = options[:contest_id]
+          problem_id = options[:problem_id]
+
           @client = Mechanize.new {|agent|
             agent.user_agent_alias = 'Windows IE 7'
           }
@@ -45,24 +71,28 @@ module Git
           end
           throw Error "Wait Result Timeout (Codeforces)"
         end
+        private :get_status_wait
 
         def is_waiting(submission_id, body)
           doc = Nokogiri::HTML(body)
           element = doc.xpath('//td[@submissionid="' + submission_id + '"]')[0]
           element["waiting"] == "true"
         end
+        private :is_waiting
 
         def get_status(submission_id, body)
           doc = Nokogiri::HTML(body)
           element = doc.xpath('//td[@submissionid="' + submission_id + '"]')[0]
           element.text().strip
         end
+        private :get_status
 
         def get_submission_id(body)
           doc = Nokogiri::HTML(body)
           elements = doc.xpath('//td[contains(concat(" ",@class," "), " status-cell ")][@waiting="true"]')
           elements[0].attributes()["submissionid"].value.strip
         end
+        private :get_submission_id
       end
     end
   end
