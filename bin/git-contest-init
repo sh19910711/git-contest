@@ -8,5 +8,7 @@ global_opts = Trollop::options do
   stop_on SUB_COMMANDS
 end
 
+# run commands
 git_do 'init'
+git_do 'commit --allow-empty --quiet -m "Initial commit"'
 

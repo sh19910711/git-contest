@@ -1,4 +1,5 @@
 require 'git/contest/version'
+require 'git/contest/git'
 require 'git/contest/driver/driver_event'
 require 'git/contest/driver/codeforces'
 require 'yaml'
@@ -8,6 +9,3 @@ def get_config
   YAML.load_file config_path
 end
 
-def git_do(*args)
-  puts `git #{args.join(' ')}`
-end
