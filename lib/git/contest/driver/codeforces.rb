@@ -6,7 +6,7 @@ require 'trollop'
 module Git
   module Contest
     module Driver
-      class Codeforces
+      class Codeforces < DriverEvent
         def get_opts
           opts = Trollop::options do
             opt(

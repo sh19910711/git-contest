@@ -66,5 +66,4 @@ end
 
 driver = $drivers[driver_name].new
 opts = driver.get_opts()
-driver.submit $sites[site], "tmp/test_submit.rb", opts
-
+driver.submit $sites[site], "main.rb", opts

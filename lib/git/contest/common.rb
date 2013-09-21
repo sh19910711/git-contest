@@ -1,4 +1,5 @@
 require 'git/contest/version'
+require 'git/contest/driver/driver_event'
 require 'git/contest/driver/codeforces'
 require 'yaml'
 
