@@ -65,5 +65,46 @@ unless $drivers.has_key?(driver_name)
 end
 
 driver = $drivers[driver_name].new
+
+# set events
+driver.on(
+  'start',
+  Proc.new do
+    puts "start submit"
+  end
+)
+driver.on(
+  'before_submit',
+  Proc.new do
+    puts "doing..."
+  end
+)
+driver.on(
+  'after_submit',
+  Proc.new do
+    puts "done"
+  end
+)
+driver.on(
+  'before_wait',
+  Proc.new do
+    puts "waiting"
+  end
+)
+driver.on(
+  'after_wait',
+  Proc.new do |submission_info|
+    puts "# Submission Result"
+    puts "  %s: %s" % ["submission id", "#{submission_info[:submission_id]}"]
+    puts "  %s: %s" % ["status", "#{submission_info[:status]}"]
+  end
+)
+driver.on(
+  'finish',
+  Proc.new do
+    puts "finish"
+  end
+)
+
 opts = driver.get_opts()
 driver.submit $sites[site], "main.rb", opts

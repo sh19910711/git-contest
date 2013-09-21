@@ -11,10 +11,10 @@ module Git
           @callbacks[type] = [] unless @callbacks.has_key?(type)
           @callbacks[type].push proc
         end
-        def trigger(type)
+        def trigger(type, *params)
           @callbacks[type] = [] unless @callbacks.has_key?(type)
           @callbacks[type].each do |proc|
-            proc.call
+            proc.call *params
           end
         end
       end

@@ -30,6 +30,8 @@ module Git
         end
 
         def submit(config, source_path, options)
+          # start
+          trigger 'start'
           contest_id = options[:contest_id]
           problem_id = options[:problem_id]
 
@@ -37,27 +39,40 @@ module Git
             agent.user_agent_alias = 'Windows IE 7'
           }
 
+          # login
+          trigger 'before_login'
           login_page = @client.get 'http://codeforces.com/enter'
           login_page.form_with(:action => '') do |form|
             form.handle = config["user"]
             form.password = config["password"]
           end.submit
+          trigger 'after_login'
 
+          # submit
+          trigger 'before_submit'
           custom_test = @client.get "http://codeforces.com/contest/#{contest_id}/submit"
           res_page = custom_test.form_with(:class => 'submit-form') do |form|
             form.submittedProblemIndex = problem_id
             form.programTypeId = "8"
             form.source = File.read(source_path)
           end.submit
+          trigger 'after_submit'
 
           # need to get the newest waiting submissionId
           submission_id = get_submission_id(res_page.body)
-          puts "submission_id = #{submission_id}"
 
           # wait result
+          trigger 'before_wait',
           status = get_status_wait(contest_id, submission_id)
-          puts "status = #{status}"
+          trigger(
+            'after_wait',
+            {
+              :submission_id => submission_id,
+              :status => status,
+            }
+          )
 
+          trigger 'finish'
           return status
         end
 
