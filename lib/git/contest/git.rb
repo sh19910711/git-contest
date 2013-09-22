@@ -11,7 +11,7 @@ end
 #
 def git_contest_is_initialized
   git_contest_has_master_configured &&
-    git_contest_has_prefixes_configured &&
+    git_contest_has_prefix_configured &&
     git_do('config --get git.contest.branch.master') != git_do('config --get git.contest.branch.develop')
 end
 
