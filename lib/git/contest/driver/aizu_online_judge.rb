@@ -27,7 +27,7 @@ module Git
         def submit(config, source_path, options)
           # start
           trigger 'start'
-          problem_id = options[:problem_id]
+          problem_id = "%04d" % options[:problem_id]
 
           @client = Mechanize.new {|agent|
             agent.user_agent_alias = 'Windows IE 7'
@@ -62,7 +62,7 @@ module Git
           )
           trigger 'finish'
 
-          return ""
+          return "AOJ %s: %s\nhttp://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=#{submission_id}" % [problem_id, status]
         end
 
         def get_status_wait(user_id, submission_id)
