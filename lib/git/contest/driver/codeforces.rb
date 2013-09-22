@@ -59,10 +59,10 @@ module Git
           trigger 'after_submit'
 
           # need to get the newest waiting submissionId
+          trigger 'before_wait',
           submission_id = get_submission_id(res_page.body)
 
           # wait result
-          trigger 'before_wait',
           status = get_status_wait(contest_id, submission_id)
           trigger(
             'after_wait',
@@ -73,7 +73,7 @@ module Git
           )
 
           trigger 'finish'
-          return status
+          return "Codeforces %s%s: #{status}\nhttp://codeforces.com/contest/#{contest_id}/submission/#{submission_id}" % [contest_id, problem_id]
         end
 
         def get_status_wait(contest_id, submission_id)

@@ -89,7 +89,7 @@ driver.on(
 driver.on(
   'before_wait',
   Proc.new do
-    puts "waiting"
+    puts "waiting..."
   end
 )
 driver.on(
