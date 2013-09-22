@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- need for problem description -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+<body id="niceBody" class="goodStyle">
+<FORM id="sform"  ACTION="/onlinejudge/servlet/Submit" METHOD="POST">
+  <fieldset class="form">
+    <TABLE class="form" width="740" border="0" cellspacing="0" cellpadding="0">
+      <TR>
+        <TD width="100"><label>User ID:</label></TD>
+        <TD><INPUT TYPE="TEXT" NAME="userID" VALUE=""></TD>
+      </TR>
+      <TR>
+        <TD width="100"><label>Password:</label></TD>
+        <TD><INPUT TYPE="PASSWORD" NAME="password" VALUE=""></TD>
+      </TR>
+      <TR>
+        <TD width="100"><label>Problem NO:</label></TD>
+        <TD><INPUT TYPE="TEXT" NAME="problemNO" VALUE="10000"></TD>
+      </TR>
+      <TR>
+        <TD width="100"><label>Language:</label></TD>
+        <TD>
+          <SELECT NAME="language">
+            <OPTION VALUE="C">C
+            <OPTION VALUE="C++" selected="selected">C++
+            <OPTION VALUE="JAVA">JAVA
+            <OPTION VALUE="C++11">C++11
+            <OPTION VALUE="C#">C#
+            <OPTION VALUE="D">D
+            <OPTION VALUE="Ruby">Ruby
+            <OPTION VALUE="Python">Python
+            <OPTION VALUE="PHP">PHP
+            <OPTION VALUE="JavaScript">JavaScript
+          </SELECT>
+          <font color="#aaa">&nbsp; *&nbsp;It depends on the problem</font>
+        </TD>
+      </tr>
+      <TR>
+        <TD width="100"><label>Source Code:</label></TD>
+        <TD><TEXTAREA id="source" NAME="sourceCode" ROWS="16" COLS="62"></TEXTAREA></TD>
+      </TR>
+    </TABLE>
+  </fieldset>
+</FORM>
+</body>
+</html>
