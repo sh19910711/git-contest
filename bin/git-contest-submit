@@ -95,6 +95,7 @@ driver.on(
 driver.on(
   'after_wait',
   Proc.new do |submission_info|
+    next unless submission_info.is_a?(Hash)
     puts "# Submission Result"
     puts "  %s: %s" % ["submission id", "#{submission_info[:submission_id]}"]
     puts "  %s: %s" % ["status", "#{submission_info[:status]}"]

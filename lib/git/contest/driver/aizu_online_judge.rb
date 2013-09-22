@@ -2,6 +2,7 @@ require 'git/contest/common'
 require 'mechanize'
 require 'nokogiri'
 require 'trollop'
+require 'rexml/document'
 
 module Git
   module Contest
@@ -34,8 +35,9 @@ module Git
 
           # submit
           trigger 'before_submit'
-          custom_test = @client.get "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=0000"
-          res_page = custom_test.form_with(:action => '/onlinejudge/servlet/Submit') do |form|
+          submit_page = @client.get "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=0000"
+          submit_page.parser.encoding = "SHIFT_JIS"
+          res_page = submit_page.form_with(:action => '/onlinejudge/servlet/Submit') do |form|
             form.userID = config["user"]
             form.password = config["password"]
             form.problemNO = problem_id
@@ -45,14 +47,50 @@ module Git
           trigger 'after_submit'
 
           # need to get the newest waiting submissionId
-          submission_id = get_submission_id(res_page.body)
+          trigger 'before_wait'
+          status_page = @client.get "http://judge.u-aizu.ac.jp/onlinejudge/status.jsp"
+          submission_id = get_submission_id status_page.body
 
           # wait result
-          trigger 'before_wait',
-          trigger 'after_wait'
+          status = get_status_wait config["user"], submission_id
+          trigger(
+            'after_wait',
+            {
+              :submission_id => submission_id,
+              :status => status,
+            }
+          )
           trigger 'finish'
-          return -1
+
+          return ""
         end
+
+        def get_status_wait(user_id, submission_id)
+          # wait result
+          5.times do
+            sleep 3
+            status_page = @client.get "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=#{user_id}&limit=1"
+            status = get_status(submission_id, status_page.body)
+            return status unless is_waiting(submission_id, status_page.body)
+          end
+          throw Error "Wait Result Timeout (Codeforces)"
+        end
+
+        def is_waiting(submission_id, body)
+          doc = REXML::Document.new body
+          doc.elements['//run_id'].text.strip != submission_id
+        end
+
+        def get_status(submission_id, body) 
+          doc = REXML::Document.new body
+          doc.elements['//status/status'].text.strip
+        end
+
+        def get_submission_id(body)
+          doc = Nokogiri::HTML body
+          doc.xpath('//table[@id="tableRanking"]//tr[@class="dat"]')[0].search('td')[0].text.strip
+        end
+
       end
     end
   end
