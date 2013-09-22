@@ -30,6 +30,16 @@ describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
       ret = @driver.get_status_wait 'test_user', '111'
       ret.should === "Wrong Answer"
     end
+    it "002: Check Timeout" do
+      @flag = false
+      proc = Proc.new do
+        @flag = true
+      end
+      @driver.on 'timeout', proc
+      @driver.get_status_wait 'test_user', '999'
+      @driver.off 'timeout', proc
+      @flag.should === true
+    end
   end
 
   describe "002: #get_status_wait" do
