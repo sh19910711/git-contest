@@ -2,13 +2,44 @@
 
 require 'git/contest/common'
 require 'trollop'
+require 'highline/import'
 
 SUB_COMMANDS = %w()
 global_opts = Trollop::options do
   stop_on SUB_COMMANDS
 end
 
+master_branch = ask('Master branch name: ') do |q|
+  q.default = 'master'
+end
+develop_branch = ask('Develop branch name: ') do |q|
+  q.default = 'develop'
+end
+prefix = ask('Prefix of sub branch name:  ') do |q|
+  q.default = 'contest'
+end
+
 # run commands
-git_do 'init'
-git_do 'commit --allow-empty --quiet -m "Initial commit"'
+if ! git_do_no_echo 'rev-parse --git-dir'
+  git_do 'init'
+end
+
+# init main
+if ! git_do_no_echo 'rev-parse --quiet --verify HEAD'
+  git_do 'symbolic-ref', 'HEAD', "\"refs/heads/#{master_branch}\""
+  git_do 'commit --allow-empty --quiet -m "Initial commit"'
+end
+
+# create develop
+if ! git_local_branch_exists develop_branch
+  git_do 'branch --no-track', develop_branch, master_branch
+end
+
+# checkout
+git_do 'checkout -q', develop_branch
+
+# save config
+git_do 'config', 'git.contest.master', master_branch
+git_do 'config', 'git.contest.develop', develop_branch
+git_do 'config', 'git.contest.prefix', prefix
 
