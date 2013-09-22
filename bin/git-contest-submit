@@ -7,6 +7,7 @@ $config = get_config()
 $sites = $config["sites"]
 $drivers = {}
 $drivers["codeforces"] = Git::Contest::Driver::Codeforces
+$drivers["aizu_online_judge"] = Git::Contest::Driver::AizuOnlineJudge
 
 def usage
   puts "usage: git contest submit <site>"
@@ -97,6 +98,11 @@ driver.on(
     puts "# Submission Result"
     puts "  %s: %s" % ["submission id", "#{submission_info[:submission_id]}"]
     puts "  %s: %s" % ["status", "#{submission_info[:status]}"]
+
+    if git_contest_is_initialized
+      git_do 'add main.rb'
+      git_do "commit -m '#{submission_info[:status]}'"
+    end
   end
 )
 driver.on(
