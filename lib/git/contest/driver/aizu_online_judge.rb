@@ -8,9 +8,6 @@ module Git
   module Contest
     module Driver
       class AizuOnlineJudge < DriverEvent
-        if ENV['TEST_MODE'] === 'TRUE'
-          attr_writer :client
-        end
 
         def get_opts
           opts = Trollop::options do
@@ -95,6 +92,14 @@ module Git
           doc.xpath('//table[@id="tableRanking"]//tr[@class="dat"]')[0].search('td')[0].text.strip
         end
 
+        if ENV['TEST_MODE'] === 'TRUE'
+          attr_writer :client
+        else
+          private :get_status_wait
+          private :is_waiting
+          private :get_status
+          private :get_submission_id
+        end
       end
     end
   end

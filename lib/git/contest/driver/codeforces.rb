@@ -7,6 +7,7 @@ module Git
   module Contest
     module Driver
       class Codeforces < DriverEvent
+
         def get_opts
           opts = Trollop::options do
             opt(
@@ -77,6 +78,8 @@ module Git
         end
 
         def get_status_wait(contest_id, submission_id)
+          contest_id = contest_id.to_s
+          submission_id = submission_id.to_s
           # wait result
           5.times do
             sleep 3
@@ -86,28 +89,33 @@ module Git
           end
           throw Error "Wait Result Timeout (Codeforces)"
         end
-        private :get_status_wait
 
         def is_waiting(submission_id, body)
           doc = Nokogiri::HTML(body)
           element = doc.xpath('//td[@submissionid="' + submission_id + '"]')[0]
           element["waiting"] == "true"
         end
-        private :is_waiting
 
         def get_status(submission_id, body)
           doc = Nokogiri::HTML(body)
           element = doc.xpath('//td[@submissionid="' + submission_id + '"]')[0]
           element.text().strip
         end
-        private :get_status
 
         def get_submission_id(body)
           doc = Nokogiri::HTML(body)
           elements = doc.xpath('//td[contains(concat(" ",@class," "), " status-cell ")][@waiting="true"]')
           elements[0].attributes()["submissionid"].value.strip
         end
-        private :get_submission_id
+
+        if ENV['TEST_MODE'] === 'TRUE'
+          attr_writer :client
+        else
+          private :get_status_wait
+          private :is_waiting
+          private :get_status
+          private :get_submission_id
+        end
       end
     end
   end

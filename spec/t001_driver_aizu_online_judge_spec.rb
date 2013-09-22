@@ -1,20 +1,14 @@
 require 'spec_helper'
-WebMock.disable_net_connect!
 
 require 'mechanize'
 require 'git/contest/driver/aizu_online_judge'
 
-def read_file path
-  real_path = File.expand_path(File.dirname(__FILE__) + path)
-  File.read real_path
-end
-
 describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
   before do
     # setup
-    @aoj = Git::Contest::Driver::AizuOnlineJudge.new
-    @aoj.stub(:sleep).and_return(0)
-    @aoj.client = Mechanize.new {|agent|
+    @driver = Git::Contest::Driver::AizuOnlineJudge.new
+    @driver.stub(:sleep).and_return(0)
+    @driver.client = Mechanize.new {|agent|
       agent.user_agent_alias = 'Windows IE 7'
     }
 
@@ -33,7 +27,7 @@ describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
 
   describe "001: #get_status_wait" do
     it "001: Check Status" do
-      ret = @aoj.get_status_wait 'test_user', '111'
+      ret = @driver.get_status_wait 'test_user', '111'
       ret.should === "Wrong Answer"
     end
   end
@@ -53,7 +47,7 @@ describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
       )
     end
     it "001: Check Status" do
-      ret = @aoj.get_status_wait 'test_user', '111'
+      ret = @driver.get_status_wait 'test_user', '111'
       ret.should === "Wrong Answer"
     end
   end
