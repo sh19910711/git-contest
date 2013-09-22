@@ -1,2 +1,2 @@
-require 'git/contest/driver/codeforces'
-require 'git/contest/driver/aizu_online_judge'
+require 'webmock'
+ENV['TEST_MODE'] = 'TRUE'

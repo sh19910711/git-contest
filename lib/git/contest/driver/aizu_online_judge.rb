@@ -8,6 +8,10 @@ module Git
   module Contest
     module Driver
       class AizuOnlineJudge < DriverEvent
+        if ENV['TEST_MODE'] === 'TRUE'
+          attr_writer :client
+        end
+
         def get_opts
           opts = Trollop::options do
             opt(

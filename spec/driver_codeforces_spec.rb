@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'git/contest/driver/codeforces'
 
 describe "hello" do
   before do
