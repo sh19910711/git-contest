@@ -74,15 +74,27 @@ driver.on(
   end
 )
 driver.on(
+  'before_login',
+  Proc.new do
+    puts "@submit: logging in..."
+  end
+)
+driver.on(
+  'after_login',
+  Proc.new do
+    puts "@submit: login ok"
+  end
+)
+driver.on(
   'before_submit',
   Proc.new do
-    puts "doing..."
+    puts "@submit: doing..."
   end
 )
 driver.on(
   'after_submit',
   Proc.new do
-    puts "done"
+    puts "@submit: done"
   end
 )
 driver.on(
