@@ -70,6 +70,7 @@ module Git
             status_page = @client.get "http://judge.u-aizu.ac.jp/onlinejudge/webservice/status_log?user_id=#{user_id}&limit=1"
             status = get_status(submission_id, status_page.body)
             return status unless is_waiting(submission_id, status_page.body)
+            trigger 'retry'
           end
           trigger 'timeout'
           return 'request timed out'

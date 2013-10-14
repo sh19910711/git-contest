@@ -83,6 +83,7 @@ module Git
             my_page = @client.get "http://codeforces.com/contest/#{contest_id}/my"
             status = get_status(submission_id, my_page.body)
             return status unless is_waiting(submission_id, my_page.body)
+            trigger 'retry'
           end
           trigger 'timeout'
           return 'timeout'

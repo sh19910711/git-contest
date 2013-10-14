@@ -88,12 +88,19 @@ driver.on(
 driver.on(
   'before_wait',
   Proc.new do
-    puts "waiting..."
+    print "waiting..."
+  end
+)
+driver.on(
+  'retry',
+  Proc.new do
+    print '.'
   end
 )
 driver.on(
   'after_wait',
   Proc.new do |submission_info|
+    puts ''
     next unless submission_info.is_a?(Hash)
     puts "# Submission Result"
     puts "  %s: %s" % ["submission id", "#{submission_info[:submission_id]}"]
