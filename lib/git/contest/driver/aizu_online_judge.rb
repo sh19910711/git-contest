@@ -78,18 +78,26 @@ module Git
           return 'request timed out'
         end
 
+        def status_loop(doc)
+          doc.root.elements['//status_list'].elements.each('status') do |elm|
+            run_id = elm.elements['run_id'].text.to_s.strip
+            status = elm.elements['status'].text.to_s.strip
+            yield run_id, status
+          end
+        end
+
         def is_waiting(submission_id, body)
           doc = REXML::Document.new body
-          doc.root.elements['//status_list'].elements.each('status/run_id') do |elm|
-            return false if elm.text.to_s.strip == submission_id
+          status_loop(doc) do |run_id|
+            return false if run_id == submission_id
           end
           return true
         end
 
         def get_status(submission_id, body)
           doc = REXML::Document.new body
-          doc.root.elements['//status_list'].elements.each('status') do |elm|
-            return elm.elements['status'].text.to_s.strip if elm.elements['run_id'].text.to_s.strip == submission_id
+          status_loop(doc) do |run_id, status|
+            return status if run_id == submission_id
           end
           return ''
         end
@@ -102,6 +110,7 @@ module Git
         if ENV['TEST_MODE'] === 'TRUE'
           attr_writer :client
         else
+          private :status_loop
           private :get_status_wait
           private :is_waiting
           private :get_status
