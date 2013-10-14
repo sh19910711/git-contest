@@ -67,11 +67,12 @@ module Git
         def get_status_wait(submission_id)
           submission_id = submission_id.to_s
           # wait result
-          5.times do
-            sleep 3
+          12.times do
+            sleep 5
             my_page = @client.get 'http://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=9'
             status = get_submission_status(submission_id, my_page.body)
-            return status unless status == 'Sent to judge'
+            return status unless status == 'Sent to judge' || status == ''
+            trigger 'retry'
           end
           trigger 'timeout'
           return 'timeout'
