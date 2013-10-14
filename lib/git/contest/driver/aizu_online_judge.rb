@@ -1,14 +1,11 @@
 require 'git/contest/common'
-require 'mechanize'
-require 'nokogiri'
-require 'trollop'
+require 'git/contest/driver/common'
 require 'rexml/document'
 
 module Git
   module Contest
     module Driver
       class AizuOnlineJudge < DriverEvent
-
         def get_opts
           opts = Trollop::options do
             opt(

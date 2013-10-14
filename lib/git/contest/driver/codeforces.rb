@@ -1,13 +1,10 @@
 require 'git/contest/common'
-require 'mechanize'
-require 'nokogiri'
-require 'trollop'
+require 'git/contest/driver/common'
 
 module Git
   module Contest
     module Driver
       class Codeforces < DriverEvent
-
         def get_opts
           opts = Trollop::options do
             opt(
@@ -87,7 +84,8 @@ module Git
             status = get_status(submission_id, my_page.body)
             return status unless is_waiting(submission_id, my_page.body)
           end
-          throw Error "Wait Result Timeout (Codeforces)"
+          trigger 'timeout'
+          return 'timeout'
         end
 
         def is_waiting(submission_id, body)

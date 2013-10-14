@@ -3,22 +3,18 @@
 require 'git/contest/common'
 require 'trollop'
 
-$config = get_config()
-$sites = $config["sites"]
+init
+
+$config  = get_config()
+$sites   = $config["sites"]
+
 $drivers = {}
-$drivers["codeforces"] = Git::Contest::Driver::Codeforces
+$drivers["codeforces"]        = Git::Contest::Driver::Codeforces
 $drivers["aizu_online_judge"] = Git::Contest::Driver::AizuOnlineJudge
+$drivers["uva_online_judge"]  = Git::Contest::Driver::UvaOnlineJudge
 
 def usage
-  puts "usage: git contest submit <site>"
-  puts ""
-  puts "Available sites are:"
-  $sites.keys().each do |site|
-    driver = $drivers[$sites[site]["driver"]].new
-    puts "  %-12s\t#{driver.get_desc}" % [site]
-  end
-  puts ""
-  puts "Try 'git contest submit <site> --help' for details."
+  puts get_banner
   return 0
 end
 
@@ -28,12 +24,15 @@ def get_banner
   res += "\n"
   res += "Available sites are:\n"
   $sites.keys().each do |site|
-    driver = $drivers[$sites[site]["driver"]].new
-    res += "  #{site}\t#{driver.get_desc}\n"
+    if $drivers.has_key? $sites[site]["driver"]
+      driver = $drivers[$sites[site]["driver"]].new
+      res += "  %-12s\t#{driver.get_desc}\n" % [site]
+    else
+      # TODO: driver not found
+    end
   end
   res += "\n"
   res += "Try 'git contest submit <site> --help' for details.\n"
-  res += " "
   return res
 end
 

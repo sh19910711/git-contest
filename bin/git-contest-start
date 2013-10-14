@@ -3,6 +3,8 @@
 require 'git/contest/common'
 require 'trollop'
 
+init
+
 sub_commands = %w()
 global_opts = Trollop::options do
   stop_on sub_commands
