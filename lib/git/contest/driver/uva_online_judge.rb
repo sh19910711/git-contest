@@ -67,7 +67,7 @@ module Git
           submission_id = submission_id.to_s
           # wait result
           12.times do
-            sleep 5
+            sleep 10
             my_page = @client.get 'http://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=9'
             status = get_submission_status(submission_id, my_page.body)
             return status unless status == 'Sent to judge' || status == ''
