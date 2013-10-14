@@ -1,7 +1,7 @@
 require 'webmock'
 WebMock.disable_net_connect!
 
-require 'debugger'
+require 'byebug'
 
 ENV['TEST_MODE'] = 'TRUE'
 

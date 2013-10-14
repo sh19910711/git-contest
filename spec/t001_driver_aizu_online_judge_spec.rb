@@ -5,7 +5,7 @@ require 'git/contest/driver/aizu_online_judge'
 
 describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
   before do
-    # setup
+    # setup driver
     @driver = Git::Contest::Driver::AizuOnlineJudge.new
     @driver.stub(:sleep).and_return(0)
     @driver.client = Mechanize.new {|agent|
@@ -84,6 +84,16 @@ describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
       @driver.off 'timeout', proc
       @flag.should === true
     end
+    it "002: Check Timeout noset" do
+      @flag = false
+      proc = Proc.new do
+        @flag = true
+      end
+      @driver.on 'timeout', proc
+      @driver.off 'timeout', proc
+      @driver.get_status_wait 'test_user', '999'
+      @flag.should === false
+    end
   end
 
   describe "002: #get_status_wait" do
@@ -103,6 +113,8 @@ describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
     it "001: Check Status" do
       ret = @driver.get_status_wait 'test_user', '111'
       ret.should === "Wrong Answer"
+      ret = @driver.get_status_wait 'test_user', '112'
+      ret.should === "Accepted"
     end
   end
 
@@ -118,26 +130,21 @@ describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
       @flag_finish        = false
 
       proc_start = Proc.new do
-        puts "proc_start"
         @flag_start = true
       end
       proc_before_submit = Proc.new do
-        puts "proc_before_submit"
         @flag_before_submit = true
       end
       proc_after_submit = Proc.new do
         @flag_after_submit = true
       end
       proc_before_wait = Proc.new do
-        puts "proc_before_wait"
         @flag_before_wait = true
       end
       proc_after_wait = Proc.new do
-        puts "proc_after_wait"
         @flag_after_wait = true
       end
       proc_finish = Proc.new do
-        puts "proc_finish"
         @flag_finish = true
       end
 

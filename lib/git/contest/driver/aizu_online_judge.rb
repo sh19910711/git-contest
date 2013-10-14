@@ -74,17 +74,24 @@ module Git
             status = get_status(submission_id, status_page.body)
             return status unless is_waiting(submission_id, status_page.body)
           end
-          throw Error "Wait Result Timeout (Codeforces)"
+          trigger 'timeout'
+          return 'request timed out'
         end
 
         def is_waiting(submission_id, body)
           doc = REXML::Document.new body
-          doc.elements['//run_id'].text.strip != submission_id
+          doc.root.elements['//status_list'].elements.each('status/run_id') do |elm|
+            return false if elm.text.to_s.strip == submission_id
+          end
+          return true
         end
 
-        def get_status(submission_id, body) 
+        def get_status(submission_id, body)
           doc = REXML::Document.new body
-          doc.elements['//status/status'].text.strip
+          doc.root.elements['//status_list'].elements.each('status') do |elm|
+            return elm.elements['status'].text.to_s.strip if elm.elements['run_id'].text.to_s.strip == submission_id
+          end
+          return ''
         end
 
         def get_submission_id(body)
