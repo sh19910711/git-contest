@@ -15,10 +15,10 @@ def usage
   puts "Try 'git contest <subcommand> help' for details."
 end
 
-SUB_COMMANDS = %w(init start finish submit)
+sub_commands = %w(init start finish submit)
 global_opts = Trollop::options do
   version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
-  stop_on SUB_COMMANDS
+  stop_on sub_commands
 end
 
 cmd = ARGV.shift

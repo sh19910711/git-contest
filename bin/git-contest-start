@@ -3,9 +3,9 @@
 require 'git/contest/common'
 require 'trollop'
 
-SUB_COMMANDS = %w()
+sub_commands = %w()
 global_opts = Trollop::options do
-  stop_on SUB_COMMANDS
+  stop_on sub_commands
 end
 
 puts "git contest start"

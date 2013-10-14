@@ -4,9 +4,9 @@ require 'git/contest/common'
 require 'trollop'
 require 'highline/import'
 
-SUB_COMMANDS = %w()
+sub_commands = %w()
 global_opts = Trollop::options do
-  stop_on SUB_COMMANDS
+  stop_on sub_commands
 end
 
 # run commands

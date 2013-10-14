@@ -38,11 +38,11 @@ def get_banner
 end
 
 # check options
-SUB_COMMANDS = $sites.keys
+sub_commands = $sites.keys
 global_opts = Trollop::options do
   version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
   banner get_banner
-  stop_on SUB_COMMANDS
+  stop_on sub_commands
 end
 
 # detect site
