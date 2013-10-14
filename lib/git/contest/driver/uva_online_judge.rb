@@ -60,8 +60,7 @@ module Git
           )
 
           trigger 'finish'
-          raise 'TODO: imple'
-          return ''
+          return "UVa %s: #{status}\nsubmission_id = #{submission_id}" % [problem_id]
         end
 
         def get_status_wait(submission_id)
