@@ -3,6 +3,28 @@
 require 'git/contest/common'
 require 'trollop'
 
+def use_current_branch
+  current_branch = git_current_branch
+  puts "current_branch = #{current_branch}"
+  if current_branch.start_with? $PREFIX
+    return current_branch.strip
+  else
+    puts "The current HEAD is no feature branch."
+    puts "Please spefcify a <name> argument."
+    abort ''
+  end
+end
+
+def expand_contest_branch
+  if ARGV.length == 0
+    return use_current_branch
+  else
+    contest_branch = "#{$PREFIX}/#{ARGV[0]}"
+    require_branch contest_branch
+    return contest_branch
+  end
+end
+
 init
 
 sub_commands = %w()
@@ -10,5 +32,10 @@ global_opts = Trollop::options do
   stop_on sub_commands
 end
 
-puts "git contest finish"
+contest_branch = expand_contest_branch()
+puts "contest_branch = #{contest_branch}"
+require_branch contest_branch
 
+require_clean_working_tree
+
+raise 'TODO: Impl'

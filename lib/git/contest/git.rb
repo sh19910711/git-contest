@@ -3,6 +3,7 @@ def git_do(*args)
   return `git #{args.join(' ')}`.strip
 end
 
+# use return value
 def git_do_no_echo(*args)
   puts "git #{args.join(' ')}"
   system "git #{args.join(' ')} >/dev/null 2>&1"
@@ -61,13 +62,45 @@ def git_all_branches
   }
 end
 
+def git_current_branch
+  ret = git_do('branch --no-color').lines
+  ret = ret.grep /^\*/
+  ret[0].gsub(/^[* ] /, '')
+end
+
+def git_is_clean_working_tree
+  if ! git_do_no_echo 'diff --no-ext-diff --ignore-submodules --quiet --exit-code'
+    return 1
+  elsif ! git_do_no_echo 'diff-index --cached --quiet --ignore-submodules HEAD --'
+    return 2
+  else
+    return 0
+  end
+end
+
 def git_repo_is_headless
   ! git_do_no_echo 'rev-parse --quiet --verify HEAD'
+end
+
+def require_branch(branch)
+  if ! git_all_branches().include?(branch)
+    abort "Branch #{branch} does not exist."
+  end
 end
 
 def require_branch_absent(branch)
   if git_all_branches().include?(branch)
     abort "Branch #{branch} already exists. Pick another name."
+  end
+end
+
+def require_clean_working_tree
+  ret = git_is_clean_working_tree
+  if ret == 1
+    abort "fatal: Working tree contains unstaged changes. Aborting."
+  end
+  if ret == 2
+    abort "fatal: Index contains uncommited changes. Aborting."
   end
 end
 
