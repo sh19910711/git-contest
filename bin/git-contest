@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+$:.unshift File.expand_path('../../lib', __FILE__)
 require 'git/contest/common'
 require 'trollop'
 
@@ -26,7 +27,7 @@ end
 cmd = ARGV.shift
 case cmd
 when "init", "start", "finish", "submit"
-  system "git-contest-#{cmd} #{ARGV.join(' ')}"
+  system File.expand_path("../git-contest-#{cmd}", __FILE__) + " #{ARGV.join(' ')}"
 else
   usage
 end

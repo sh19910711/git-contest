@@ -4,9 +4,9 @@ require 'git/contest/driver/common'
 module Git
   module Contest
     module Driver
-      class Codeforces < DriverEvent
-        def get_opts
-          opts = Trollop::options do
+      class Codeforces < DriverBase 
+        def get_opts_ext
+          define_options do
             opt(
               :contest_id,
               "Contest ID (Ex: 100, 234, etc...)",
@@ -20,14 +20,54 @@ module Git
               :required => true,
             )
           end
-          return opts
         end
 
         def get_desc
           "Codeforces (URL: http://codeforces.com/)"
         end
 
-        def submit(config, source_path, options)
+        def resolve_language(label)
+          case label
+          when "c", "C"
+            return "10"
+          when "cpp", "C++", "c++"
+            return "1"
+          when "c++11", "C++11"
+            return "16"
+          when "cs", "c#", "C#"
+            return "9"
+          when "d", "D", "dlang"
+            return "28"
+          when "go", "golang"
+            return "32"
+          when "hs", "haskell", "Haskell"
+            return "12"
+          when "java", "Java"
+            return "23"
+          when "ocaml", "ml", "OCaml"
+            return "19"
+          when "Delphi", "delphi"
+            return "3"
+          when "pascal", "Pascal"
+            return "4"
+          when "perl", "Perl", "pl"
+            return "13"
+          when "php", "PHP"
+            return "6"
+          when "python2"
+            return "7"
+          when "python3", "python", "Python", "py"
+            return "31"
+          when "ruby", "rb", "Ruby"
+            return "8"
+          when "scala", "Scala"
+            return "20"
+          else
+            abort "unknown languag"
+          end
+        end
+
+        def submit_ext(config, source_path, options)
           # start
           trigger 'start'
           contest_id = options[:contest_id]
@@ -51,7 +91,7 @@ module Git
           custom_test = @client.get "http://codeforces.com/contest/#{contest_id}/submit"
           res_page = custom_test.form_with(:class => 'submit-form') do |form|
             form.submittedProblemIndex = problem_id
-            form.programTypeId = "8"
+            form.programTypeId = options[:language]
             form.source = File.read(source_path)
           end.submit
           trigger 'after_submit'

@@ -4,9 +4,9 @@ require 'git/contest/driver/common'
 module Git
   module Contest
     module Driver
-      class UvaOnlineJudge < DriverEvent
-        def get_opts
-          opts = Trollop::options do
+      class UvaOnlineJudge < DriverBase
+        def get_opts_ext
+          define_options do
             opt(
               :problem_id,
               "Problem ID (Ex: 100, 200, etc...)",
@@ -14,14 +14,28 @@ module Git
               :required => true,
             )
           end
-          return opts
         end
 
         def get_desc
           "UVa Online Judge (URL: http://uva.onlinejudge.org/)"
         end
 
-        def submit(config, source_path, options)
+        def resolve_language(label)
+          case label
+          when "c", "C"
+            return "1"
+          when "cpp", "c++", "C++"
+            return "3"
+          when "java", "Java", "JAVA"
+            return "2"
+          when "pascal"
+            return "4"
+          else
+            abort "unknown languag"
+          end
+        end
+
+        def submit_ext(config, source_path, options)
           trigger 'start'
           problem_id = options[:problem_id]
 
@@ -42,7 +56,7 @@ module Git
           submit_page = @client.get 'http://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=25'
           res_page = submit_page.form_with(:action => 'index.php?option=com_onlinejudge&Itemid=25&page=save_submission') do |form|
             form.localid = problem_id
-            form.radiobutton_with(:name => 'language', :value => '3').check
+            form.radiobutton_with(:name => 'language', :value => options[:language]).check
             form.code = File.read(source_path)
           end.submit
           trigger 'after_submit'

@@ -5,9 +5,9 @@ require 'rexml/document'
 module Git
   module Contest
     module Driver
-      class AizuOnlineJudge < DriverEvent
-        def get_opts
-          opts = Trollop::options do
+      class AizuOnlineJudge < DriverBase
+        def get_opts_ext
+          define_options do
             opt(
               :problem_id,
               "Problem ID (Ex: 1000, 123, 0123, etc...)",
@@ -15,14 +15,38 @@ module Git
               :required => true,
             )
           end
-          return opts
         end
 
         def get_desc
           "Aizu Online Judge (URL: http://judge.u-aizu.ac.jp)"
         end
 
-        def submit(config, source_path, options)
+        def resolve_language(label)
+          case label
+          when "c", "C"
+            return "C"
+          when "cpp", "c++", "C++"
+            return "C++"
+          when "java", "Java", "JAVA"
+            return "JAVA"
+          when "cpp11", "C++11", "c++11", "cxx"
+            return "C++11"
+          when "C#", "c#", "cs"
+            return "C#"
+          when "D", "d"
+            return "D"
+          when "py", "python", "Python"
+            return "Python"
+          when "php", "PHP"
+            return "PHP"
+          when "JavaScript", "js", "javascript"
+            return "JavaScript"
+          else
+            abort "unknown languag"
+          end
+        end
+
+        def submit_ext(config, source_path, options)
           # start
           trigger 'start'
           problem_id = "%04d" % options[:problem_id]
@@ -39,7 +63,7 @@ module Git
             form.userID = config["user"]
             form.password = config["password"]
             form.problemNO = problem_id
-            form.language = "Ruby"
+            form.language = options[:language]
             form.sourceCode = File.read(source_path)
           end.submit
           trigger 'after_submit'

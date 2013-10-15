@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+$:.unshift File.expand_path('../../lib', __FILE__)
 require 'git/contest/common'
 require 'trollop'
 
@@ -44,6 +45,7 @@ init
 
 sub_commands = %w()
 global_opts = Trollop::options do
+  version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
   stop_on sub_commands
 end
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+$:.unshift File.expand_path('../../lib', __FILE__)
 require 'git/contest/common'
 require 'trollop'
 
@@ -129,7 +130,7 @@ driver.on(
 )
 
 opts = driver.get_opts()
-result = driver.submit $sites[site], "main.rb", opts
+result = driver.submit $sites[site], "main.*", opts
 
 if git_contest_is_initialized
   git_do 'add main.rb'
