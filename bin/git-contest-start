@@ -10,5 +10,28 @@ global_opts = Trollop::options do
   stop_on sub_commands
 end
 
-puts "git contest start"
+if ARGV.length == 0
+  puts "Missing argument <name>"
+  exit 1
+end
+
+base_branch_name=$DEVELOP
+contest_branch_name = "#{ARGV[0]}"
+contest_branch = "#{$PREFIX}/#{contest_branch_name}"
+require_branch_absent contest_branch
+
+# create branch
+if ! git_do "checkout -b \"#{contest_branch}\" \"#{base_branch_name}\""
+  abort "Could not create contest branch #{contest_branch}"
+end
+
+puts ""
+puts "Summary of actions:"
+puts "- A new branch \"#{contest_branch}\" was created, based on \"#{base_branch_name}\""
+puts "- You are now on branch \"#{contest_branch}\""
+puts ""
+puts "Now, start committing on your contest. When done, use:"
+puts ""
+puts "    git contest finish #{contest_branch_name}"
+puts ""
 

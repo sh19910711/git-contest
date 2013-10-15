@@ -61,8 +61,13 @@ def git_all_branches
   }
 end
 
-#
 def git_repo_is_headless
   ! git_do_no_echo 'rev-parse --quiet --verify HEAD'
+end
+
+def require_branch_absent(branch)
+  if git_all_branches().include?(branch)
+    abort "Branch #{branch} already exists. Pick another name."
+  end
 end
 
