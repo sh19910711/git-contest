@@ -15,7 +15,7 @@ if ARGV.length == 0
   exit 1
 end
 
-base_branch_name=$DEVELOP
+base_branch_name=$MASTER
 contest_branch_name = "#{ARGV[0]}"
 contest_branch = "#{$PREFIX}/#{contest_branch_name}"
 require_branch_absent contest_branch

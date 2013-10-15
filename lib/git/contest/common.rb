@@ -16,7 +16,6 @@ def init_global
   $GIT_CONTEST_HOME   = ENV['GIT_CONTEST_HOME'] || GIT_CONTEST_HOME_DEFAULT
   $GIT_CONTEST_CONFIG = ENV['GIT_CONTEST_CONFIG'] || GIT_CONTEST_CONFIG_DEFAULT
   $MASTER = git_do 'config --get git.contest.branch.master'
-  $DEVELOP = git_do 'config --get git.contest.branch.develop'
   $PREFIX = git_do 'config --get git.contest.branch.prefix'
 end
 

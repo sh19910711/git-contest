@@ -7,7 +7,8 @@ def use_current_branch
   current_branch = git_current_branch
   puts "current_branch = #{current_branch}"
   if current_branch.start_with? $PREFIX
-    return current_branch.strip
+    $BRANCH = current_branch.strip
+    $NAME = $BRANCH[$PREFIX.length+1..-1]
   else
     puts "The current HEAD is no feature branch."
     puts "Please spefcify a <name> argument."
@@ -17,12 +18,26 @@ end
 
 def expand_contest_branch
   if ARGV.length == 0
-    return use_current_branch
+    use_current_branch
   else
-    contest_branch = "#{$PREFIX}/#{ARGV[0]}"
-    require_branch contest_branch
-    return contest_branch
+    $NAME = ARGV[0]
+    $BRANCH = "#{$PREFIX}/#{$NAME}"
+    require_branch $BRANCH
   end
+end
+
+def helper_finish_cleanup
+  require_branch $BRANCH
+  require_clean_working_tree
+
+  git_do "branch -d #{$BRANCH}"
+
+  puts ""
+  puts "Summary of actions:"
+  puts "- The contest branch \"#{$BRANCH}\" was merged into \"#{$MASTER}\""
+  puts "- Contest branch \"#{$BRANCH}\" has been removed"
+  puts "- You are now on branch \"#{$MASTER}\""
+  puts ""
 end
 
 init
@@ -32,10 +47,17 @@ global_opts = Trollop::options do
   stop_on sub_commands
 end
 
-contest_branch = expand_contest_branch()
-puts "contest_branch = #{contest_branch}"
-require_branch contest_branch
+expand_contest_branch()
+require_branch $BRANCH
 
 require_clean_working_tree
 
-raise 'TODO: Impl'
+git_do "checkout #{$MASTER}"
+if git_do("rev-list -n2 \"#{$MASTER}..#{$BRANCH}\"").lines.length == 1
+  git_do "merge --ff \"#{$BRANCH}\""
+else
+  git_do "merge --no-ff \"#{$BRANCH}\""
+end
+
+helper_finish_cleanup
+
