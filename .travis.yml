@@ -3,6 +3,8 @@ rvm:
   - 2.0.0
   - 1.9.3
 before_install:
+  - git config --global user.email "dummy@localhost"
+  - git config --global user.name "This Is Dummy"
   - mkdir -p ~/local/src
   - pushd `pwd`
   - cd ~/local/src
