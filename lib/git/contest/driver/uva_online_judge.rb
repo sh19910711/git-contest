@@ -22,11 +22,11 @@ module Git
 
         def resolve_language(label)
           case label
-          when "c", "C"
+          when "c"
             return "1"
-          when "cpp", "c++", "C++"
+          when "cpp"
             return "3"
-          when "java", "Java", "JAVA"
+          when "java"
             return "2"
           when "pascal"
             return "4"

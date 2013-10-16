@@ -64,7 +64,7 @@ module Git
         def submit(config, source_path, options)
           source_path = Utils.resolve_path(options[:source] || source_path)
           options[:language] ||= Utils.resolve_language(source_path)
-          options[:language] = resolve_language options[:language]
+          options[:language] = resolve_language Utils.normalize_language(options[:language])
           p options
           submit_ext config, source_path, options
         end

@@ -20,6 +20,47 @@ module Git
             return nil
           end
         end
+
+        def self.normalize_language label
+          case label
+          when "c", "C"
+            return "clang"
+          when "cpp", "C++", "c++"
+            return "cpp"
+          when "c++11", "C++11"
+            return "cpp11"
+          when "cs", "c#", "C#"
+            return "cs"
+          when "d", "D", "dlang"
+            return "dlang"
+          when "go", "golang"
+            return "golang"
+          when "hs", "haskell", "Haskell"
+            return "haskell"
+          when "java", "Java"
+            return "java"
+          when "ocaml", "ml", "OCaml"
+            return "ocaml"
+          when "Delphi", "delphi"
+            return "delphi"
+          when "pascal", "Pascal"
+            return "pascal"
+          when "perl", "Perl", "pl"
+            return "perl"
+          when "php", "PHP"
+            return "php"
+          when "python2"
+            return "python2"
+          when "python3", "python", "Python", "py"
+            return "python3"
+          when "ruby", "rb", "Ruby"
+            return "ruby"
+          when "scala", "Scala"
+            return "scala"
+          else
+            abort "unknown language @ normalize language"
+          end
+        end
       end
     end
   end
