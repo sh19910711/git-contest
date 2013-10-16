@@ -1,20 +1,17 @@
 language: ruby
 rvm:
-  - 2.1.0
   - 2.0.0
   - 1.9.3
-  - 1.9.2
-  - 1.9.1
   - 1.8.7
-  - 1.8.6
 before_install:
   - mkdir -p ~/local/src
   - pushd `pwd`
   - cd ~/local/src
   - export GIT_VERSIONS="1.8.4 1.8.3 1.8.2 1.8.1 1.8.0 1.7.0 1.6.0 1.5.0 1.4.0 1.3.0"
   - for version in ${GIT_VERSIONS}; do
-      echo install git-${version};
-      wget -O - https://github.com/git/git/archive/v${version}.tar.gz | tar zxvf - ;
+      echo install git-${version} start;
+      wget -O - https://github.com/git/git/archive/v${version}.tar.gz | tar zxf - ;
+      echo install git-${version} finish;
     done
   - ls -l
   - hash -r
