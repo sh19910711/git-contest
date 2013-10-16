@@ -16,7 +16,6 @@ def init_env
   ENV['GIT_CONTEST_HOME'] = "#{ENV['GIT_CONTEST_TEMP_DIR']}/home"
 end
 
-require 'byebug'
 require 'webmock'
 WebMock.disable_net_connect!
 
