@@ -18,6 +18,7 @@ describe "T004: bin/git-contest-submit" do
 
     it "001: git-contest-submit --version" do
       ret = `#{bin_path("git-contest-submit")} --version`
+      puts ret
       (!!ret.match(/git-contest [0-9]+\.[0-9]+\.[0-9]+/)).should === true
     end
 

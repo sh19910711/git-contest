@@ -7,7 +7,10 @@ require 'trollop'
 init
 
 $config = get_config() || {}
-$sites  = $config["sites"] || {}
+$sites  = {}
+if $config.has_key? 'sites'
+  $sites = $config["sites"]
+end
 
 $drivers = {}
 $drivers["codeforces"]        = Git::Contest::Driver::Codeforces
