@@ -35,6 +35,8 @@ module Git
             return "C#"
           when "D", "d"
             return "D"
+          when "Ruby", "ruby", "rb"
+            return "Ruby"
           when "py", "python", "Python"
             return "Python"
           when "php", "PHP"
