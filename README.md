@@ -20,6 +20,10 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
+## Requirements
+* `ruby --version` >= 1.9.2
+* `git --version` >= 1.7
+
 ## Contributing
 
 1. Fork it
