@@ -11,7 +11,6 @@ GIT_CONTEST_HOME_DEFAULT = File.expand_path('~/.git-contest')
 GIT_CONTEST_CONFIG_DEFAULT = GIT_CONTEST_HOME_DEFAULT + '/config.yml'
 
 def init
-  puts "@init"
   init_global
   init_home
 end
