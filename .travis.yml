@@ -12,6 +12,7 @@ before_install:
   - pushd `pwd`
   - cd ~/local/src
   - for version in ${GIT_VERSIONS}; do
+      echo install git-${GIT_VERSION};
       wget -O - https://github.com/git/git/archive/v${version}.tar.gz && tar xvf -;
     done
   - hash -r
