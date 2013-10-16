@@ -9,7 +9,7 @@ rvm:
   - 1.8.6
 install:
   - for version in ${GIT_VERSIONS}; do
-      wget -O - https://github.com/git/git/archive/v${GIT_VERSION}.tar.gz && tar xvf -;
+      wget -O - https://github.com/git/git/archive/v${version}.tar.gz && tar xvf -;
     done
   - ls
 evn:
