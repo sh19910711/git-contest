@@ -17,7 +17,7 @@ describe "T002: Git::Contest::Driver::Codeforces" do
       /http:\/\/codeforces.com\/contest\/[0-9A-Z]*\/my/
     ).to_return(
       :status => 200,
-      :body => read_file('/mock/t002.my_submissions.html'),
+      :body => read_file('/mock/t002/my_submissions.html'),
       :header => {
         'Content-Type' => 'text/html',
       },

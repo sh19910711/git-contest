@@ -20,7 +20,7 @@ describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
     )
     .to_return(
       :status => 200,
-      :body => read_file('/mock/t001.status_log.xml'),
+      :body => read_file('/mock/t001/status_log.xml'),
       :headers => {
         'Content-Type' => 'text/xml',
       },
@@ -34,7 +34,7 @@ describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
     )
     .to_return(
       :status => 200,
-      :body => read_file('/mock/t001.status.html'),
+      :body => read_file('/mock/t001/status.html'),
       :headers => {
         'Content-Type' => 'text/html',
       },
@@ -48,7 +48,7 @@ describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
     )
     .to_return(
       :status => 200,
-      :body => read_file('/mock/t001.description.html'),
+      :body => read_file('/mock/t001/description.html'),
       :headers => {
         'Content-Type' => 'text/html',
       },
@@ -104,7 +104,7 @@ describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
         /http:\/\/judge\.u-aizu\.ac\.jp\/onlinejudge\/webservice\/status_log\??.*/
       ).to_return(
         :status => 200,
-        :body => read_file('/mock/t001_002.status_log.xml'),
+        :body => read_file('/mock/t001/002.status_log.xml'),
         :headers => {
           'Content-Type' => 'text/xml',
         },

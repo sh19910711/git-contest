@@ -147,7 +147,7 @@ module Git
           elements[0].attributes()["submissionid"].value.strip
         end
 
-        if ENV['TEST_MODE'] === 'TRUE'
+        if is_test_mode?
           attr_writer :client
         else
           private :get_status_wait

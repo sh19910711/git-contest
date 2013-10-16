@@ -112,7 +112,7 @@ module Git
           'timeout'
         end
 
-        if ENV['TEST_MODE'] === 'TRUE'
+        if is_test_mode?
           attr_writer :client
         else
         end

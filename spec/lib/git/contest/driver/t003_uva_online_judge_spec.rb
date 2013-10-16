@@ -14,18 +14,18 @@ describe "T003: Git::Contest::Driver::UvaOnlineJudge" do
 
   describe '001: #get_submission_id' do
     it '001' do
-      ret = @driver.get_submission_id(read_file('/mock/t003.after_submit.html'))
+      ret = @driver.get_submission_id(read_file('/mock/t003/after_submit.html'))
       ret.should eq '99999'
     end
   end
 
   describe '002: #get_submission_status' do
     it '001: Sent to Judge' do
-      ret = @driver.get_submission_status('99999', read_file('/mock/t003.my_submissions.sent_to_judge.html'))
+      ret = @driver.get_submission_status('99999', read_file('/mock/t003/my_submissions.sent_to_judge.html'))
       ret.should eq 'Sent to judge'
     end
     it '002: Compile Error' do
-      ret = @driver.get_submission_status('99999', read_file('/mock/t003.my_submissions.compile_error.html'))
+      ret = @driver.get_submission_status('99999', read_file('/mock/t003/my_submissions.compile_error.html'))
       ret.should eq 'Compilation error'
     end
   end

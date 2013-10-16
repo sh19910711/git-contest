@@ -131,7 +131,7 @@ module Git
           doc.xpath('//table[@id="tableRanking"]//tr[@class="dat"]')[0].search('td')[0].text.strip
         end
 
-        if ENV['TEST_MODE'] === 'TRUE'
+        if is_test_mode?
           attr_writer :client
         else
           private :status_loop

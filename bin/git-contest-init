@@ -8,8 +8,15 @@ require 'highline/import'
 init
 
 sub_commands = %w()
-global_opts = Trollop::options do
+options = Trollop::options do
   version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
+  opt(
+    :defaults,
+    "Use default branch naming conventions.",
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
   stop_on sub_commands
 end
 
@@ -21,14 +28,20 @@ end
 # init main
 if git_contest_has_master_configured
   master_branch = git_do 'config --get git.contest.branch.master'
+elsif options[:defaults]
+  master_branch = 'master'
 else
   master_branch = ask('Master branch name: ') do |q|
     q.default = 'master'
   end
 end
 
-prefix = ask('Prefix of contest branch name:  ') do |q|
-  q.default = 'contest'
+if options[:defaults]
+  prefix = 'contest'
+else
+  prefix = ask('Prefix of contest branch name:  ') do |q|
+    q.default = 'contest'
+  end
 end
 
 if git_repo_is_headless

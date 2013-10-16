@@ -13,6 +13,9 @@ $drivers = {}
 $drivers["codeforces"]        = Git::Contest::Driver::Codeforces
 $drivers["aizu_online_judge"] = Git::Contest::Driver::AizuOnlineJudge
 $drivers["uva_online_judge"]  = Git::Contest::Driver::UvaOnlineJudge
+if is_test_mode?
+  $drivers["dummy"]             = Git::Contest::Driver::Dummy
+end
 
 def usage
   puts get_banner
