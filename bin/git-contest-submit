@@ -6,8 +6,8 @@ require 'trollop'
 
 init
 
-$config  = get_config()
-$sites   = $config["sites"]
+$config = get_config() || {}
+$sites  = $config["sites"] || {}
 
 $drivers = {}
 $drivers["codeforces"]        = Git::Contest::Driver::Codeforces
