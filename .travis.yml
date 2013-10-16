@@ -31,9 +31,9 @@ script:
   - export GIT_VERSIONS="1.8.4 1.7.0"
   - 
     for version in ${GIT_VERSIONS}; do
-      export PATH=$HOME/local/git-${version}/bin:$PATH
-      hash -r
-      git --version
-      bundle exec rake spec
+      export PATH=$HOME/local/git-${version}/bin:$PATH;
+      hash -r;
+      git --version;
+      bundle exec rake spec;
     done
 
