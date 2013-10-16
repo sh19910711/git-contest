@@ -13,7 +13,7 @@ before_install:
       wget -O - https://github.com/git/git/archive/v${version}.tar.gz | tar zxf - ;
       pushd `pwd`;
       echo install git-${version} making;
-      cd git-${version} && ./configure --prefix=${HOME}/local --quite && make -s && make install ;
+      cd git-${version} && ls && autoconf && ./configure --prefix=${HOME}/local --quite && make -s && make install ;
       popd;
       echo install git-${version} finish;
     done
