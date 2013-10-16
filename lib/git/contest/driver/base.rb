@@ -9,12 +9,14 @@ module Git
       class DriverBase < DriverEvent
         def get_opts_ext
           # Example:
-          # opt(
-          #   :source,
-          #   "Specify submitted source code path",
-          #   :type => :string,
-          #   :required => false,
-          # )
+          # define_options do
+          #   opt(
+          #     :problem_id,
+          #     "Problem ID (Ex: 1000, 123, 0123, etc...)",
+          #     :type => :string,
+          #     :required => true,
+          #   )
+          # end
           raise 'TODO: Implement'
         end
 
