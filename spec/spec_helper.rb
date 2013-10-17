@@ -16,6 +16,18 @@ def init_env
   ENV['GIT_CONTEST_HOME'] = "#{ENV['GIT_CONTEST_TEMP_DIR']}/home"
 end
 
+def debug_print
+  puts `pwd`
+  puts `ls -a`
+  puts ""
+end
+
+def bin_exec args
+  puts "Commmand: #{bin_path('git-contest')} #{args}" if ENV['GIT_CONTEST_DEBUG'] == 'ON'
+  ret = `#{bin_path('git-contest')} #{args}`
+  ret
+end
+
 require 'webmock'
 WebMock.disable_net_connect!
 
@@ -23,3 +35,6 @@ temp_dir = `mktemp -d /tmp/XXXXXXXXXXXXX`.strip
 `mkdir #{temp_dir}/home`
 ENV['GIT_CONTEST_TEMP_DIR'] = temp_dir
 init_env
+
+require 'git/contest/common'
+

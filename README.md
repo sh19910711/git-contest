@@ -1,6 +1,8 @@
 # Git::Contest
 `git-contest` is the Git Extension for Online Judges (Codeforces, etc...)
 
+[![Build Status](https://travis-ci.org/sh19910711/git-contest.png?branch=develop)](https://travis-ci.org/sh19910711/git-contest)
+
 ## Branching Model
 ![image](https://googledrive.com/host/0Bz19k_5gA4wVZWJEcW1XS25NRWM/git-contest.svg)
 
@@ -50,5 +52,14 @@ Use --help option as below:
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-## Recently Status
-[![Build Status](https://travis-ci.org/sh19910711/git-contest.png?branch=develop)](https://travis-ci.org/sh19910711/git-contest)
+## Links
+`git-contest` is inspired by [nvie/gitflow](https://github.com/nvie/gitflow).
+
+* A successful Git branching model
+    * http://nvie.com/posts/a-successful-git-branching-model/
+* nvie/gitflow
+    * https://github.com/nvie/gitflow
+* ruby
+    * https://www.ruby-lang.org/
+* git
+    * http://git-scm.com/

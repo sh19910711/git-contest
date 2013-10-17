@@ -139,6 +139,7 @@ opts = driver.get_opts()
 result = driver.submit $sites[site], "main.*", opts
 
 if git_contest_is_initialized
-  git_do 'add main.rb'
+  git_do "add ."
   git_do "commit --allow-empty -m '#{result}'"
 end
+

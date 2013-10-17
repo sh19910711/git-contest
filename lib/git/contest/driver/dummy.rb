@@ -29,25 +29,27 @@ module Git
 
         def resolve_language(label)
           case label
-          when "c", "C"
+          when "clang"
             return "C"
-          when "cpp", "c++", "C++"
+          when "cpp"
             return "C++"
-          when "java", "Java", "JAVA"
+          when "java"
             return "JAVA"
-          when "cpp11", "C++11", "c++11", "cxx"
+          when "cpp11"
             return "C++11"
-          when "C#", "c#", "cs"
+          when "cs"
             return "C#"
-          when "D", "d"
+          when "dlang"
             return "D"
-          when "Ruby", "ruby", "rb"
+          when "ruby"
             return "Ruby"
-          when "py", "python", "Python"
+          when "python2"
+            return "Python2"
+          when "python3"
             return "Python"
-          when "php", "PHP"
+          when "php"
             return "PHP"
-          when "JavaScript", "js", "javascript"
+          when "javascript"
             return "JavaScript"
           else
             abort "unknown languag"
@@ -66,16 +68,25 @@ module Git
           trigger 'before_wait'
 
           # wait result
+          status = ''
+          File.open source_path, 'r' do |file|
+            line = file.read
+            if line == 'wa-code'
+              status = 'Wrong Answer'
+            elsif line == 'ac-code'
+              status = 'Accepted'
+            end
+          end
           trigger(
             'after_wait',
             {
               :submission_id => '99999',
-              :status => 'Accepted',
+              :status => status,
             }
           )
           trigger 'finish'
 
-          return 'Dummy Driver 99999: Accepted'
+          return "Dummy #{options[:contest_id]}#{options[:problem_id]}: #{status}"
         end
 
         if ENV['TEST_MODE'] === 'TRUE'

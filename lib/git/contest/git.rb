@@ -1,6 +1,6 @@
 def git_do(*args)
   puts "git #{args.join(' ')}" if ENV['GIT_CONTEST_DEBUG'] == 'ON'
-  return `git #{args.join(' ')}`.strip
+  return `git #{args.join(' ')} 2>&1`.strip
 end
 
 # use return value
@@ -42,14 +42,14 @@ end
 def git_remote_branches
   cmd_ret = git_do 'branch -r --no-color'
   cmd_ret.lines.map {|line|
-    line.gsub(/^[*]?\s*/, '').gsub(/\s*$/, '')
+    line.gsub(/^[*]?\s*/, '').gsub(/\s*$/, '').strip
   }
 end
 
 def git_local_branches
   cmd_ret = git_do 'branch --no-color'
   cmd_ret.lines.map {|line|
-    line.gsub(/^[*]?\s*/, '').gsub(/\s*$/, '')
+    line.gsub(/^[*]?\s*/, '').gsub(/\s*$/, '').strip
   }
 end
 
@@ -58,14 +58,14 @@ def git_all_branches
   cmd_ret2 = git_do 'branch -r --no-color'
   lines = cmd_ret1.lines + cmd_ret2.lines
   lines.map {|line|
-    line.gsub(/^[*]?\s*/, '').gsub(/\s*$/, '')
+    line.gsub(/^[*]?\s*/, '').gsub(/\s*$/, '').strip
   }
 end
 
 def git_current_branch
   ret = git_do('branch --no-color').lines
   ret = ret.grep /^\*/
-  ret[0].gsub(/^[* ] /, '')
+  ret[0].gsub(/^[* ] /, '').strip
 end
 
 def git_is_clean_working_tree

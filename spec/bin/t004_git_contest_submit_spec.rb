@@ -18,7 +18,6 @@ describe "T004: bin/git-contest-submit" do
 
     it "001: git-contest-submit --version" do
       ret = `#{bin_path("git-contest-submit")} --version`
-      puts ret
       (!!ret.match(/git-contest [0-9]+\.[0-9]+\.[0-9]+/)).should === true
     end
 
@@ -42,7 +41,9 @@ describe "T004: bin/git-contest-submit" do
       Dir.chdir '002'
       Dir.mkdir 'working'
       Dir.chdir 'working'
-      FileUtils.touch 'main.cpp'
+      File.open 'main.cpp', 'w' do |file|
+        file.write 'ac-code'
+      end
     end
 
     after do
@@ -100,7 +101,9 @@ describe "T004: bin/git-contest-submit" do
       Dir.chdir '003'
       Dir.mkdir 'working'
       Dir.chdir 'working'
-      FileUtils.touch 'main.cpp'
+      File.open 'main.cpp', 'w' do |file|
+        file.write 'ac-code'
+      end
     end
 
     after do
@@ -124,7 +127,7 @@ describe "T004: bin/git-contest-submit" do
       ret_submit.include?("99999").should === true
       ret_submit.include?("Accepted").should === true
       ret_git = `git log --oneline --decorate --graph`
-      ret_git.include?("Dummy Driver 99999: Accepted").should === true
+      ret_git.include?("Dummy 100A: Accepted").should === true
     end
 
   end
