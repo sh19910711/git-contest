@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/sh19910711/git-contest.png?branch=develop)](https://travis-ci.org/sh19910711/git-contest)
 
 ## Branching Model
-![image](https://googledrive.com/host/0Bz19k_5gA4wVZWJEcW1XS25NRWM/git-contest.svg)
+![image](https://googledrive.com/host/0Bz19k_5gA4wVZWJEcW1XS25NRWM/git-contest.png)
 
 ## Installation
 
@@ -63,3 +63,7 @@ Use --help option as below:
     * https://www.ruby-lang.org/
 * git
     * http://git-scm.com/
+
+## Author
+* [Hiroyuki Sano](http://yomogimochi.com/)
+
