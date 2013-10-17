@@ -1,28 +1,46 @@
 # Git::Contest
+`git-contest` is the Git Extension for Online Judges (Codeforces, etc...)
 
-TODO: Write a gem description
+## Branching Model
+![image](https://googledrive.com/host/0Bz19k_5gA4wVZWJEcW1XS25NRWM/git-contest.svg)
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'git-contest'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+Install [Ruby](https://www.ruby-lang.org/) (>= 1.9.2) and [Git](http://git-scm.com/) (>= 1.7), and type a following command:
 
     $ gem install git-contest
 
 ## Usage
+There are 4 basic commands:
 
-TODO: Write usage instructions here
+### init
+Initialize a git repository.
 
-## Requirements
-* `ruby --version` >= 1.9.2
-* `git --version` >= 1.7
+    $ git contest init
+
+### start
+Start a contest branch.
+
+    $ git contest start <contest-branch> [based-branch]
+
+After this command, `<contest-branch>` is created based on `<based-branch>`.
+
+### finish
+Finish a contest branch.
+
+    $ git contest finish <contest-branch>
+
+After this command, `<contest-branch>` is merged into `<based-branch>`, and then removed.
+
+### submit
+Submit a code to the online judge.
+
+    $ git contest submit <site>
+
+## More Documentation
+Use --help option as below:
+
+    $ git contest <sub-command> ... --help
 
 ## Contributing
 
@@ -32,5 +50,5 @@ TODO: Write usage instructions here
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-## 
+## Recently Status
 [![Build Status](https://travis-ci.org/sh19910711/git-contest.png?branch=develop)](https://travis-ci.org/sh19910711/git-contest)
