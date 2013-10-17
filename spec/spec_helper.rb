@@ -36,5 +36,6 @@ temp_dir = `mktemp -d /tmp/XXXXXXXXXXXXX`.strip
 ENV['GIT_CONTEST_TEMP_DIR'] = temp_dir
 init_env
 
+$:.unshift File.expand_path('../../lib', __FILE__)
 require 'git/contest/common'
 
