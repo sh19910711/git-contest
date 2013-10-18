@@ -131,6 +131,31 @@ describe "T004: bin/git-contest-submit" do
     end
 
   end
+
+  describe "004: with commit message" do
+
+    before do
+      Dir.mkdir '004'
+      Dir.chdir '004'
+      File.write "main.cpp", "w" do |file|
+        file.write "ac-code"
+      end
+      bin_exec "init --defaults"
+    end
+
+    after do
+      FileUtils.remove "main.cpp"
+      Dir.chdir '004'
+      Dir.rmdir '004'
+    end
+
+    it "001" do
+      bin_exec "submit test_dummy -c 100 -p A -m 'this is commit message'"
+      ret = git_do "log --oneline"
+      ret.include? "this is commit message"
+    end
+
+  end
  
 end
 
