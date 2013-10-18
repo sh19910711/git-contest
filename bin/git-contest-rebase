@@ -1,0 +1,56 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.expand_path('../../lib', __FILE__)
+require 'git/contest/common'
+require 'trollop'
+
+def use_current_branch
+  current_branch = git_current_branch
+  if current_branch.start_with? $PREFIX
+    $BRANCH = current_branch.strip
+    $NAME = $BRANCH[$PREFIX.length+1..-1]
+  else
+    puts "The current HEAD is no feature branch."
+    puts "Please spefcify a <name> argument."
+    abort ''
+  end
+end
+
+def expand_nameprefix_arg
+  expanded_name = gitcontest_resolve_nameprefix $NAME, $PREFIX
+  exitcode = $?.to_i
+  if $? == 0
+    $NAME = expanded_name
+    $BRANCH = "#{$PREFIX}/#{$NAME}"
+  else
+    return 1
+  end
+end
+
+def expand_nameprefix_arg_or_current
+  if $NAME != ""
+    expand_nameprefix_arg
+    require_branch "#{$PREFIX}/#{$NAME}"
+  else
+    use_current_branch
+  end
+end
+
+init
+
+sub_commands = %w()
+$options = Trollop::options do
+  version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
+  opt(
+    :interactive,
+    "Do an interactive rebase.",
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
+  stop_on sub_commands
+end
+
+puts "@git-contest-rebase"
+expand_nameprefix_arg_or_current
+
