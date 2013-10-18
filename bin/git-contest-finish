@@ -31,7 +31,9 @@ def helper_finish_cleanup
   require_branch $BRANCH
   require_clean_working_tree
 
-  git_do "branch -d #{$BRANCH}"
+  if ! $options[:keep]
+    git_do "branch -d #{$BRANCH}"
+  end
 
   puts ""
   puts "Summary of actions:"
@@ -44,8 +46,22 @@ end
 init
 
 sub_commands = %w()
-global_opts = Trollop::options do
+$options = Trollop::options do
   version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
+  opt(
+    "no-edit",
+    "Use default commit message.",
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
+  opt(
+    :keep,
+    "Keep contest branch after merge.",
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
   stop_on sub_commands
 end
 
@@ -54,11 +70,15 @@ require_branch $BRANCH
 
 require_clean_working_tree
 
+merge_options = ""
+if $options["no-edit"]
+  merge_options += " --no-edit"
+end
 git_do "checkout #{$MASTER}"
 if git_do("rev-list -n2 \"#{$MASTER}..#{$BRANCH}\"").lines.length == 1
-  git_do "merge --ff \"#{$BRANCH}\""
+  git_do "merge --ff \"#{$BRANCH}\" #{merge_options}"
 else
-  git_do "merge --no-ff \"#{$BRANCH}\""
+  git_do "merge --no-ff \"#{$BRANCH}\" #{merge_options}"
 end
 
 helper_finish_cleanup
