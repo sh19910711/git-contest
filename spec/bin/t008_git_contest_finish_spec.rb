@@ -9,7 +9,7 @@ describe "T008: git-contest-finish" do
     @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t008"
     Dir.mkdir @test_dir
     Dir.chdir @test_dir
-    debug_on
+    # debug_on
   end
 
   after do
@@ -34,7 +34,7 @@ describe "T008: git-contest-finish" do
       bin_exec "init --defaults"
       bin_exec "start branch1"
       git_do "commit --allow-empty -m 'this is commit'"
-      puts bin_exec "finish --no-edit"
+      bin_exec "finish --no-edit"
       ret1 = git_do "branch"
       ret_log1 = git_do "log --oneline master"
       ret1.include?("branch1").should === false
@@ -214,8 +214,10 @@ describe "T008: git-contest-finish" do
       Dir.chdir "src"
       bin_exec "init --defaults"
       bin_exec "start branch1"
+      10.times {|x| git_do "commit --allow-empty -m 'this is commit #{x}'" }
       Dir.chdir ".."
       git_do "clone src dest"
+
       Dir.chdir "dest"
     end
 
@@ -229,15 +231,18 @@ describe "T008: git-contest-finish" do
       Dir.rmdir "005"
     end
 
-    it "001: init -> start -> clone -> checkout@dest -> empty-commits@dest -> finish@dest" do 
+    it "001: init -> start -> clone -> checkout@dest -> empty-commits@dest -> finish@dest" do
+      git_do "checkout -b master origin/master"
+      bin_exec "init --defaults"
       bin_exec "start --fetch branch1"
-      10.times {|x| git_do "commit --allow-empty -m 'this is commit #{x}'" }
       bin_exec "finish --fetch branch1 --no-edit"
+      ret_branch2 = git_do "branch"
       Dir.chdir ".."
       Dir.chdir "src"
-      git_do "checkout contest/branch1"
-      ret_log1 = git_do "log --oneline"
-      ret_log1.include?('this is commit').should === true
+      ret_branch1 = git_do "branch"
+      git_do "checkout master"
+      ret_branch1.include?('branch1').should === true
+      ret_branch2.include?('branch1').should === false
     end
 
   end

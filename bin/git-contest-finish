@@ -30,6 +30,10 @@ def helper_finish_cleanup
   require_branch $BRANCH
   require_clean_working_tree
 
+  if $options[:fetch]
+    git_do "push \"#{$ORIGIN}\" \":refs/heads/#{$BRANCH}\""
+  end
+
   if ! $options[:keep]
     if $options[:force_delete]
       git_do "branch -D #{$BRANCH}"
@@ -86,6 +90,13 @@ $options = Trollop::options do
     :default => false,
     :required => false,
   )
+  opt(
+    :fetch,
+    "Fetch from origin before finish.",
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
   stop_on sub_commands
 end
 
@@ -93,6 +104,21 @@ expand_contest_branch()
 require_branch $BRANCH
 
 require_clean_working_tree
+
+if git_remote_branches().include?("#{$ORIGIN}/#{$BRANCH}")
+  if $options[:fetch]
+    git_do "fetch -q \"#{$ORIGIN}\" \"#{$BRANCH}\""
+    git_do "fetch -q \"#{$ORIGIN}\" \"#{$MASTER}\""
+  end
+end
+
+if git_remote_branches().include?("#{$ORIGIN}/#{$BRANCH}")
+  require_branches_equal $BRANCH, "#{$ORIGIN}/#{$BRANCH}"
+end
+
+if git_remote_branches().include?("#{$ORIGIN}/#{$MASTER}")
+  require_branches_equal $MASTER, "#{$ORIGIN}/#{$MASTER}"
+end
 
 merge_options = ""
 if $options[:no_edit]
