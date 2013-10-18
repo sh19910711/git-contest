@@ -9,6 +9,7 @@ describe "T008: git-contest-finish" do
     @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t008"
     Dir.mkdir @test_dir
     Dir.chdir @test_dir
+    debug_on
   end
 
   after do
@@ -21,7 +22,6 @@ describe "T008: git-contest-finish" do
     before do
       Dir.mkdir "001"
       Dir.chdir "001"
-      debug_on
     end
 
     after do
@@ -61,8 +61,56 @@ describe "T008: git-contest-finish" do
 
   describe "002: --rebase" do
 
+    before do
+      Dir.mkdir "002"
+      Dir.chdir "002"
+    end
+
+    after do
+      FileUtils.remove_dir ".git", :force => true
+      Dir.chdir ".."
+      Dir.rmdir "002"
+    end
+
     it "001: init -> start -> empty-commits -> finish --rebase" do
-      abort "to check: merge commit does not exist"
+      # create branches: branch1(normal) -> branch2(rebase) -> branch3(normal)
+      bin_exec "init --defaults"
+      bin_exec "start branch1"
+      10.times {|x|
+        name = "test-1.#{x}"
+        FileUtils.touch name
+        git_do "add #{name}"
+        git_do "commit -m 'Add #{name}'"
+      }
+      bin_exec "start branch2"
+      10.times {|x|
+        name = "test-2.#{x}"
+        FileUtils.touch name
+        git_do "add #{name}"
+        git_do "commit -m 'Add #{name}'"
+      }
+      bin_exec "start branch3"
+      10.times {|x|
+        name = "test-3.#{x}"
+        FileUtils.touch name
+        git_do "add #{name}"
+        git_do "commit -m 'Add #{name}'"
+      }
+      # finish branches
+      ret_branch_1 = git_do "branch"
+      bin_exec "finish branch1 --no-edit"
+      bin_exec "finish branch2 --no-edit"
+      bin_exec "finish branch3 --no-edit"
+      ret_branch_2 = git_do "branch"
+      ret_log = git_do "log --oneline"
+      ret_branch_1.include?("branch1").should === true
+      ret_branch_1.include?("branch2").should === true
+      ret_branch_1.include?("branch3").should === true
+      ret_branch_2.include?("branch1").should === false
+      ret_branch_2.include?("branch2").should === false
+      ret_branch_2.include?("branch3").should === false
+      (!!ret_log.match(/test-2.*test-3.*test-1/m)).should === true
+      FileUtils.remove "test-*"
     end
 
   end
