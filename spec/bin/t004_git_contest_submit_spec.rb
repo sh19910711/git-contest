@@ -144,8 +144,9 @@ describe "T004: bin/git-contest-submit" do
     end
 
     after do
+      FileUtils.remove_dir ".git", :force => true
       FileUtils.remove "main.cpp"
-      Dir.chdir '004'
+      Dir.chdir '..'
       Dir.rmdir '004'
     end
 
