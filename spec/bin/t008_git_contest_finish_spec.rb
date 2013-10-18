@@ -117,8 +117,43 @@ describe "T008: git-contest-finish" do
 
   describe "003: --force_delete" do
 
+    before do
+      Dir.mkdir "003"
+      Dir.chdir "003"
+    end
+
+    after do
+      FileUtils.remove_dir ".git", :force => true
+      Dir.chdir ".."
+      Dir.rmdir "003"
+    end
+
     it "001: init -> start -> trigger merge error -> finish --force_delete" do
-      abort "to check: branch does not exist"
+      # make conflict
+      bin_exec "init --defaults"
+      FileUtils.touch "test.txt"
+      git_do "add test.txt"
+      git_do "commit -m 'Add test.txt'"
+      bin_exec "start branch1"
+      bin_exec "start branch2"
+      git_do "checkout contest/branch1"
+      File.open "test.txt", "w" do |file|
+        file.write "test1"
+      end
+      git_do "add test.txt"
+      git_do "commit -m 'Edit test.txt @ branch1'"
+      git_do "checkout contest/branch2"
+      File.open "test.txt", "w" do |file|
+        file.write "test2"
+      end
+      git_do "add test.txt"
+      git_do "commit -m 'Edit test.txt @ branch2'"
+      bin_exec "finish branch1"
+      bin_exec "finish branch2 --force_delete"
+      ret_branch = git_do "branch"
+      ret_branch.include?("contest/branch1").should === false
+      ret_branch.include?("contest/branch2").should === false
+      FileUtils.remove "test.txt"
     end
 
   end
