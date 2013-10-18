@@ -23,6 +23,14 @@ module Git
           end
         end
 
+        def get_site_name
+          "Dummy"
+        end
+
+        def get_problem_id(options)
+          "#{options[:contest_id]}#{options[:problem_id]}"
+        end
+
         def get_desc
           "This is Dummy"
         end
@@ -41,6 +49,8 @@ module Git
             return "C#"
           when "dlang"
             return "D"
+          when "golang"
+            return "Go"
           when "ruby"
             return "Ruby"
           when "python2"
@@ -61,7 +71,12 @@ module Git
           trigger 'start'
 
           # submit
-          trigger 'before_submit'
+          trigger(
+            'before_submit',
+            {
+              :source => source_path
+            },
+          )
           trigger 'after_submit'
 
           # need to get the newest waiting submissionId
@@ -75,6 +90,8 @@ module Git
               status = 'Wrong Answer'
             elsif line == 'ac-code'
               status = 'Accepted'
+            elsif line == 'tle-code'
+              status = 'Time Limit Exceeded'
             end
           end
           trigger(
@@ -86,7 +103,7 @@ module Git
           )
           trigger 'finish'
 
-          return "Dummy #{options[:contest_id]}#{options[:problem_id]}: #{status}"
+          status
         end
 
         if ENV['TEST_MODE'] === 'TRUE'

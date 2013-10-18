@@ -20,6 +20,14 @@ module Git
           raise 'TODO: Implement'
         end
 
+        def get_site_name
+          raise 'TODO: Implement'
+        end
+
+        def get_problem_id(options)
+          raise 'TODO: Implement'
+        end
+
         def resolve_language(label)
           raise 'TODO: Implement'
         end
@@ -61,12 +69,23 @@ module Git
           end
         end
 
+        def get_commit_message rule, status, options
+          message = rule
+          message = message.gsub '${site}', get_site_name
+          message = message.gsub '${problem-id}', get_problem_id(options)
+          message = message.gsub '${status}', status
+          return message
+        end
+
         def submit(config, source_path, options)
-          source_path = Utils.resolve_path(options[:source] || source_path)
+          $config = get_config
+          $config["submit_rules"] ||= {}
+          $config["submit_rules"]["message"] ||= "${site} ${problem-id}: ${status}"
+          source_path = Utils.resolve_path(options[:source] || $config["submit_rules"]["source"] || source_path)
           options[:language] ||= Utils.resolve_language(source_path)
           options[:language] = resolve_language Utils.normalize_language(options[:language])
-          p options
-          submit_ext config, source_path, options
+          status = submit_ext(config, source_path, options)
+          get_commit_message($config["submit_rules"]["message"], status, options)
         end
       end
     end

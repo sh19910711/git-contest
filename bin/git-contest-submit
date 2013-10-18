@@ -43,6 +43,13 @@ def get_banner
   return res
 end
 
+def get_git_add_target rule
+  puts "@get_git_add_taarget: rule = #{rule}"
+  str = rule
+  str = str.gsub('${source}', $submit_info[:source])
+  str
+end
+
 # check options
 sub_commands = $sites.keys
 global_opts = Trollop::options do
@@ -73,6 +80,8 @@ end
 
 driver = $drivers[driver_name].new
 
+$submit_info = {}
+
 # set events
 driver.on(
   'start',
@@ -94,7 +103,8 @@ driver.on(
 )
 driver.on(
   'before_submit',
-  Proc.new do
+  Proc.new do |submit_info|
+    $submit_info = submit_info
     puts "@submit: doing..."
   end
 )
@@ -139,7 +149,8 @@ opts = driver.get_opts()
 result = driver.submit $sites[site], "main.*", opts
 
 if git_contest_is_initialized
-  git_do "add ."
+  puts "@before add"
+  git_do "add #{get_git_add_target($config["submit_rules"]["add"] || ".")}"
   git_do "commit --allow-empty -m '#{result}'"
 end
 

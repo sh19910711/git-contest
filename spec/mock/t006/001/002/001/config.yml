@@ -1,0 +1,8 @@
+submit_rules:
+  source: "ac.*"
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+
