@@ -4,14 +4,57 @@ require "spec_helper"
 
 describe "T008: git-contest-finish" do
 
+  before do
+    init_env
+    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t008"
+    Dir.mkdir @test_dir
+    Dir.chdir @test_dir
+  end
+
+  after do
+    Dir.chdir '..'
+    Dir.rmdir @test_dir
+  end
+
   describe "001: --keep" do
 
+    before do
+      Dir.mkdir "001"
+      Dir.chdir "001"
+      debug_on
+    end
+
+    after do
+      FileUtils.remove_dir ".git", :force => true
+      Dir.chdir ".."
+      Dir.rmdir "001"
+    end
+
     it "001: init -> start -> empty-commits -> finish" do
-      abort "to check: does not exist"
+      bin_exec "init --defaults"
+      bin_exec "start branch1"
+      git_do "commit --allow-empty -m 'this is commit'"
+      bin_exec "finish --no-edit"
+      ret1 = git_do "branch"
+      ret1.include?("branch1").should === false
     end
 
     it "002: init -> start -> empty-commits -> finish --keep" do
-      abort "to check: exist"
+      bin_exec "init --defaults"
+      bin_exec "start branch1"
+      git_do "commit --allow-empty -m 'this is commit'"
+      bin_exec "finish --no-edit --keep"
+      ret1 = git_do "branch"
+      ret1.include?("branch1").should === true
+    end
+
+    it "003: init -> start -> empty-commits -> finish -k" do
+      bin_exec "init --defaults"
+      bin_exec "start branch1"
+      git_do "commit --allow-empty -m 'this is commit'"
+      bin_exec "finish --no-edit -k"
+      ret1 = git_do "branch"
+      ret1.include?("branch1").should === true
     end
 
   end

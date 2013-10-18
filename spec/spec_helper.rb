@@ -22,6 +22,10 @@ def debug_print
   puts ""
 end
 
+def debug_on
+  ENV['GIT_CONTEST_DEBUG'] = 'ON'
+end
+
 def bin_exec args
   puts "Commmand: #{bin_path('git-contest')} #{args}" if ENV['GIT_CONTEST_DEBUG'] == 'ON'
   ret = `#{bin_path('git-contest')} #{args} 2>&1`
