@@ -9,7 +9,7 @@ describe "T008: git-contest-finish" do
     @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t008"
     Dir.mkdir @test_dir
     Dir.chdir @test_dir
-    debug_on
+    # debug_on
   end
 
   after do
@@ -187,8 +187,37 @@ describe "T008: git-contest-finish" do
 
   describe "005: --fetch" do
 
-    it "001: init -> start -> clone -> checkout@dest -> empty-commits@dest -> finish@dest" do
-      abort "to check: empty-commits exists at src-repo"
+    before do
+      Dir.mkdir "005"
+      Dir.chdir "005"
+      Dir.mkdir "src"
+      Dir.chdir "src"
+      bin_exec "init --defaults"
+      bin_exec "start branch1"
+      Dir.chdir ".."
+      git_do "clone src dest"
+      Dir.chdir "dest"
+    end
+
+    after do
+      Dir.chdir ".."
+      FileUtils.remove_dir "src/.git", :force => true
+      FileUtils.remove_dir "dest/.git", :force => true
+      Dir.rmdir "src"
+      DIr.rmdir "dest"
+      Dir.chdir ".."
+      Dir.rmdir "005"
+    end
+
+    it "001: init -> start -> clone -> checkout@dest -> empty-commits@dest -> finish@dest" do 
+      bin_exec "start --fetch branch1"
+      10.times {|x| git_do "commit --allow-empty -m 'this is commit #{x}'" }
+      bin_exec "finish --fetch branch1 --no-edit"
+      Dir.chdir ".."
+      Dir.chdir "src"
+      git_do "checkout contest/branch1"
+      ret_log1 = git_do "log --oneline"
+      ret_log1.include?('this is commit').should === true
     end
 
   end
