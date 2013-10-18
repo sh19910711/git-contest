@@ -148,21 +148,39 @@ describe "T008: git-contest-finish" do
       end
       git_do "add test.txt"
       git_do "commit -m 'Edit test.txt @ branch2'"
-      bin_exec "finish branch1"
-      bin_exec "finish branch2 --force_delete"
+      # finish
+      bin_exec "finish branch1 --no-edit"
+      bin_exec "finish branch2 --force_delete --no-edit"
       ret_branch = git_do "branch"
       ret_branch.include?("contest/branch1").should === false
       ret_branch.include?("contest/branch2").should === false
+      # clean
       FileUtils.remove "test.txt"
     end
 
   end
 
-  describe "004: --squash" do 
+  describe "004: --squash" do
+
+    before do
+      Dir.mkdir "004"
+      Dir.chdir "004"
+    end
+
+    after do
+      FileUtils.remove_dir ".git", :force => true
+      Dir.chdir ".."
+      Dir.rmdir "004"
+    end
 
     it "001: init -> start -> empty-commits -> finish --squash" do
-      abort "to check: empty-commits does not exist"
-      abort "to check: merge commit exists"
+      bin_exec "init --defaults"
+      bin_exec "start branch1"
+      10.times {|x| git_do "commit --allow-empty -m 'this is commit #{x}'" }
+      bin_exec "finish --squash branch1 --no-edit"
+      ret_log1 = git_do "log --oneline"
+      ret_log1.include?("this is commit").should === true
+      ret_log1.include?("Squashed commit").should === true
     end
 
   end
