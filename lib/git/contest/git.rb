@@ -30,6 +30,22 @@ def git_contest_has_prefix_configured
   git_do_no_echo 'config --get git.contest.branch.prefix'
 end
 
+def git_contest_resolve_nameprefix name, prefix
+  if git_local_branch_exists "#{prefix}/#{name}"
+    return name
+  end
+  branches = git_local_branches().select {|branch| branch.start_with? "#{prefix}/#{name}" }
+  if branches.size == 0
+    abort "No branch matches prefix '#{name}'"
+  else
+    if branches.size == 1
+      return branches[0][prefix.length..-1]
+    else
+      abort "Multiple branches match prefix '#{name}'"
+    end
+  end
+end
+
 #
 def git_remote_branch_exists(branch_name)
   git_remote_branches().include?(branch_name)

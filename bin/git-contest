@@ -18,7 +18,7 @@ end
 
 init
 
-sub_commands = %w(init start finish submit)
+sub_commands = %w(init start finish submit rebase)
 global_opts = Trollop::options do
   version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
   stop_on sub_commands
@@ -26,7 +26,7 @@ end
 
 cmd = ARGV.shift
 case cmd
-when "init", "start", "finish", "submit"
+when "init", "start", "finish", "submit", "rebase"
   system File.expand_path("../git-contest-#{cmd}", __FILE__) + " #{ARGV.join(' ')}"
 else
   usage

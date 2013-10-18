@@ -9,7 +9,7 @@ describe "T008: git-contest-finish" do
     @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t008"
     Dir.mkdir @test_dir
     Dir.chdir @test_dir
-    # debug_on
+    debug_on
   end
 
   after do
@@ -36,7 +36,9 @@ describe "T008: git-contest-finish" do
       git_do "commit --allow-empty -m 'this is commit'"
       bin_exec "finish --no-edit"
       ret1 = git_do "branch"
+      ret_log1 = git_do "log --oneline master"
       ret1.include?("branch1").should === false
+      ret_log1.include?("this is commit").should === true
     end
 
     it "002: init -> start -> empty-commits -> finish --keep" do
@@ -45,7 +47,9 @@ describe "T008: git-contest-finish" do
       git_do "commit --allow-empty -m 'this is commit'"
       bin_exec "finish --no-edit --keep"
       ret1 = git_do "branch"
+      ret_log1 = git_do "log --oneline master"
       ret1.include?("branch1").should === true
+      ret_log1.include?("this is commit").should === true
     end
 
     it "003: init -> start -> empty-commits -> finish -k" do
@@ -54,7 +58,9 @@ describe "T008: git-contest-finish" do
       git_do "commit --allow-empty -m 'this is commit'"
       bin_exec "finish --no-edit -k"
       ret1 = git_do "branch"
+      ret_log1 = git_do "log --oneline master"
       ret1.include?("branch1").should === true
+      ret_log1.include?("this is commit").should === true
     end
 
   end
@@ -99,7 +105,7 @@ describe "T008: git-contest-finish" do
       # finish branches
       ret_branch_1 = git_do "branch"
       bin_exec "finish branch1 --no-edit"
-      bin_exec "finish branch2 --no-edit"
+      puts bin_exec "finish branch2 --no-edit --rebase"
       bin_exec "finish branch3 --no-edit"
       ret_branch_2 = git_do "branch"
       ret_log = git_do "log --oneline"
@@ -110,7 +116,11 @@ describe "T008: git-contest-finish" do
       ret_branch_2.include?("branch2").should === false
       ret_branch_2.include?("branch3").should === false
       (!!ret_log.match(/test-2.*test-3.*test-1/m)).should === true
-      FileUtils.remove "test-*"
+      10.times {|x|
+        FileUtils.remove "test-1.#{x}"
+        FileUtils.remove "test-2.#{x}"
+        FileUtils.remove "test-3.#{x}"
+      }
     end
 
   end

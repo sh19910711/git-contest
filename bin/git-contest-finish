@@ -62,6 +62,13 @@ $options = Trollop::options do
     :default => false,
     :required => false,
   )
+  opt(
+    :rebase,
+    "Use rebase instead of merge.",
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
   stop_on sub_commands
 end
 
@@ -74,6 +81,17 @@ merge_options = ""
 if $options["no-edit"]
   merge_options += " --no-edit"
 end
+
+if $options[:rebase]
+  ret = git_do "contest rebase \"#{$NAME}\" \"#{$MASTER}\""
+  exitcode = $?.to_i
+  puts ret
+  if ! $?
+    puts "Finish was aborted due to conflicts during rebase."
+    exit 1
+  end
+end
+
 git_do "checkout #{$MASTER}"
 if git_do("rev-list -n2 \"#{$MASTER}..#{$BRANCH}\"").lines.length == 1
   git_do "merge --ff \"#{$BRANCH}\" #{merge_options}"

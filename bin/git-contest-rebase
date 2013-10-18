@@ -16,8 +16,8 @@ def use_current_branch
   end
 end
 
-def expand_nameprefix_arg
-  expanded_name = gitcontest_resolve_nameprefix $NAME, $PREFIX
+def expand_nameprefix_arg name, prefix
+  expanded_name = git_contest_resolve_nameprefix name, prefix
   exitcode = $?.to_i
   if $? == 0
     $NAME = expanded_name
@@ -28,8 +28,8 @@ def expand_nameprefix_arg
 end
 
 def expand_nameprefix_arg_or_current
-  if $NAME != ""
-    expand_nameprefix_arg
+  if ARGV.length > 0
+    expand_nameprefix_arg ARGV[0], $PREFIX
     require_branch "#{$PREFIX}/#{$NAME}"
   else
     use_current_branch
@@ -51,6 +51,18 @@ $options = Trollop::options do
   stop_on sub_commands
 end
 
-puts "@git-contest-rebase"
 expand_nameprefix_arg_or_current
+
+puts "Will try to rebase '#{$NAME}'..."
+
+require_clean_working_tree
+require_branch $BRANCH
+
+git_do "checkout -q \"#{$BRANCH}\""
+rebase_options = ""
+if $options[:interactive]
+  rebase_options += " -i"
+end
+
+puts git_do "rebase #{rebase_options} #{$MASTER}"
 
