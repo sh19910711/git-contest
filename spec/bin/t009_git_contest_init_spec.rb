@@ -4,17 +4,61 @@ require "spec_helper"
 
 describe "T009: git-contest-init" do
 
+  before do
+    init_env
+    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t009"
+    Dir.mkdir @test_dir
+    Dir.chdir @test_dir
+  end
+
+  after do
+    Dir.chdir '..'
+    Dir.rmdir @test_dir
+  end
+
   describe "001: --force" do
+    before do
+      Dir.mkdir "001"
+      Dir.chdir "001"
+    end
+
+    after do
+      FileUtils.remove_dir ".git", :force => true
+      Dir.chdir ".."
+      Dir.rmdir "001"
+    end
+
     it "001: init -> init" do
-      abort "to check: display already initalized error"
+      ret1 = bin_exec "init --defaults"
+      ret2 = bin_exec "init --defaults"
+      ret2.include?("Already initialized for git-contest.").should === false
+      ret2.include?("use: git contest init -f").should === false
+      ret2.include?("Already initialized for git-contest.").should === true
+      ret2.include?("use: git contest init -f").should === true
     end
 
     it "002: init -> init -f -> init --force" do
-      abort "to check: does not display already initalized error"
+      ret1 = bin_exec "init --defaults"
+      ret2 = bin_exec "init --defaults -f"
+      ret3 = bin_exec "init --defaults --force"
+      ret1.include?("Already initialized for git-contest.").should === false
+      ret1.include?("use: git contest init -f").should === false
+      ret2.include?("Already initialized for git-contest.").should === false
+      ret2.include?("use: git contest init -f").should === false
+      ret3.include?("Already initialized for git-contest.").should === false
+      ret3.include?("use: git contest init -f").should === false
     end
 
     it "003: init -f -> init -f -> init --force" do
-      abort "to check: does not display already initalized error"
+      ret1 = bin_exec "init --defaults -f"
+      ret2 = bin_exec "init --defaults -f"
+      ret3 = bin_exec "init --defaults --force"
+      ret1.include?("Already initialized for git-contest.").should === false
+      ret1.include?("use: git contest init -f").should === false
+      ret2.include?("Already initialized for git-contest.").should === false
+      ret2.include?("use: git contest init -f").should === false
+      ret3.include?("Already initialized for git-contest.").should === false
+      ret3.include?("use: git contest init -f").should === false
     end
   end
 
