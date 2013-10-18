@@ -18,6 +18,10 @@ def init_global
   if git_do_no_echo 'branch'
     $MASTER = git_do 'config --get git.contest.branch.master'
     $PREFIX = git_do 'config --get git.contest.branch.prefix'
+    $ORIGIN = git_do 'config --get git.contest.origin'
+    if $ORIGIN == ''
+      $ORIGIN = 'origin'
+    end
     $GIT_CONTEST_GIT_OK = true
   else
     $GIT_CONTEST_GIT_OK = false
