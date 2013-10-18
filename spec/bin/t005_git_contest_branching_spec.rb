@@ -72,7 +72,7 @@ describe "T005" do
         ret = git_do "ls-files"
         ret.include?('main.c').should === true
         # Finish
-        bin_exec "finish"
+        bin_exec "finish --no-edit"
         git_current_branch.should === 'master'
         ret = git_do "log --oneline"
         ret.include?('Dummy 1000A: Wrong Answer').should === true
