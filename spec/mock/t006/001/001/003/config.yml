@@ -1,0 +1,8 @@
+submit_rules:
+  message:    "${status}-${site}"
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+

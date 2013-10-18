@@ -17,6 +17,14 @@ module Git
           end
         end
 
+        def get_site_name
+          "AOJ"
+        end
+
+        def get_problem_id(options)
+          "#{options[:problem_id]}"
+        end
+
         def get_desc
           "Aizu Online Judge (URL: http://judge.u-aizu.ac.jp)"
         end

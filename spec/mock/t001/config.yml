@@ -1,0 +1,5 @@
+sites:
+  aoj:
+    driver: aizu_online_judge
+    user: dummy
+    password: dummy

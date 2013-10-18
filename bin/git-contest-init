@@ -17,7 +17,21 @@ options = Trollop::options do
     :default => false,
     :required => false,
   )
+  opt(
+    :force,
+    "force setting of git-contest branches, even if already configured.",
+    :short => :f,
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
   stop_on sub_commands
+end
+
+if git_contest_is_initialized && ! options[:force]
+  puts "Already initialized for git-contest."
+  puts "To force reinitialization, use: git contest init -f"
+  exit 0
 end
 
 # run commands

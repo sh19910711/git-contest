@@ -11,6 +11,8 @@ describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
     @driver.client = Mechanize.new {|agent|
       agent.user_agent_alias = 'Windows IE 7'
     }
+    ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t001/config.yml')
+    init
 
     # basic status_log
     WebMock
@@ -132,7 +134,7 @@ describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
       proc_start = Proc.new do
         @flag_start = true
       end
-      proc_before_submit = Proc.new do
+      proc_before_submit = Proc.new do |info|
         @flag_before_submit = true
       end
       proc_after_submit = Proc.new do

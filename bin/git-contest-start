@@ -7,8 +7,15 @@ require 'trollop'
 init
 
 sub_commands = %w()
-global_opts = Trollop::options do
+options = Trollop::options do
   version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
+  opt(
+    :fetch,
+    "fetch from origin before performing operation.",
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
   stop_on sub_commands
 end
 
@@ -17,10 +24,24 @@ if ARGV.length == 0
   exit 1
 end
 
-base_branch_name=$MASTER
+base_branch_name = $MASTER
+# specify based branch
+if ARGV.length == 2
+  base_branch_name = ARGV[1]
+end
 contest_branch_name = "#{ARGV[0]}"
 contest_branch = "#{$PREFIX}/#{contest_branch_name}"
 require_branch_absent contest_branch
+
+# fetch origin/master
+if options[:fetch]
+  git_do "fetch -q \"#{$ORIGIN}\" \"#{$MASTER}\""
+end
+
+# require equal
+if git_branch_exists "#{$ORIGIN}/#{$MASTER}"
+  require_branches_equal "#{$MASTER}", "#{$ORIGIN}/#{$MASTER}"
+end
 
 # create branch
 if ! git_do "checkout -b \"#{contest_branch}\" \"#{base_branch_name}\""
