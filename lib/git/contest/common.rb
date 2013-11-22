@@ -4,7 +4,6 @@ require 'git/contest/git'
 require 'git/contest/driver/codeforces'
 require 'git/contest/driver/aizu_online_judge'
 require 'git/contest/driver/uva_online_judge'
-require 'git/contest/driver/dummy' if is_test_mode?
 require 'yaml'
 
 def init

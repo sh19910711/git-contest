@@ -12,6 +12,21 @@ if $config.has_key? 'sites'
   $sites = $config["sites"]
 end
 
+#
+# Load Plugins
+#
+def load_plugins
+  # load drivers
+  Dir.glob("#{$GIT_CONTEST_HOME}/plugins/**") do |path|
+    require path if /\/driver_.*\.rb$/.match path
+  end
+end
+
+load_plugins
+
+#
+# Load Drivers
+#
 def load_drivers
   driver_names = $sites.keys().map {|key| $sites[key]["driver"] }
   driver_names.uniq.each do |driver_name|
@@ -25,6 +40,9 @@ end
 $drivers = {}
 load_drivers
 
+#
+# Command Utils
+#
 def usage
   puts get_banner
   return 0
@@ -83,6 +101,9 @@ unless $drivers.has_key?(driver_name)
   exit
 end
 
+#
+# Submit Start
+#
 driver = $drivers[driver_name].new
 
 $submit_info = {}

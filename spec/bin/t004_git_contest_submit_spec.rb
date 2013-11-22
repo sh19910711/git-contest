@@ -4,6 +4,7 @@ describe "T004: bin/git-contest-submit" do
 
   before do
     init_env
+    ENV['GIT_CONTEST_HOME'] = get_path('/mock/t004')
     @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t004"
     Dir.mkdir @test_dir
     Dir.chdir @test_dir
@@ -59,15 +60,6 @@ describe "T004: bin/git-contest-submit" do
       it "001: git-contest-submit --help" do
         ret = `#{bin_path("git-contest-submit")} --help`
         ret.include?('test_dummy').should === true
-        ret.include?('test_11111').should === true
-        ret.include?('test_22222').should === true
-        ret.include?('test_33333').should === true
-      end
-
-      it "002: no dummy" do
-        ENV['TEST_MODE'] = 'FALSE'
-        ret = `#{bin_path("git-contest-submit")} --help`
-        ret.include?('test_dummy').should === false
         ret.include?('test_11111').should === true
         ret.include?('test_22222').should === true
         ret.include?('test_33333').should === true
