@@ -64,7 +64,7 @@ module Contest
         }
 
         # submit
-        trigger 'before_submit'
+        trigger 'before_submit', options
         submit_page = @client.get "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=0000"
         submit_page.parser.encoding = "SHIFT_JIS"
         res_page = submit_page.form_with(:action => '/onlinejudge/servlet/Submit') do |form|
@@ -88,6 +88,7 @@ module Contest
           {
             :submission_id => submission_id,
             :status => status,
+            :result => "AOJ %s: %s\nhttp://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=#{submission_id}" % [problem_id, status],
           }
         )
         trigger 'finish'

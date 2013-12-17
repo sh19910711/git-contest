@@ -80,6 +80,7 @@ module Contest
         $config["submit_rules"] ||= {}
         $config["submit_rules"]["message"] ||= "${site} ${problem-id}: ${status}"
         source_path = Utils.resolve_path(options[:source] || $config["submit_rules"]["source"] || source_path)
+        options[:source] = source_path
         options[:language] ||= Utils.resolve_language(source_path)
         options[:language] = resolve_language Utils.normalize_language(options[:language])
         status = submit_ext(config, source_path, options)
