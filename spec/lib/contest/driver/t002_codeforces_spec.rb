@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-require 'git/contest/driver/codeforces'
+require 'contest/driver/codeforces'
 require 'mechanize'
 
-describe "T002: Git::Contest::Driver::Codeforces" do
+describe "T002: Contest::Driver::Codeforces" do
   before do
-    @driver = Git::Contest::Driver::Codeforces.new
+    @driver = Contest::Driver::Codeforces.new
     @driver.stub(:sleep).and_return(0)
     @driver.client = Mechanize.new {|agent|
       agent.user_agent_alias = 'Windows IE 7'

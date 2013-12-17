@@ -1,7 +1,6 @@
-require 'git/contest/common'
-require 'git/contest/driver/common'
+require 'contest/driver/common'
 require 'rexml/document'
-require 'git/contest/driver/driver_event'
+require 'contest/driver/driver_event'
 
 module Git
   module Contest
