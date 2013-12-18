@@ -76,7 +76,7 @@ end
 def git_all_branches
   cmd_ret1 = git_do 'branch --no-color'
   cmd_ret2 = git_do 'branch -r --no-color'
-  lines = cmd_ret1.lines + cmd_ret2.lines
+  lines = ( cmd_ret1 + cmd_ret2 ).lines
   lines.map {|line|
     line.gsub(/^[*]?\s*/, '').gsub(/\s*$/, '').strip
   }

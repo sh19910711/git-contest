@@ -135,7 +135,7 @@ if $options[:rebase]
 end
 
 git_do "checkout #{$MASTER}"
-if git_do("rev-list -n2 \"#{$MASTER}..#{$BRANCH}\"").lines.length == 1
+if git_do("rev-list -n2 \"#{$MASTER}..#{$BRANCH}\"").lines.to_a.length == 1
   git_do "merge --ff \"#{$BRANCH}\" #{merge_options}"
 else
   if $options[:squash]
