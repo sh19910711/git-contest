@@ -122,7 +122,7 @@ describe "T001: Contest::Driver::AizuOnlineJudge" do
 
   describe "003: #submit" do
     it "001: Check Event" do
-      File.write '/tmp/main.rb', ''
+      FileUtils.touch '/tmp/main.rb'
 
       @flag_start         = false
       @flag_before_submit = false
