@@ -35,7 +35,7 @@ require_branch_absent contest_branch
 
 # fetch origin/master
 if options[:fetch]
-  git_do "fetch -q \"#{$ORIGIN}\" \"#{$MASTER}\""
+  git_do "fetch -q \"#{$ORIGIN}\""
 end
 
 # require equal
