@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 require 'mechanize'
-require 'git/contest/driver/aizu_online_judge'
+require 'contest/driver/aizu_online_judge'
 
-describe "T001: Git::Contest::Driver::AizuOnlineJudge" do
+describe "T001: Contest::Driver::AizuOnlineJudge" do
   before do
     # setup driver
-    @driver = Git::Contest::Driver::AizuOnlineJudge.new
+    @driver = Contest::Driver::AizuOnlineJudge.new
     @driver.stub(:sleep).and_return(0)
     @driver.client = Mechanize.new {|agent|
       agent.user_agent_alias = 'Windows IE 7'

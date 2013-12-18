@@ -4,6 +4,7 @@ describe "T006: Config Test" do
 
   before do
     init_env
+    ENV['GIT_CONTEST_HOME'] = get_path('/mock/default_config')
     @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t006"
     Dir.mkdir @test_dir
     Dir.chdir @test_dir

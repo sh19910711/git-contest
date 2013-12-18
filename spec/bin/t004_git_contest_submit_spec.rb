@@ -4,6 +4,8 @@ describe "T004: bin/git-contest-submit" do
 
   before do
     init_env
+    ENV['GIT_CONTEST_HOME'] = get_path('/mock/default_config')
+    ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t004/config.yml')
     @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t004"
     Dir.mkdir @test_dir
     Dir.chdir @test_dir
@@ -36,7 +38,6 @@ describe "T004: bin/git-contest-submit" do
   describe "002: help check" do
 
     before do
-      ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t004/config.yml')
       Dir.mkdir '002'
       Dir.chdir '002'
       Dir.mkdir 'working'
@@ -59,15 +60,6 @@ describe "T004: bin/git-contest-submit" do
       it "001: git-contest-submit --help" do
         ret = `#{bin_path("git-contest-submit")} --help`
         ret.include?('test_dummy').should === true
-        ret.include?('test_11111').should === true
-        ret.include?('test_22222').should === true
-        ret.include?('test_33333').should === true
-      end
-
-      it "002: no dummy" do
-        ENV['TEST_MODE'] = 'FALSE'
-        ret = `#{bin_path("git-contest-submit")} --help`
-        ret.include?('test_dummy').should === false
         ret.include?('test_11111').should === true
         ret.include?('test_22222').should === true
         ret.include?('test_33333').should === true
@@ -96,7 +88,6 @@ describe "T004: bin/git-contest-submit" do
   describe '003: after init git repo' do
 
     before do
-      ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t004/config.yml')
       Dir.mkdir '003'
       Dir.chdir '003'
       Dir.mkdir 'working'

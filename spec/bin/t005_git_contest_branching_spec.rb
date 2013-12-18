@@ -2,17 +2,18 @@ require "spec_helper"
 
 describe "T005" do
 
-  before do
+  before(:each) do
     init_env
+    ENV['GIT_CONTEST_HOME'] = get_path('/mock/default_config')
     @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t005"
     Dir.mkdir @test_dir
     Dir.chdir @test_dir
     # ENV['GIT_CONTEST_DEBUG'] = 'ON'
   end
 
-  after do
+  after(:each) do
     Dir.chdir '..'
-    Dir.rmdir @test_dir
+    FileUtils.remove_dir @test_dir, :force => true
   end
 
   describe "001" do
@@ -23,21 +24,11 @@ describe "T005" do
       Dir.chdir '001'
     end
 
-    after do
-      Dir.chdir '..'
-      Dir.rmdir '001'
-    end
-
     describe '001' do
 
       before do
         Dir.mkdir '001'
         Dir.chdir '001'
-      end
-
-      after do
-        Dir.chdir '..'
-        FileUtils.remove_dir '001'
       end
 
       it '001: init -> start -> submit -> submit -> finish' do

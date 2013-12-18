@@ -12,14 +12,37 @@ if $config.has_key? 'sites'
   $sites = $config["sites"]
 end
 
-$drivers = {}
-$drivers["codeforces"]        = Git::Contest::Driver::Codeforces
-$drivers["aizu_online_judge"] = Git::Contest::Driver::AizuOnlineJudge
-$drivers["uva_online_judge"]  = Git::Contest::Driver::UvaOnlineJudge
-if is_test_mode?
-  $drivers["dummy"]             = Git::Contest::Driver::Dummy
+#
+# Load Plugins
+#
+def load_plugins
+  # load drivers
+  Dir.glob("#{$GIT_CONTEST_HOME}/plugins/**") do |path|
+    require path if /\/driver_.*\.rb$/.match path
+  end
 end
 
+load_plugins
+
+#
+# Load Drivers
+#
+def load_drivers
+  driver_names = $sites.keys().map {|key| $sites[key]["driver"] }
+  driver_names.uniq.each do |driver_name|
+    class_name = driver_name
+    class_name.gsub!(/^[a-z]/) {|c| c.upcase }
+    class_name.gsub!(/(_)([a-z])/) {|c, b| $2.upcase }
+    $drivers[driver_name] = Object.const_get "Contest::Driver::#{class_name}"
+  end
+end
+
+$drivers = {}
+load_drivers
+
+#
+# Command Utils
+#
 def usage
   puts get_banner
   return 0
@@ -44,7 +67,6 @@ def get_banner
 end
 
 def get_git_add_target rule
-  puts "@get_git_add_taarget: rule = #{rule}"
   str = rule
   str = str.gsub('${source}', $submit_info[:source])
   str
@@ -78,6 +100,9 @@ unless $drivers.has_key?(driver_name)
   exit
 end
 
+#
+# Submit Start
+#
 driver = $drivers[driver_name].new
 
 $submit_info = {}
@@ -86,7 +111,7 @@ $submit_info = {}
 driver.on(
   'start',
   Proc.new do
-    puts "start submit"
+    puts "@start: submit"
   end
 )
 driver.on(
@@ -136,21 +161,20 @@ driver.on(
     puts "  %s: %s" % ["submission id", "#{submission_info[:submission_id]}"]
     puts "  %s: %s" % ["status", "#{submission_info[:status]}"]
     puts ""
+    if git_contest_is_initialized
+      git_do "add #{get_git_add_target($config["submit_rules"]["add"] || ".")}"
+      git_do "commit --allow-empty -m '#{submission_info[:result]}'"
+    end
   end
 )
 driver.on(
   'finish',
   Proc.new do
-    puts "finish"
+    puts "@finish"
   end
 )
 
 opts = driver.get_opts()
 result = driver.submit $sites[site], "main.*", opts
 
-if git_contest_is_initialized
-  puts "@before add"
-  git_do "add #{get_git_add_target($config["submit_rules"]["add"] || ".")}"
-  git_do "commit --allow-empty -m '#{result}'"
-end
 
