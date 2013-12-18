@@ -29,7 +29,7 @@ module Contest
         when "pascal"
           return "4"
         else
-          abort "unknown languag"
+          abort "unknown language"
         end
       end
 
@@ -68,11 +68,12 @@ module Contest
           {
             :submission_id => submission_id,
             :status => status,
+            :result => get_commit_message($config["submit_rules"]["message"], status, options),
           }
         )
 
         trigger 'finish'
-        return "UVa %s: #{status}\nsubmission_id = #{submission_id}" % [problem_id]
+        get_commit_message($config["submit_rules"]["message"], status, options)
       end
 
       def get_status_wait(submission_id)

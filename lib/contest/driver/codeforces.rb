@@ -105,11 +105,12 @@ module Contest
           {
             :submission_id => submission_id,
             :status => status,
+            :result => get_commit_message($config["submit_rules"]["message"], status, options),
           }
         )
 
         trigger 'finish'
-        return "Codeforces %s%s: #{status}\nhttp://codeforces.com/contest/#{contest_id}/submission/#{submission_id}" % [contest_id, problem_id]
+        get_commit_message($config["submit_rules"]["message"], status, options)
       end
 
       def get_status_wait(contest_id, submission_id)
