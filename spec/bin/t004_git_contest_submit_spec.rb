@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "T004: bin/git-contest-submit" do
 
-  before do
+  before(:each) do
     init_env
     ENV['GIT_CONTEST_HOME'] = get_path('/mock/default_config')
     ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t004/config.yml')
@@ -11,9 +11,9 @@ describe "T004: bin/git-contest-submit" do
     Dir.chdir @test_dir
   end
 
-  after do
+  after(:each) do
     Dir.chdir '..'
-    Dir.rmdir @test_dir
+    FileUtils.remove_dir @test_dir, :force => true
   end
 
   describe "001: version option check" do
@@ -50,9 +50,7 @@ describe "T004: bin/git-contest-submit" do
     after do
       FileUtils.remove 'main.cpp'
       Dir.chdir '..'
-      Dir.rmdir 'working'
       Dir.chdir '..'
-      Dir.rmdir '002'
     end
 
     describe '001: dummy driver available only test-mode' do
@@ -98,11 +96,8 @@ describe "T004: bin/git-contest-submit" do
     end
 
     after do
-      FileUtils.remove 'main.cpp'
       Dir.chdir '..'
-      Dir.rmdir 'working'
       Dir.chdir '..'
-      Dir.rmdir '003'
     end
 
     before do
@@ -138,7 +133,6 @@ describe "T004: bin/git-contest-submit" do
       FileUtils.remove_dir ".git", :force => true
       FileUtils.remove "main.cpp"
       Dir.chdir '..'
-      Dir.rmdir '004'
     end
 
     it "001" do

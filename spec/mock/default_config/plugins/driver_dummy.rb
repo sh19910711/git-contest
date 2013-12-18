@@ -1,4 +1,3 @@
-require 'git/contest/common'
 require 'contest/driver/common'
 require 'rexml/document'
 

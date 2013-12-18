@@ -113,10 +113,6 @@ describe "T007: git-contest-start" do
       ret_start2.include?("Summary of actions:").should === true
       # clean
       Dir.chdir ".."
-      FileUtils.remove_dir "test1/.git", :force => true
-      FileUtils.remove_dir "test2/.git", :force => true
-      Dir.rmdir "test1"
-      Dir.rmdir "test2"
     end
 
   end
