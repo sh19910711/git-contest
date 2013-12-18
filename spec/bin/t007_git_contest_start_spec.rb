@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "T007: git-contest-start" do
 
-  before do
+  before(:each) do
     init_env
     @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t007"
     Dir.mkdir @test_dir
@@ -10,9 +10,9 @@ describe "T007: git-contest-start" do
     # debug_on
   end
 
-  after do
+  after(:each) do
     Dir.chdir '..'
-    Dir.rmdir @test_dir
+    FileUtils.remove_dir @test_dir, :force => true
   end
 
   describe "001: specify based branch" do
@@ -24,9 +24,7 @@ describe "T007: git-contest-start" do
     end
 
     after do
-      FileUtils.remove_dir '.git', :force => true
       Dir.chdir ".."
-      Dir.rmdir "001"
     end
 
     it "001" do
@@ -85,9 +83,7 @@ describe "T007: git-contest-start" do
     end
 
     after do
-      FileUtils.remove_dir '.git', :force => true
       Dir.chdir ".."
-      Dir.rmdir "002"
     end
 
     it "001" do
