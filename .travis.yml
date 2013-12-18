@@ -5,36 +5,9 @@ rvm:
 before_install:
   - git config --global user.email "dummy@localhost"
   - git config --global user.name "This Is Dummy"
-  - mkdir -p ~/local/src
-  - pushd `pwd`
-  - cd ~/local/src
-  - export GIT_VERSIONS="1.8.4 1.8.3 1.8.2 1.8.1 1.8.0 1.7.0"
-  # - export GIT_VERSIONS="1.8.4"
-  -
-    for version in ${GIT_VERSIONS}; do
-      echo install git-${version} start;
-      wget -O - https://github.com/git/git/archive/v${version}.tar.gz | tar zxf - ;
-      pushd `pwd`;
-      echo install git-${version} making;
-      cd git-${version} && ls && autoconf && ./configure --prefix=${HOME}/local/git-${version} > /dev/null && make -s && make install ;
-      popd;
-      echo install git-${version} finish;
-    done
-
-  - ls -l
-  - hash -r
-  - popd
 install:
   - bundle install
-script:
   - bundle exec rake install
-  - export GIT_VERSIONS="1.8.4 1.8.3 1.8.2 1.8.1 1.8.0 1.7.0"
-  # - export GIT_VERSIONS="1.8.4"
-  - 
-    for version in ${GIT_VERSIONS}; do
-      export PATH=$HOME/local/git-${version}/bin:$PATH;
-      hash -r;
-      git --version;
-      bundle exec rake spec;
-    done
+script:
+  - bundle exec rake spec
 
