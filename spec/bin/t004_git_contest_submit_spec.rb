@@ -121,7 +121,7 @@ describe "T004: bin/git-contest-submit" do
     before do
       Dir.mkdir '004'
       Dir.chdir '004'
-      File.write "main.cpp", "w" do |file|
+      File.open "main.cpp", "w" do |file|
         file.write "ac-code"
       end
       bin_exec "init --defaults"
