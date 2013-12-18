@@ -30,10 +30,10 @@ load_plugins
 def load_drivers
   driver_names = $sites.keys().map {|key| $sites[key]["driver"] }
   driver_names.uniq.each do |driver_name|
-    class_name = driver_name
+    class_name = driver_name.clone
     class_name.gsub!(/^[a-z]/) {|c| c.upcase }
     class_name.gsub!(/(_)([a-z])/) {|c, b| $2.upcase }
-    $drivers[driver_name] = Object.const_get "Contest::Driver::#{class_name}"
+    $drivers[driver_name] = Contest::Driver.const_get "#{class_name}"
   end
 end
 

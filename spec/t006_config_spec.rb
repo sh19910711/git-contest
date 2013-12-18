@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "T006: Config Test" do
 
-  before do
+  before(:each) do
     init_env
     ENV['GIT_CONTEST_HOME'] = get_path('/mock/default_config')
     @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t006"
@@ -11,9 +11,9 @@ describe "T006: Config Test" do
     # debug_on
   end
 
-  after do
+  after(:each) do
     Dir.chdir '..'
-    Dir.rmdir @test_dir
+    FileUtils.remove_dir @test_dir, :force => true
   end
 
   describe "001: submit_rules" do
@@ -30,10 +30,7 @@ describe "T006: Config Test" do
       end
 
       after do
-        FileUtils.remove_dir ".git", :force => true
-        FileUtils.remove "main.d"
         Dir.chdir '..'
-        Dir.rmdir '001'
       end
 
       it "001: ${site} ${problem-id}: ${status}" do
@@ -77,12 +74,7 @@ describe "T006: Config Test" do
       end
 
       after do
-        FileUtils.remove_dir ".git", :force => true
-        FileUtils.remove "ac.cpp"
-        FileUtils.remove "wa.d"
-        FileUtils.remove "tle.go"
         Dir.chdir '..'
-        Dir.rmdir '002'
       end
 
       it "001: ac.*" do
@@ -135,13 +127,7 @@ describe "T006: Config Test" do
       end
       
       after do
-        FileUtils.remove_dir '.git'
-        FileUtils.remove "test1.cpp"
-        FileUtils.remove "input1.txt"
-        FileUtils.remove "test2.c"
-        FileUtils.remove "input2.txt"
         Dir.chdir ".."
-        Dir.rmdir "003"
       end
 
       it "001: test*.cpp input1.txt" do

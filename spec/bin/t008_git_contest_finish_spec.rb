@@ -4,7 +4,7 @@ require "spec_helper"
 
 describe "T008: git-contest-finish" do
 
-  before do
+  before(:each) do
     init_env
     @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t008"
     Dir.mkdir @test_dir
@@ -12,9 +12,9 @@ describe "T008: git-contest-finish" do
     # debug_on
   end
 
-  after do
+  after(:each) do
     Dir.chdir '..'
-    Dir.rmdir @test_dir
+    FileUtils.remove_dir @test_dir, :force => true
   end
 
   describe "001: --keep" do
@@ -25,9 +25,7 @@ describe "T008: git-contest-finish" do
     end
 
     after do
-      FileUtils.remove_dir ".git", :force => true
       Dir.chdir ".."
-      Dir.rmdir "001"
     end
 
     it "001: init -> start -> empty-commits -> finish" do
@@ -73,9 +71,7 @@ describe "T008: git-contest-finish" do
     end
 
     after do
-      FileUtils.remove_dir ".git", :force => true
       Dir.chdir ".."
-      Dir.rmdir "002"
     end
 
     it "001: init -> start -> empty-commits -> finish --rebase" do
@@ -116,11 +112,6 @@ describe "T008: git-contest-finish" do
       ret_branch_2.include?("branch2").should === false
       ret_branch_2.include?("branch3").should === false
       (!!ret_log.match(/test-2.*test-3.*test-1/m)).should === true
-      10.times {|x|
-        FileUtils.remove "test-1.#{x}"
-        FileUtils.remove "test-2.#{x}"
-        FileUtils.remove "test-3.#{x}"
-      }
     end
 
   end
@@ -133,9 +124,7 @@ describe "T008: git-contest-finish" do
     end
 
     after do
-      FileUtils.remove_dir ".git", :force => true
       Dir.chdir ".."
-      Dir.rmdir "003"
     end
 
     # TODO: recheck
@@ -165,8 +154,6 @@ describe "T008: git-contest-finish" do
       ret_branch = git_do "branch"
       ret_branch.include?("contest/branch1").should === false
       ret_branch.include?("contest/branch2").should === false
-      # clean
-      FileUtils.remove "test.txt"
     end
 
   end
@@ -179,9 +166,7 @@ describe "T008: git-contest-finish" do
     end
 
     after do
-      FileUtils.remove_dir ".git", :force => true
       Dir.chdir ".."
-      Dir.rmdir "004"
     end
 
     it "001: init -> start -> empty-commits -> finish --squash" do
@@ -199,8 +184,6 @@ describe "T008: git-contest-finish" do
       ret_branch1.include?("branch1").should === false
       ret_log1.include?("this is commit").should === true
       ret_log1.include?("Squashed commit").should === true
-      # clean
-      10.times {|x| FileUtils.remove "test#{x}.txt" }
     end
 
   end
@@ -223,12 +206,7 @@ describe "T008: git-contest-finish" do
 
     after do
       Dir.chdir ".."
-      FileUtils.remove_dir "src/.git", :force => true
-      FileUtils.remove_dir "dest/.git", :force => true
-      Dir.rmdir "src"
-      Dir.rmdir "dest"
       Dir.chdir ".."
-      Dir.rmdir "005"
     end
 
     it "001: init -> start -> clone -> checkout@dest -> empty-commits@dest -> finish@dest" do
