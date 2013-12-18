@@ -4,6 +4,7 @@ describe "T005" do
 
   before(:each) do
     init_env
+    ENV['GIT_CONTEST_HOME'] = get_path('/mock/default_config')
     @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t005"
     Dir.mkdir @test_dir
     Dir.chdir @test_dir
@@ -18,7 +19,6 @@ describe "T005" do
   describe "001" do
 
     before do
-      ENV['GIT_CONTEST_HOME'] = get_path('/mock/t005/001')
       ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t005/001/config.yml')
       Dir.mkdir '001'
       Dir.chdir '001'

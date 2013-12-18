@@ -4,6 +4,7 @@ describe "T006: Config Test" do
 
   before do
     init_env
+    ENV['GIT_CONTEST_HOME'] = get_path('/mock/default_config')
     @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t006"
     Dir.mkdir @test_dir
     Dir.chdir @test_dir
@@ -36,7 +37,6 @@ describe "T006: Config Test" do
       end
 
       it "001: ${site} ${problem-id}: ${status}" do
-        ENV['GIT_CONTEST_HOME'] = get_path('/mock/t006/001/001/001')
         ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/001/001/config.yml')
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
@@ -44,7 +44,6 @@ describe "T006: Config Test" do
       end
 
       it "002: ${site}-${problem-id}-${status}" do
-        ENV['GIT_CONTEST_HOME'] = get_path('/mock/t006/001/001/002')
         ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/001/002/config.yml')
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
@@ -52,7 +51,6 @@ describe "T006: Config Test" do
       end
 
       it "003: ${status}-${site}" do
-        ENV['GIT_CONTEST_HOME'] = get_path('/mock/t006/001/001/003')
         ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/001/003/config.yml')
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
@@ -88,7 +86,6 @@ describe "T006: Config Test" do
       end
 
       it "001: ac.*" do
-        ENV['GIT_CONTEST_HOME'] = get_path('/mock/t006/001/002/001')
         ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/002/001/config.yml')
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
@@ -98,7 +95,6 @@ describe "T006: Config Test" do
       end
 
       it "002: wa.*" do
-        ENV['GIT_CONTEST_HOME'] = get_path('/mock/t006/001/002/002')
         ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/002/002/config.yml')
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
@@ -108,7 +104,6 @@ describe "T006: Config Test" do
       end
 
       it "003: tle.*" do
-        ENV['GIT_CONTEST_HOME'] = get_path('/mock/t006/001/002/003')
         ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/002/003/config.yml')
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
@@ -150,7 +145,6 @@ describe "T006: Config Test" do
       end
 
       it "001: test*.cpp input1.txt" do
-        ENV['GIT_CONTEST_HOME'] = get_path('/mock/t006/001/003/001')
         ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/003/001/config.yml')
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "ls-files"
@@ -161,7 +155,6 @@ describe "T006: Config Test" do
       end
 
       it "002: input2.txt test*.c" do
-        ENV['GIT_CONTEST_HOME'] = get_path('/mock/t006/001/003/002')
         ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/003/002/config.yml')
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "ls-files"
@@ -172,7 +165,6 @@ describe "T006: Config Test" do
       end
 
       it "003: input1.txt test1.cpp test2.c input2.txt" do
-        ENV['GIT_CONTEST_HOME'] = get_path('/mock/t006/001/003/003')
         ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/003/003/config.yml')
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "ls-files"

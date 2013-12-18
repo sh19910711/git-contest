@@ -88,7 +88,7 @@ module Contest
           {
             :submission_id => submission_id,
             :status => status,
-            :result => "AOJ %s: %s\nhttp://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=#{submission_id}" % [problem_id, status],
+            :result => get_commit_message($config["submit_rules"]["message"], status, options),
           }
         )
         trigger 'finish'

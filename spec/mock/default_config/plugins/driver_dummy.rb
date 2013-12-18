@@ -1,3 +1,4 @@
+require 'git/contest/common'
 require 'contest/driver/common'
 require 'rexml/document'
 
@@ -97,6 +98,7 @@ module Contest
           {
             :submission_id => '99999',
             :status => status,
+            :result => get_commit_message($config["submit_rules"]["message"], status, options),
           }
         )
         trigger 'finish'
@@ -110,4 +112,3 @@ module Contest
     end
   end
 end
-
