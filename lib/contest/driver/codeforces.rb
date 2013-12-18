@@ -20,6 +20,14 @@ module Contest
         end
       end
 
+      def get_site_name
+        "Codeforces"
+      end
+
+      def get_problem_id(options)
+        "#{options[:contest_id]}#{options[:problem_id]}"
+      end
+
       def get_desc
         "Codeforces (URL: http://codeforces.com/)"
       end
@@ -85,13 +93,34 @@ module Contest
         trigger 'after_login'
 
         # submit
-        trigger 'before_submit'
-        custom_test = @client.get "http://codeforces.com/contest/#{contest_id}/submit"
-        res_page = custom_test.form_with(:class => 'submit-form') do |form|
-          form.submittedProblemIndex = problem_id
-          form.programTypeId = options[:language]
-          form.source = File.read(source_path)
-        end.submit
+        trigger 'before_submit', options
+        # retry once
+        retries = 1
+        begin
+          submit_page = @client.get "http://codeforces.com/contest/#{contest_id}/submit"
+          res_page = submit_page.form_with(:class => 'submit-form') do |form|
+            form.submittedProblemIndex = problem_id
+            form.programTypeId = options[:language]
+            form.source = File.read(source_path)
+          end.submit
+        rescue => e
+          raise if retries == 0
+          retries -= 1
+          # may not be registered practice
+          if /submittedProblemIndex/ =~ e.to_s
+            contest_page = @client.get "http://codeforces.com/contest/#{contest_id}"
+            contest_page.form_with(:action => "") do |form|
+              flag_need_to_register = false
+              form.field_with(:value => "registerForPractice") do |field|
+                flag_need_to_register = true
+              end
+              form.click_button if flag_need_to_register
+            end
+            sleep 3
+            retry
+          end
+          raise
+        end
         trigger 'after_submit'
 
         # need to get the newest waiting submissionId
@@ -142,6 +171,7 @@ module Contest
 
       def get_submission_id(body)
         doc = Nokogiri::HTML(body)
+        # get td.status-cell
         elements = doc.xpath('//td[contains(concat(" ",@class," "), " status-cell ")][@waiting="true"]')
         elements[0].attributes()["submissionid"].value.strip
       end

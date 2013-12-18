@@ -67,11 +67,16 @@ module Contest
         end
       end
 
+      def get_commit_message_ext
+        nil
+      end
+
       def get_commit_message rule, status, options
         message = rule
         message = message.gsub '${site}', get_site_name
         message = message.gsub '${problem-id}', get_problem_id(options)
         message = message.gsub '${status}', status
+        message = "\n#{get_commit_message_ext}" unless get_commit_message_ext.nil?
         return message
       end
 

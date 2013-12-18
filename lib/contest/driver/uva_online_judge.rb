@@ -14,6 +14,10 @@ module Contest
         end
       end
 
+      def get_site_name
+        "UVa"
+      end
+
       def get_desc
         "UVa Online Judge (URL: http://uva.onlinejudge.org/)"
       end
@@ -50,7 +54,7 @@ module Contest
         end.submit
         trigger 'after_login'
 
-        trigger 'before_submit'
+        trigger 'before_submit', options
         submit_page = @client.get 'http://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=25'
         res_page = submit_page.form_with(:action => 'index.php?option=com_onlinejudge&Itemid=25&page=save_submission') do |form|
           form.localid = problem_id
