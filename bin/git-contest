@@ -27,7 +27,7 @@ end
 cmd = ARGV.shift
 case cmd
 when "init", "start", "finish", "submit", "rebase"
-  system File.expand_path("../git-contest-#{cmd}", __FILE__) + " #{ARGV.join(' ')}"
+  load File.expand_path("../git-contest-#{cmd}", __FILE__)
 else
   usage
 end
