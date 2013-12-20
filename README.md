@@ -127,8 +127,19 @@ Example 2:
     $ git contest <sub-command> ... --help
 
 ## Configuration
+### Options: environment variables
+#### `GIT_CONTEST_HOME`
+Type: `String`, Default: `~/.git-contest`
+
+Set a path of git-contest home directory having a config file and plugins.
+
+#### `GIT_CONTEST_CONFIG`
+Type: `String`, Default: `${GIT_CONTEST_HOME}/config.yml`
+
+Set a path of git-contest config file.
+
 ### `${GIT_CONTEST_HOME}/config.yml`
-Write the information of online judges to this file.
+Write the information of online judges and git-contest settings to this file.
 
 #### Example of `config.yml`
 ```yaml
