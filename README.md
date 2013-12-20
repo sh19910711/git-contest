@@ -4,12 +4,13 @@
 [![Build Status](https://travis-ci.org/sh19910711/git-contest.png?branch=develop)](https://travis-ci.org/sh19910711/git-contest)
 
 Currently support the following online judges:
+
 * Codeforces
-    * http://codeforces.com/
+    * [http://codeforces.com/](http://codeforces.com/)
 * Aizu Online Judge
-    * http://judge.u-aizu.ac.jp/onlinejudge/
+    * [http://judge.u-aizu.ac.jp/onlinejudge/](http://judge.u-aizu.ac.jp/onlinejudge/)
 * UVa Online Judge
-    * http://uva.onlinejudge.org/
+    * [http://uva.onlinejudge.org/](http://uva.onlinejudge.org/)
 
 ## Branching Model
 ![image](https://googledrive.com/host/0Bz19k_5gA4wVZWJEcW1XS25NRWM/git-contest.png)
@@ -160,13 +161,13 @@ sites:
 `git-contest` is inspired by [nvie/gitflow](https://github.com/nvie/gitflow).
 
 * A successful Git branching model
-    * http://nvie.com/posts/a-successful-git-branching-model/
+    * [http://nvie.com/posts/a-successful-git-branching-model/](http://nvie.com/posts/a-successful-git-branching-model/)
 * nvie/gitflow
-    * https://github.com/nvie/gitflow
+    * [https://github.com/nvie/gitflow](https://github.com/nvie/gitflow)
 * ruby
-    * https://www.ruby-lang.org/
+    * [https://www.ruby-lang.org/](https://www.ruby-lang.org/)
 * git
-    * http://git-scm.com/
+    * [http://git-scm.com/](http://git-scm.com/)
 
 ## Author Information
 * [Hiroyuki Sano](http://yomogimochi.com/)
