@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.version       = Git::Contest::VERSION
   spec.authors       = ["Hiroyuki Sano"]
   spec.email         = ["sh19910711@gmail.com"]
-  spec.description   = %q{the Git Extension for online judge (Codeforces, Google Codejam, ICPC, etc...)}
-  spec.summary       = %q{the git extension for online judge}
+  spec.description   = %q{the Git Extension for online judge (Codeforces, etc...)}
+  spec.summary       = %q{the Git Extension for online judge (Codeforces, etc...)}
   spec.homepage      = "https://github.com/sh19910711/git-contest"
   spec.license       = "MIT"
 
