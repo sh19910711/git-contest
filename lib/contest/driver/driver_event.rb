@@ -1,3 +1,10 @@
+#
+# driver_event.rb
+#
+# Copyright (c) 2013 Hiroyuki Sano <sh19910711 at gmail.com>
+# Licensed under the MIT-License.
+#
+
 module Contest
   module Driver
     class DriverEvent

@@ -1,5 +1,13 @@
 #!/usr/bin/env ruby
 
+#
+# git-contest-start
+# https://github.com/sh19910711/git-contest
+#
+# Copyright (c) 2013 Hiroyuki Sano <sh19910711 at gmail.com>
+# Licensed under the MIT-License.
+#
+
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'git/contest/common'
 require 'trollop'

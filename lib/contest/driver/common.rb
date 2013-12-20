@@ -1,3 +1,10 @@
+#
+# common.rb
+#
+# Copyright (c) 2013 Hiroyuki Sano <sh19910711 at gmail.com>
+# Licensed under the MIT-License.
+#
+
 require 'mechanize'
 require 'nokogiri'
 require 'trollop'
