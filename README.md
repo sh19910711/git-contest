@@ -142,25 +142,39 @@ Set a path of git-contest config file.
 Write the information of online judges and git-contest settings to this file.
 
 #### Example of `config.yml`
+The site name can be set as you want.
+
 ```yaml
 sites:
-    cxdeforces:
-        driver:     cxdeforces
-        user:       your_cxdeforces_id
-        password:   your_cxdeforces_password
-    multi_account_axj_1:
-        driver:     axj
-        user:       your_axj_id_1
-        password:   your_axj_password_1
-    multi_account_axj_2:
-        driver:     axj
-        user:       your_axj_id_2
-        password:   your_axj_password_2
-    uvx:
-        driver:     uvx
-        user:       your_uvx_id
-        password:   your_uvx_password
+    codeforces:
+        driver:     codeforces
+        user:       your_codeforces_id
+        password:   your_codeforces_password
+    multi_account_aoj_1:
+        driver:     aizu_online_judge
+        user:       your_aoj_id_1
+        password:   your_aoj_password_1
+    multi_account_aoj_2:
+        driver:     aizu_online_judge
+        user:       your_aoj_id_2
+        password:   your_aoj_password_2
+    uva:
+        driver:     uva_online_judge
+        user:       your_uva_id
+        password:   your_uva_password
 ```
+
+#### About contest drivers
+Available drivers:
+
+* codeforces
+* aizu\_online\_judge
+* uva\_online\_judge
+
+You can write driver plugin on `${GIT_CONTEST_HOME}/plugins/driver_***.rb`
+
+#### (TODO) How to write driver plugin
+to be written here.
 
 ## Contributing
 
