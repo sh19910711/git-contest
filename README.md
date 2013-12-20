@@ -1,6 +1,7 @@
 # Git::Contest
 **git-contest** is _the Git Extension for online judges_ (Codeforces, etc...)
 
+[![Gem Version](https://badge.fury.io/rb/git-contest.png)](http://badge.fury.io/rb/git-contest)
 [![Build Status](https://travis-ci.org/sh19910711/git-contest.png?branch=develop)](https://travis-ci.org/sh19910711/git-contest)
 
 Currently support the following online judges:
