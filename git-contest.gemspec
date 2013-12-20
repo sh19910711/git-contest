@@ -1,6 +1,8 @@
 # coding: utf-8
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
 require 'git/contest/version'
 
 Gem::Specification.new do |spec|
@@ -8,13 +10,12 @@ Gem::Specification.new do |spec|
   spec.version       = Git::Contest::VERSION
   spec.authors       = ["Hiroyuki Sano"]
   spec.email         = ["sh19910711@gmail.com"]
-  spec.description   = %q{git extension for programming contest (Codeforces, Google Codejam, ICPC, etc...)}
-  spec.summary       = %q{git extension for programming contest}
-  spec.homepage      = ""
+  spec.description   = %q{the Git Extension for online judge (Codeforces, Google Codejam, ICPC, etc...)}
+  spec.summary       = %q{the git extension for online judge}
+  spec.homepage      = "https://github.com/sh19910711/git-contest"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
-  # spec.files         = `find . -type f | grep -Ev '/\\.' | grep -v /tmp/`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
@@ -30,3 +31,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "webmock"
 end
+
