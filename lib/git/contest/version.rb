@@ -7,6 +7,6 @@
 
 module Git
   module Contest
-    VERSION = "0.0.1"
+    VERSION = "0.0.2"
   end
 end
