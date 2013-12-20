@@ -1,0 +1,163 @@
+#!/usr/bin/env ruby
+
+#
+# git-contest-finish
+# https://github.com/sh19910711/git-contest
+#
+# Copyright (c) 2013 Hiroyuki Sano <sh19910711 at gmail.com>
+# Licensed under the MIT-License.
+#
+
+$:.unshift File.expand_path('../../lib', __FILE__)
+require 'git/contest/common'
+require 'trollop'
+
+def use_current_branch
+  current_branch = git_current_branch
+  if current_branch.start_with? $PREFIX
+    $BRANCH = current_branch.strip
+    $NAME = $BRANCH[$PREFIX.length+1..-1]
+  else
+    puts "The current HEAD is no feature branch."
+    puts "Please spefcify a <name> argument."
+    abort ''
+  end
+end
+
+def expand_contest_branch
+  if ARGV.length == 0
+    use_current_branch
+  else
+    $NAME = ARGV[0]
+    $BRANCH = "#{$PREFIX}/#{$NAME}"
+    require_branch $BRANCH
+  end
+end
+
+def helper_finish_cleanup
+  require_branch $BRANCH
+  require_clean_working_tree
+
+  if $options[:fetch]
+    git_do "push \"#{$ORIGIN}\" \":refs/heads/#{$BRANCH}\""
+  end
+
+  if ! $options[:keep]
+    if $options[:force_delete]
+      git_do "branch -D #{$BRANCH}"
+    else
+      git_do "branch -d #{$BRANCH}"
+    end
+  end
+
+  puts ""
+  puts "Summary of actions:"
+  puts "- The contest branch \"#{$BRANCH}\" was merged into \"#{$MASTER}\""
+  puts "- Contest branch \"#{$BRANCH}\" has been removed"
+  puts "- You are now on branch \"#{$MASTER}\""
+  puts ""
+end
+
+init
+
+sub_commands = %w()
+$options = Trollop::options do
+  version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
+  opt(
+    :no_edit,
+    "Use default commit message.",
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
+  opt(
+    :keep,
+    "Keep contest branch after merge.",
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
+  opt(
+    :rebase,
+    "Use rebase instead of merge.",
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
+  opt(
+    :force_delete,
+    "Force delete contest branch after finish.",
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
+  opt(
+    :squash,
+    "Use squash during merge.",
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
+  opt(
+    :fetch,
+    "Fetch from origin before finish.",
+    :type => :flag,
+    :default => false,
+    :required => false,
+  )
+  stop_on sub_commands
+end
+
+expand_contest_branch()
+require_branch $BRANCH
+
+require_clean_working_tree
+
+if git_remote_branches().include?("#{$ORIGIN}/#{$BRANCH}")
+  if $options[:fetch]
+    git_do "fetch -q \"#{$ORIGIN}\" \"#{$BRANCH}\""
+    git_do "fetch -q \"#{$ORIGIN}\" \"#{$MASTER}\""
+  end
+end
+
+if git_remote_branches().include?("#{$ORIGIN}/#{$BRANCH}")
+  require_branches_equal $BRANCH, "#{$ORIGIN}/#{$BRANCH}"
+end
+
+if git_remote_branches().include?("#{$ORIGIN}/#{$MASTER}")
+  require_branches_equal $MASTER, "#{$ORIGIN}/#{$MASTER}"
+end
+
+merge_options = ""
+if $options[:no_edit]
+  merge_options += " --no-edit"
+end
+
+if $options[:rebase]
+  ret = git_do "contest rebase \"#{$NAME}\" \"#{$MASTER}\""
+  exitcode = $?.to_i
+  if ! $?
+    puts "Finish was aborted due to conflicts during rebase."
+    exit 1
+  end
+end
+
+git_do "checkout #{$MASTER}"
+if git_do("rev-list -n2 \"#{$MASTER}..#{$BRANCH}\"").lines.to_a.length == 1
+  git_do "merge --ff \"#{$BRANCH}\" #{merge_options}"
+else
+  if $options[:squash]
+    git_do "merge --squash \"#{$BRANCH}\" #{merge_options}"
+    if $options[:no_edit]
+      git_do "commit -m 'Squashed commit'"
+    else
+      git_do "commit"
+    end
+    git_do "merge \"#{$BRANCH}\" #{merge_options}"
+  else
+    git_do "merge --no-ff \"#{$BRANCH}\" #{merge_options}"
+  end
+end
+
+helper_finish_cleanup
+

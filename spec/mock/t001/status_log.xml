@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<status_list>
+  <status>
+    <run_id>
+      111
+    </run_id>
+    <user_id>
+      test_user
+    </user_id>
+    <problem_id>
+      222
+    </problem_id>
+    <status>
+      Wrong Answer
+    </status>
+    <language>
+      Ruby
+    </language>
+    <cputime>
+      333
+    </cputime>
+    <memory>
+      444
+    </memory>
+    <code_size>
+      555
+    </code_size>
+  </status>
+</status_list>

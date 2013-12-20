@@ -1,0 +1,9 @@
+submit_rules:
+  source: "test*.c"
+  add:    "input2.txt test*.c"
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+
