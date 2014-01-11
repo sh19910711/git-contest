@@ -73,19 +73,21 @@ module Contest
         trigger 'before_submit', options
         submit_page = @client.get 'https://open.kattis.com/submit'
         res_page = submit_page.form_with(:name => 'upload') do |form|
-          form.problem = "aaah" # problem_id
-          form.field_with(:name => 'lang').options[0].select # = options[:language]
+          form.problem = problem_id
+          form['lang'] = options[:language]
           form.sub_code = File.read(source_path)
-          #if (form.lang == 'java')
-          #	form.mainclass = 'Main'
+          if (options[:language] == resolve_language('java'))
+            form['mainclass'] = 'Main'
+          end
           form.submit(form.button_with(:name => 'submit'))
         end.submit
-        print res_page.body
+        # print res_page.body
         trigger 'after_submit'
 
         # result
         trigger 'before_wait'
-        #submission_id = get_submission_id(res_page.body)
+        submission_id = get_submission_id(res_page.body)
+        print submission_id
         #status = get_status_wait(submission_id)
         #trigger(
         #  'after_wait',
@@ -114,12 +116,12 @@ module Contest
         #return 'timeout'
       #end
 
-      #def get_submission_id(body)
-        #doc = Nokogiri::HTML(body)
-        #text = doc.xpath('//div[@class="message"]')[0].text().strip
+      def get_submission_id(body)
+        doc = Nokogiri::HTML(body)
+        1234
         # Submission received with ID 12500010
         #text.match(/Submission received with ID ([0-9]+)/)[1]
-      #end
+      end
 
       #def get_submission_status(submission_id, body)
       #  'timeout'
