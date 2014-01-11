@@ -90,10 +90,9 @@ module Contest
 
         # result
         trigger 'before_wait'
-        username = 'osund' # !!!
-        my_page = @client.get 'https://open.kattis.com/users/' + username + '?show=submissions'
+        my_page = @client.get 'https://open.kattis.com/users/' + config["user"] + '?show=submissions'
         submission_id = get_submission_id(my_page.body)
-        status = get_status_wait(submission_id)
+        status = get_status_wait(submission_id, config["user"])
         trigger(
           'after_wait',
           {
@@ -107,13 +106,12 @@ module Contest
         get_commit_message($config["submit_rules"]["message"], status, options)
       end
 
-      def get_status_wait(submission_id)
+      def get_status_wait(submission_id, user)
         submission_id = submission_id.to_s
-        # wait result
+        # wait for result
         12.times do
           sleep 10
-          username = 'osund' # !!!
-          my_page = @client.get 'https://open.kattis.com/users/' + username + '?show=submissions'
+          my_page = @client.get 'https://open.kattis.com/users/' + user + '?show=submissions'
           status = get_submission_status(submission_id, my_page.body)
           return status unless status == 'Running' || status == ''
           trigger 'retry'
