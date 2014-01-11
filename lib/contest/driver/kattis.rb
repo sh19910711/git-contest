@@ -5,6 +5,8 @@
 # Licensed under the MIT-License.
 #
 
+# Oskar Sundström
+
 require 'contest/driver/common'
 
 module Contest
@@ -30,7 +32,7 @@ module Contest
       end
 
       def get_problem_id(options)
-        'aaah' # ???
+        "#{options[:problem_id]}"
       end      
 
       def resolve_language(label)
@@ -49,8 +51,8 @@ module Contest
           return "9"
         when "golang"
           return "10"
-        # when "objectivec"
-        #   return "11"
+        when "objc"
+           return "11"
         else
           abort "unknown language"
         end
@@ -67,11 +69,10 @@ module Contest
         # submit
         trigger 'before_login'
         login_page = @client.get 'https://open.kattis.com/login?email_login=true'
-        page = login_page.form_with(:action => 'login?email_login=true') do |form|
+        login_page.form_with(:action => 'login?email_login=true') do |form|
           form.user = config["user"]
           form.password = config["password"]
         end.submit
-        # print page.body
         trigger 'after_login'
 
         trigger 'before_submit', options
@@ -89,8 +90,8 @@ module Contest
 
         # result
         trigger 'before_wait'
-        # username = osund
-        my_page = @client.get 'https://open.kattis.com/users/osund?show=submissions'
+        username = 'osund' # !!!
+        my_page = @client.get 'https://open.kattis.com/users/' + username + '?show=submissions'
         submission_id = get_submission_id(my_page.body)
         status = get_status_wait(submission_id)
         trigger(
@@ -111,8 +112,8 @@ module Contest
         # wait result
         12.times do
           sleep 10
-          # username = osund
-          my_page = @client.get 'https://open.kattis.com/users/osund?show=submissions'
+          username = 'osund' # !!!
+          my_page = @client.get 'https://open.kattis.com/users/' + username + '?show=submissions'
           status = get_submission_status(submission_id, my_page.body)
           return status unless status == 'Running' || status == ''
           trigger 'retry'
