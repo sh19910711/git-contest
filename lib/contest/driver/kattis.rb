@@ -29,6 +29,10 @@ module Contest
         "Kattis (URL: https://open.kattis.com/)"
       end
 
+      def get_problem_id(options)
+        'aaah' # ???
+      end      
+
       def resolve_language(label)
         case label
         when "cpp"
