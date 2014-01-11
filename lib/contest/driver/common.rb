@@ -31,7 +31,7 @@ module Contest
         case label
         when "c", "C"
           return "clang"
-        when "cpp", "C++", "c++"
+        when "cpp", "C++", "c++", "cc", "cxx"
           return "cpp"
         when "c++11", "C++11"
           return "cpp11"
