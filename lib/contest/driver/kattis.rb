@@ -92,7 +92,7 @@ module Contest
         trigger 'before_wait'
         my_page = @client.get 'https://open.kattis.com/users/' + config["user"] + '?show=submissions'
         submission_id = get_submission_id(my_page.body)
-        status = get_status_wait(submission_id, config["user"])
+        status = get_status_wait(submission_id)
         trigger(
           'after_wait',
           {
@@ -106,13 +106,14 @@ module Contest
         get_commit_message($config["submit_rules"]["message"], status, options)
       end
 
-      def get_status_wait(submission_id, user)
+      def get_status_wait(submission_id)
+        # print submission_id
         submission_id = submission_id.to_s
         # wait for result
-        12.times do
+        17.times do
           sleep 10
-          my_page = @client.get 'https://open.kattis.com/users/' + user + '?show=submissions'
-          status = get_submission_status(submission_id, my_page.body)
+          submission_page = @client.get 'https://open.kattis.com/submission?id=' + submission_id
+          status = get_submission_status(submission_id, submission_page.body)
           return status unless status == 'Running' || status == ''
           trigger 'retry'
         end
@@ -123,12 +124,13 @@ module Contest
       def get_submission_id(body)
         doc = Nokogiri::HTML(body)
         text = doc.xpath('//a')[16].inner_text().strip
+        return text
       end
 
       def get_submission_status(submission_id, body)
         doc = Nokogiri::HTML(body)
-        # doc.xpath('')
-        'timeout'
+        text = doc.xpath('//td[@class="status"]/span').inner_text().strip
+        return text
       end
 
       if is_test_mode?
