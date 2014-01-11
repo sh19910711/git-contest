@@ -45,8 +45,8 @@ module Contest
           return "9"
         when "golang"
           return "10"
-        #when "objectivec"
-        #  return "11"
+        # when "objectivec"
+        #   return "11"
         else
           abort "unknown language"
         end
@@ -81,51 +81,41 @@ module Contest
           end
           form.submit(form.button_with(:name => 'submit'))
         end.submit
-        # print res_page.body
         trigger 'after_submit'
 
         # result
         trigger 'before_wait'
         submission_id = get_submission_id(res_page.body)
         print submission_id
-        #status = get_status_wait(submission_id)
-        #trigger(
-        #  'after_wait',
-        #  {
-        #    :submission_id => submission_id,
-        #    :status => status,
-        #    :result => get_commit_message($config["submit_rules"]["message"], status, options),
-        #  }
-        #)
+        status = get_status_wait(submission_id)
+        trigger(
+          'after_wait',
+          {
+            :submission_id => submission_id,
+            :status => status,
+            :result => get_commit_message($config["submit_rules"]["message"], status, options),
+          }
+        )
 
         trigger 'finish'
-        # get_commit_message($config["submit_rules"]["message"], status, options)
+        get_commit_message($config["submit_rules"]["message"], status, options)
       end
 
-      #def get_status_wait(submission_id)
-        #submission_id = submission_id.to_s
-        # wait result
-        #12.times do
-          #sleep 10
-          #my_page = @client.get 'https://open.kattis.com/users/osund?show=submissions'
-          #status = get_submission_status(submission_id, my_page.body)
-          #return status unless status == 'Sent to judge' || status == ''
-          #trigger 'retry'
-        #end
-        #trigger 'timeout'
-        #return 'timeout'
-      #end
+      def get_status_wait(submission_id)
+        my_page = @client.get 'https://open.kattis.com/users/osund?show=submissions'
+        status = get_submission_status(submission_id, my_page.body)
+        trigger 'timeout'
+        return 'timeout'
+      end
 
       def get_submission_id(body)
         doc = Nokogiri::HTML(body)
         1234
-        # Submission received with ID 12500010
-        #text.match(/Submission received with ID ([0-9]+)/)[1]
       end
 
-      #def get_submission_status(submission_id, body)
-      #  'timeout'
-      #end
+      def get_submission_status(submission_id, body)
+        'timeout'
+      end
 
       if is_test_mode?
         attr_writer :client
