@@ -13,3 +13,6 @@ require 'contest/driver/codeforces'
 
 # http://uva.onlinejudge.org/
 require 'contest/driver/uva_online_judge'
+
+# https://open.kattis.com/
+require 'contest/driver/kattis'
