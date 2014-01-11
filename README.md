@@ -12,6 +12,8 @@ Currently support the following online judges:
     * [http://judge.u-aizu.ac.jp/onlinejudge/](http://judge.u-aizu.ac.jp/onlinejudge/)
 * UVa Online Judge
     * [http://uva.onlinejudge.org/](http://uva.onlinejudge.org/)
+* Kattis
+    * [https://open.kattis.com/](https://open.kattis.com/) (not really..)
 
 ## Branching Model
 ![image](https://googledrive.com/host/0Bz19k_5gA4wVZWJEcW1XS25NRWM/git-contest.png)
@@ -162,6 +164,10 @@ sites:
         driver:     uva_online_judge
         user:       your_uva_id
         password:   your_uva_password
+    kattis:
+        driver:     kattis
+        user:       your_kattis_id
+        password:   your_kattis_password
 ```
 
 #### About contest drivers
