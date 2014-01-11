@@ -1,5 +1,5 @@
 #
-# uva_online_judge.rb
+# kattis.rb
 #
 # Copyright (c) 2013 Hiroyuki Sano <sh19910711 at gmail.com>
 # Licensed under the MIT-License.
@@ -103,7 +103,7 @@ module Contest
         # wait result
         12.times do
           sleep 10
-          my_page = @client.get 'http://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=9'
+          my_page = @client.get 'https://open.kattis.com/users/osund?show=submissions'
           status = get_submission_status(submission_id, my_page.body)
           return status unless status == 'Sent to judge' || status == ''
           trigger 'retry'
@@ -120,16 +120,6 @@ module Contest
       end
 
       def get_submission_status(submission_id, body)
-        doc = Nokogiri::HTML(body)
-        doc.xpath('//tr[@class="sectiontableheader"]/following-sibling::node()').search('tr').each do |elm|
-          td_list = elm.search('td')
-          item_submission_id = td_list[0].text.strip
-          if item_submission_id == submission_id
-            item_problem_id = td_list[1].text.strip
-            item_status = td_list[3].text.strip
-            return item_status
-          end
-        end
         'timeout'
       end
 
