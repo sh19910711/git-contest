@@ -61,6 +61,7 @@ module Contest
       def submit_ext(config, source_path, options)
         trigger 'start'
         problem_id = options[:problem_id]
+        subdomain = 'open' # kth/liu
 
         @client = Mechanize.new {|agent|
           agent.user_agent_alias = 'Windows IE 7'
@@ -68,7 +69,7 @@ module Contest
 
         # submit
         trigger 'before_login'
-        login_page = @client.get 'https://open.kattis.com/login?email_login=true'
+        login_page = @client.get 'https://' + subdomain + '.kattis.com/login?email_login=true'
         login_page.form_with(:action => 'login?email_login=true') do |form|
           form.user = config["user"]
           form.password = config["password"]
@@ -76,7 +77,7 @@ module Contest
         trigger 'after_login'
 
         trigger 'before_submit', options
-        submit_page = @client.get 'https://open.kattis.com/submit'
+        submit_page = @client.get 'https://' + subdomain + '.kattis.com/submit'
         res_page = submit_page.form_with(:name => 'upload') do |form|
           form.problem = problem_id
           form['lang'] = options[:language]
@@ -90,9 +91,9 @@ module Contest
 
         # result
         trigger 'before_wait'
-        my_page = @client.get 'https://open.kattis.com/users/' + config["user"] + '?show=submissions'
+        my_page = @client.get 'https://' + subdomain + '.kattis.com/users/' + config["user"] + '?show=submissions'
         submission_id = get_submission_id(my_page.body)
-        status = get_status_wait(submission_id)
+        status = get_status_wait(submission_id, subdomain)
         trigger(
           'after_wait',
           {
@@ -106,13 +107,12 @@ module Contest
         get_commit_message($config["submit_rules"]["message"], status, options)
       end
 
-      def get_status_wait(submission_id)
-        # print submission_id
+      def get_status_wait(submission_id, subdomain)
         submission_id = submission_id.to_s
         # wait for result
-        17.times do
+        12.times do
           sleep 10
-          submission_page = @client.get 'https://open.kattis.com/submission?id=' + submission_id
+          submission_page = @client.get 'https://' + subdomain + '.kattis.com/submission?id=' + submission_id
           status = get_submission_status(submission_id, submission_page.body)
           return status unless status == 'Running' || status == ''
           trigger 'retry'
