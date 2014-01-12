@@ -15,6 +15,12 @@ module Contest
       def get_opts_ext
         define_options do
           opt(
+            :contest_id,
+            "Contest ID (Ex: open, kth, liu, etc...)",
+            :type => :string,
+            :required => false,
+          )
+          opt(
             :problem_id,
             "Problem ID (Ex: aaah, listgame2, etc...)",
             :type => :string,
@@ -61,7 +67,12 @@ module Contest
       def submit_ext(config, source_path, options)
         trigger 'start'
         problem_id = options[:problem_id]
-        subdomain = 'open' # kth/liu
+
+        if (options[:contest_id])
+          subdomain = options[:contest_id]
+        else
+          subdomain = "open"
+        end
 
         @client = Mechanize.new {|agent|
           agent.user_agent_alias = 'Windows IE 7'
@@ -69,7 +80,7 @@ module Contest
 
         # submit
         trigger 'before_login'
-        login_page = @client.get 'https://' + subdomain + '.kattis.com/login?email_login=true'
+        login_page = @client.get "https://#{subdomain}.kattis.com/login?email_login=true"
         login_page.form_with(:action => 'login?email_login=true') do |form|
           form.user = config["user"]
           form.password = config["password"]
@@ -77,7 +88,7 @@ module Contest
         trigger 'after_login'
 
         trigger 'before_submit', options
-        submit_page = @client.get 'https://' + subdomain + '.kattis.com/submit'
+        submit_page = @client.get "https://#{subdomain}.kattis.com/submit"
         res_page = submit_page.form_with(:name => 'upload') do |form|
           form.problem = problem_id
           form['lang'] = options[:language]
@@ -91,7 +102,8 @@ module Contest
 
         # result
         trigger 'before_wait'
-        my_page = @client.get 'https://' + subdomain + '.kattis.com/users/' + config["user"] + '?show=submissions'
+        user = config['user']
+        my_page = @client.get "https://#{subdomain}.kattis.com/users/#{user}?show=submissions"
         submission_id = get_submission_id(my_page.body)
         status = get_status_wait(submission_id, subdomain)
         trigger(
@@ -99,12 +111,12 @@ module Contest
           {
             :submission_id => submission_id,
             :status => status,
-            :result => get_commit_message($config["submit_rules"]["message"], status, options),
+            :result => get_commit_message($config['submit_rules']['message'], status, options),
           }
         )
 
         trigger 'finish'
-        get_commit_message($config["submit_rules"]["message"], status, options)
+        get_commit_message($config['submit_rules']['message'], status, options)
       end
 
       def get_status_wait(submission_id, subdomain)
@@ -112,7 +124,7 @@ module Contest
         # wait for result
         12.times do
           sleep 10
-          submission_page = @client.get 'https://' + subdomain + '.kattis.com/submission?id=' + submission_id
+          submission_page = @client.get "https://#{subdomain}.kattis.com/submission?id=#{submission_id}"
           status = get_submission_status(submission_id, submission_page.body)
           return status unless status == 'Running' || status == ''
           trigger 'retry'
@@ -123,14 +135,12 @@ module Contest
 
       def get_submission_id(body)
         doc = Nokogiri::HTML(body)
-        text = doc.xpath('//a')[16].inner_text().strip
-        return text
+        return doc.xpath('//a[starts-with(@href,"submission")]')[0].inner_text().strip
       end
 
       def get_submission_status(submission_id, body)
         doc = Nokogiri::HTML(body)
-        text = doc.xpath('//td[@class="status"]/span').inner_text().strip
-        return text
+        return doc.xpath('//td[@class="status"]/span').inner_text().strip
       end
 
       if is_test_mode?
