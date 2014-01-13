@@ -93,9 +93,11 @@ module Contest
           form.problem = problem_id
           form['lang'] = options[:language]
           form.sub_code = File.read(source_path)
+          # Use file name as main class for Java
           if (options[:language] == resolve_language('java'))
-            form['mainclass'] = 'Main'
+            form['mainclass'] = source_path.rpartition('.')[0]
           end
+
           form.submit(form.button_with(:name => 'submit'))
         end.submit
         trigger 'after_submit'
