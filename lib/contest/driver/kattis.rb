@@ -43,9 +43,9 @@ module Contest
       def resolve_language(label)
         case label
         when 'cpp'
-          return "1"
+          return '1'
         when 'c'
-          return "2"
+          return '2'
         when 'java'
           return '3'
         when 'python2'
@@ -104,6 +104,13 @@ module Contest
         # result
         trigger 'before_wait'
         user = config['user']
+        doc = Nokogiri::HTML(res_page.body)
+        # Check for error messages
+        error = doc.xpath('//p[@class="error"]')[0];
+        if ((/Problem ID not found in database./ =~ error.inner_text()) ||
+        	(/Problem-id inte funnet i databasen./ =~ error.inner_text()))
+        	abort "Problem ID not found in database."
+        end
         my_page = @client.get "https://#{subdomain}.kattis.com/users/#{user}?show=submissions"
         submission_id = get_submission_id(my_page.body)
         status = get_status_wait(submission_id, subdomain)
@@ -122,7 +129,7 @@ module Contest
 
       def get_status_wait(submission_id, subdomain)
         submission_id = submission_id.to_s
-        # wait for result
+        # Wait for result
         12.times do
           sleep 10
           submission_page = @client.get "https://#{subdomain}.kattis.com/submission?id=#{submission_id}"
