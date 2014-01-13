@@ -2,10 +2,9 @@
 # kattis.rb
 #
 # Copyright (c) 2013 Hiroyuki Sano <sh19910711 at gmail.com>
+# Copyright (c) 2014 Oskar Sundström <oskar.sundstrom@gmail.com>
 # Licensed under the MIT-License.
 #
-
-# Oskar Sundström
 
 require 'contest/driver/common'
 
@@ -43,24 +42,24 @@ module Contest
 
       def resolve_language(label)
         case label
-        when "cpp"
+        when 'cpp'
           return "1"
-        when "c"
+        when 'c'
           return "2"
-        when "java"
-          return "3"
-        when "python2"
-          return "6"
-        when "python3"
-          return "8"
-        when "cs"
-          return "9"
-        when "golang"
-          return "10"
-        when "objc"
-           return "11"
+        when 'java'
+          return '3'
+        when 'python2'
+          return '6'
+        when 'python3'
+          return '8'
+        when 'cs'
+          return '9'
+        when 'golang'
+          return '10'
+        when 'objc'
+           return '11'
         else
-          abort "unknown language"
+          abort 'unknown language'
         end
       end
 
@@ -71,7 +70,7 @@ module Contest
         if (options[:contest_id])
           subdomain = options[:contest_id]
         else
-          subdomain = "open"
+          subdomain = 'open'
         end
 
         @client = Mechanize.new {|agent|
@@ -82,8 +81,8 @@ module Contest
         trigger 'before_login'
         login_page = @client.get "https://#{subdomain}.kattis.com/login?email_login=true"
         login_page.form_with(:action => 'login?email_login=true') do |form|
-          form.user = config["user"]
-          form.password = config["password"]
+          form.user = config['user']
+          form.password = config['password']
         end.submit
         trigger 'after_login'
 
