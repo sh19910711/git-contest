@@ -19,7 +19,7 @@ describe "T007: Kattis Driver" do
   context "A002: #get_submissions_status" do
     context "111111" do
       subject do
-        dummy_html = read_file('/mock/t007/user_submissions.html')
+        dummy_html = read_file('/mock/t007/user_submission_111111.html')
         @driver.get_submission_status "111111", dummy_html
       end
       it "must return the status of specified submission" do
@@ -28,7 +28,7 @@ describe "T007: Kattis Driver" do
     end
     context "222222" do
       subject do
-        dummy_html = read_file('/mock/t007/user_submissions.html')
+        dummy_html = read_file('/mock/t007/user_submission_222222.html')
         @driver.get_submission_status "222222", dummy_html
       end
       it "must return the status of specified submission" do
