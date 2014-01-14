@@ -31,7 +31,7 @@ module Contest
         case label
         when "c", "C"
           return "clang"
-        when "cpp", "C++", "c++"
+        when "cpp", "C++", "c++", "cc", "cxx"
           return "cpp"
         when "c++11", "C++11"
           return "cpp11"
@@ -45,6 +45,8 @@ module Contest
           return "haskell"
         when "java", "Java"
           return "java"
+        when "objc", "m"
+          return "objc"
         when "ocaml", "ml", "OCaml"
           return "ocaml"
         when "Delphi", "delphi"
