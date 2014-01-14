@@ -57,7 +57,7 @@ module Contest
         when "javascript"
           return "JavaScript"
         else
-          abort "unknown languag"
+          abort "unknown language"
         end
       end
 
