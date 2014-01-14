@@ -5,6 +5,14 @@
 # Copyright (c) 2014 Oskar Sundström <oskar.sundstrom@gmail.com>
 # Licensed under the MIT-License.
 #
+# An official Python submission script can be found at
+# https://open.kattis.com/doc/submit
+#
+# Using the Python script you would write:
+#  $ python3 submit3.py -p aaah Main.java
+# 
+# To do the same thing using git-contest you instead write:
+#  $ git contest submit kattis -p aaah -s Main.java
 
 require 'contest/driver/common'
 
@@ -77,7 +85,7 @@ module Contest
           agent.user_agent_alias = 'Windows IE 7'
         }
 
-        # submit
+        # Submit
         trigger 'before_login'
         login_page = @client.get "https://#{subdomain}.kattis.com/login?email_login=true"
         login_page.form_with(:action => 'login?email_login=true') do |form|
@@ -96,23 +104,22 @@ module Contest
           if (options[:language] == resolve_language('java'))
             form['mainclass'] = source_path.rpartition('.')[0]
           end
-
           form.submit(form.button_with(:name => 'submit'))
         end.submit
         trigger 'after_submit'
 
-        # result
+        # Result
         trigger 'before_wait'
         user = config['user']
         doc = Nokogiri::HTML(res_page.body)
         # Check for error messages
         error = doc.xpath('//p[@class="error"]')[0];
-        if ((/Problem ID not found in database./ =~ error.inner_text()) ||
-        	(/Problem-id inte funnet i databasen./ =~ error.inner_text()))
-        	abort "Problem ID not found in database."
+        if ((/Problem ID not found in database./ =~ error) ||
+            (/Problem-id inte funnet i databasen./ =~ error))
+          abort "Problem ID not found in database."
         end
-        my_page = @client.get "https://#{subdomain}.kattis.com/users/#{user}?show=submissions"
-        submission_id = get_submission_id(my_page.body)
+        submissions_page = @client.get "https://#{subdomain}.kattis.com/users/#{user}?show=submissions"
+        submission_id = get_submission_id(submissions_page.body)
         status = get_status_wait(submission_id, subdomain)
         trigger(
           'after_wait',
@@ -134,7 +141,7 @@ module Contest
           sleep 10
           submission_page = @client.get "https://#{subdomain}.kattis.com/submission?id=#{submission_id}"
           status = get_submission_status(submission_id, submission_page.body)
-          return status unless status == 'Running' || status == ''
+          return status unless status == 'Running'
           trigger 'retry'
         end
         trigger 'timeout'
