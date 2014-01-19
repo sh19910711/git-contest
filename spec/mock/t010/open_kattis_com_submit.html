@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <body> 
+    <div class='container'>
+      <h1>Upload to judge</h1><form action='submit' name='upload' method='post' enctype='multipart/form-data'>
+        <input type='hidden' name='csrf_token' value='this is dummy' />
+        <table id='submit_table' width='100%'>
+          <tr>
+            <td>
+              <span id='sub_files'>Select files to upload <input type='file' name='sub_file[]' id='sub_files_input' multiple onChange='hideEditor("sub_code"); document.getElementById("show_editor_button_sub_code").style.display="none"; document.getElementById("cancel").disabled=false; fileDialogEnabled();' />
+              </span>
+              <button id='show_editor_button_sub_code' name='editor_visible' type='button' onClick='showEditor("sub_code"); document.getElementById("show_editor_button_sub_code").style.display="none"; document.getElementById("sub_files").style.display="none";  document.getElementById("cancel").disabled=false; editorEnabled();'>OR open an editor</button><br />
+            </td>
+          </tr>
+          <tr>
+            <td colspan='2'>
+              <div id='editor_resize' style='display:none'><div class='editor_wrapper' id='sub_code_box' style='display:none'>
+                  <div id='sub_code'></div>
+                </div>
+              </div>
+              <input type='hidden' id='sub_code_submit' name='sub_code' value='' />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Problem ID: <input type='text' name='problem' value='' list='problems'/>
+            </td>
+            <td>
+              <tr>
+              <td>Language: 
+                <select name='lang' onChange='setLanguageChoice(parseInt(document.upload.lang.value), "")'>
+                  <option value='1' selected='selected'>C++</option>
+                  <option value='2' >C</option>
+                  <option value='3' >Java</option>
+                  <option value='6' >Python 2</option>
+                  <option value='8' >Python 3</option>
+                  <option value='9' >C#</option>
+                  <option value='10' >Go</option>
+                  <option value='11' >Objective-C</option>
+              </select>  </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <button id='cancel' name='cancel' type='button' onClick='window.location="submit";' disabled>Cancel</button>
+                <input type='submit' name='submit' onClick='setEditorValues();' value='Submit' />
+              </td>
+            </tr>
+          </table>
+          <input type='hidden' name='submit_ctr' value='1' />
+        </form>
+      </div>
+    </body>
+  </html>

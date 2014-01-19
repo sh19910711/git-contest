@@ -13,12 +13,26 @@ require 'contest/driver/base'
 module Contest
   module Driver
     module Utils
-      def self.resolve_path path
-        path = `ls #{path} | cat | head -n 1`
-        path.strip
+      def self.resolve_wild_card path
+        `ls #{path} | cat | head -n 1`.strip
+      end
+
+      # resolve wild card
+      def self.resolve_path src
+        if src.match ','
+          src.split(',').map do |path|
+            resolve_wild_card(path)
+          end
+        else
+          resolve_wild_card(src)
+        end
       end
 
       def self.resolve_language path
+        # set first element if path is array
+        if path.is_a? Array
+          path = path[0]
+        end
         regexp = /\.([a-z0-9]+)$/
         if path.match(regexp)
           return path.match(regexp)[1]

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+  </head>
+  <body>
+    <div style="position: relative;">
+      <div id="content">
+        <div>
+          <h5>Fill in the form to login into Codeforces.</h5>
+          You can use <a href="enter/OpenID">OpenID</a> or <a href="enter/Gmail">Gmail</a> as an alternative way to enter.
+          <div class="roundbox " style="width: 30em;margin: 2em auto;">
+            <div class="roundbox-lt">&nbsp;</div>
+            <div class="roundbox-rt">&nbsp;</div>
+            <div class="caption titled">
+              Login into Codeforces
+              <div class="top-links">
+              </div>
+            </div>
+            <form method="post" action="">
+              <input type='hidden' name='csrf_token' value='dummy_token'/>
+              <table class="table-form">
+                <input type="hidden" name="action" value="enter"/>
+                <tr>
+                  <td class="field-name">Handle</td><td><input style="width: 15em;" name="handle" value=""/></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Password</td><td><input style="width: 15em;" name="password" type="password" value=""/></td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td valign="middle">
+                    <label style="font-size:11px;">
+                      <input style="position:relative;top:0.25em;" type="checkbox" name="remember"/>
+                      Remember me for a month
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <div style="text-align: center;"><input class="submit" type="submit" value="Login"/></div>
+                    <div style="text-align:right;font-size:11px;">
+                      <a href="/passwordRecovery">Forgot your password?</a>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </form>
+            <div class="bottom-links">
+              <table style="width:100%;">
+                <tbody>
+                  <tr>
+                    <td style="text-align:left;">
+                    </td>
+                    <td style="text-align:right;">
+                      <a href="/enter/OpenID">Use OpenID</a> |
+                      <a href="/enter/Gmail" class="useGmailLink">Use Gmail</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>                                       

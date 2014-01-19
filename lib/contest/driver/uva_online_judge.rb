@@ -21,6 +21,10 @@ module Contest
         end
       end
 
+      def get_problem_id(options)
+        "#{options[:problem_id]}"
+      end
+
       def get_site_name
         "UVa"
       end
@@ -44,9 +48,9 @@ module Contest
         end
       end
 
-      def submit_ext(config, source_path, options)
+      def submit_ext
         trigger 'start'
-        problem_id = options[:problem_id]
+        problem_id = @options[:problem_id]
 
         @client = Mechanize.new {|agent|
           agent.user_agent_alias = 'Windows IE 7'
@@ -56,17 +60,17 @@ module Contest
         trigger 'before_login'
         login_page = @client.get 'http://uva.onlinejudge.org/'
         login_page.form_with(:id => 'mod_loginform') do |form|
-          form.username = config["user"]
-          form.passwd = config["password"]
+          form.username = @config["user"]
+          form.passwd = @config["password"]
         end.submit
         trigger 'after_login'
 
-        trigger 'before_submit', options
+        trigger 'before_submit', @options
         submit_page = @client.get 'http://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=25'
         res_page = submit_page.form_with(:action => 'index.php?option=com_onlinejudge&Itemid=25&page=save_submission') do |form|
           form.localid = problem_id
-          form.radiobutton_with(:name => 'language', :value => options[:language]).check
-          form.code = File.read(source_path)
+          form.radiobutton_with(:name => 'language', :value => @options[:language]).check
+          form.code = File.read(@options[:source])
         end.submit
         trigger 'after_submit'
 
@@ -79,12 +83,12 @@ module Contest
           {
             :submission_id => submission_id,
             :status => status,
-            :result => get_commit_message($config["submit_rules"]["message"], status, options),
+            :result => get_commit_message(status),
           }
         )
 
         trigger 'finish'
-        get_commit_message($config["submit_rules"]["message"], status, options)
+        get_commit_message(status)
       end
 
       def get_status_wait(submission_id)
@@ -104,7 +108,6 @@ module Contest
       def get_submission_id(body)
         doc = Nokogiri::HTML(body)
         text = doc.xpath('//div[@class="message"]')[0].text().strip
-        # Submission received with ID 12500010
         text.match(/Submission received with ID ([0-9]+)/)[1]
       end
 

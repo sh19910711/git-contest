@@ -64,15 +64,20 @@ module Contest
         end
       end
 
-      def submit_ext(config, source_path, options)
+      def submit_ext
         # start
         trigger 'start'
 
         # submit
+        if @options[:source].is_a? Array
+          source_text = @options[:source].join(", ")
+        else
+          source_text = @options[:source]
+        end
         trigger(
           'before_submit',
           {
-            :source => source_path
+            :source => source_text
           },
         )
         trigger 'after_submit'
@@ -82,22 +87,37 @@ module Contest
 
         # wait result
         status = ''
-        File.open source_path, 'r' do |file|
-          line = file.read
-          if line == 'wa-code'
-            status = 'Wrong Answer'
-          elsif line == 'ac-code'
-            status = 'Accepted'
-          elsif line == 'tle-code'
-            status = 'Time Limit Exceeded'
+
+        if @options[:source].is_a? Array
+          File.open @options[:source][0], 'r' do |file|
+            line = file.read
+            if line == 'wa-code'
+              status = 'Wrong Answer'
+            elsif line == 'ac-code'
+              status = 'Accepted'
+            elsif line == 'tle-code'
+              status = 'Time Limit Exceeded'
+            end
+          end
+        elsif @options[:source].is_a? String
+          File.open @options[:source], 'r' do |file|
+            line = file.read
+            if line == 'wa-code'
+              status = 'Wrong Answer'
+            elsif line == 'ac-code'
+              status = 'Accepted'
+            elsif line == 'tle-code'
+              status = 'Time Limit Exceeded'
+            end
           end
         end
+
         trigger(
           'after_wait',
           {
             :submission_id => '99999',
             :status => status,
-            :result => get_commit_message($config["submit_rules"]["message"], status, options),
+            :result => get_commit_message(status),
           }
         )
         trigger 'finish'
