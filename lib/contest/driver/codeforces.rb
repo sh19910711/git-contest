@@ -1,7 +1,7 @@
 #
 # codeforces.rb
 #
-# Copyright (c) 2013 Hiroyuki Sano <sh19910711 at gmail.com>
+# Copyright (c) 2013-2014 Hiroyuki Sano <sh19910711 at gmail.com>
 # Licensed under the MIT-License.
 #
 
@@ -80,11 +80,11 @@ module Contest
         end
       end
 
-      def submit_ext(config, source_path, options)
+      def submit_ext()
         # start
         trigger 'start'
-        contest_id = options[:contest_id]
-        problem_id = options[:problem_id]
+        contest_id = @options[:contest_id]
+        problem_id = @options[:problem_id]
 
         @client = Mechanize.new {|agent|
           agent.user_agent_alias = 'Windows IE 7'
@@ -94,21 +94,21 @@ module Contest
         trigger 'before_login'
         login_page = @client.get 'http://codeforces.com/enter'
         login_page.form_with(:action => '') do |form|
-          form.handle = config["user"]
-          form.password = config["password"]
+          form.handle = @config["user"]
+          form.password = @config["password"]
         end.submit
         trigger 'after_login'
 
         # submit
-        trigger 'before_submit', options
+        trigger 'before_submit', @options
         # retry once
         retries = 1
         begin
           submit_page = @client.get "http://codeforces.com/contest/#{contest_id}/submit"
           res_page = submit_page.form_with(:class => 'submit-form') do |form|
             form.submittedProblemIndex = problem_id
-            form.programTypeId = options[:language]
-            form.source = File.read(source_path)
+            form.programTypeId = @options[:language]
+            form.source = File.read(@options[:source])
           end.submit
         rescue => e
           raise if retries == 0
@@ -131,8 +131,13 @@ module Contest
         trigger 'after_submit'
 
         # need to get the newest waiting submissionId
-        trigger 'before_wait',
-          submission_id = get_submission_id(res_page.body)
+        submission_id = get_submission_id(res_page.body)
+        trigger(
+          'before_wait',
+          {
+            :submission_id => submission_id,
+          }
+        )
 
         # wait result
         status = get_status_wait(contest_id, submission_id)
@@ -141,12 +146,12 @@ module Contest
           {
             :submission_id => submission_id,
             :status => status,
-            :result => get_commit_message($config["submit_rules"]["message"], status, options),
+            :result => get_commit_message(status),
           }
         )
 
         trigger 'finish'
-        get_commit_message($config["submit_rules"]["message"], status, options)
+        get_commit_message(status)
       end
 
       def get_status_wait(contest_id, submission_id)
@@ -178,8 +183,9 @@ module Contest
 
       def get_submission_id(body)
         doc = Nokogiri::HTML(body)
-        # get td.status-cell
-        elements = doc.xpath('//td[contains(concat(" ",@class," "), " status-cell ")][@waiting="true"]')
+        # get first td.status-cell
+        line = doc.xpath('//td/a[contains(./text() , "' + @config["user"] + '")]').xpath('../..')[0]
+        elements = line.xpath('//td[contains(concat(" ",@class," "), " status-cell ")]')
         elements[0].attributes()["submissionid"].value.strip
       end
 

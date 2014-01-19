@@ -4,7 +4,7 @@
 # git-contest
 # https://github.com/sh19910711/git-contest
 #
-# Copyright (c) 2013 Hiroyuki Sano <sh19910711 at gmail.com>
+# Copyright (c) 2013-2014 Hiroyuki Sano <sh19910711 at gmail.com>
 # Licensed under the MIT-License.
 #
 
@@ -28,7 +28,7 @@ init
 
 sub_commands = %w(init start finish submit rebase)
 global_opts = Trollop::options do
-  version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
+  version "git-contest #{Git::Contest::VERSION} (c) 2013-2014 Hiroyuki Sano"
   stop_on sub_commands
 end
 

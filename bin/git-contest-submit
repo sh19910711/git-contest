@@ -4,21 +4,13 @@
 # git-contest-submit
 # https://github.com/sh19910711/git-contest
 #
-# Copyright (c) 2013 Hiroyuki Sano <sh19910711 at gmail.com>
+# Copyright (c) 2013-2014 Hiroyuki Sano <sh19910711 at gmail.com>
 # Licensed under the MIT-License.
 #
 
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'git/contest/common'
 require 'trollop'
-
-init
-
-$config = get_config() || {}
-$sites  = {}
-if $config.has_key? 'sites'
-  $sites = $config["sites"]
-end
 
 #
 # Load Plugins
@@ -29,8 +21,6 @@ def load_plugins
     require path if /\/driver_.*\.rb$/.match path
   end
 end
-
-load_plugins
 
 #
 # Load Drivers
@@ -44,9 +34,6 @@ def load_drivers
     $drivers[driver_name] = Contest::Driver.const_get "#{class_name}"
   end
 end
-
-$drivers = {}
-load_drivers
 
 #
 # Command Utils
@@ -80,10 +67,23 @@ def get_git_add_target rule
   str
 end
 
+init
+
+$config = get_config() || {}
+$sites  = {}
+if $config.has_key? 'sites'
+  $sites = $config["sites"]
+end
+
+load_plugins
+
+$drivers = {}
+load_drivers
+
 # check options
 sub_commands = $sites.keys
 global_opts = Trollop::options do
-  version "git-contest #{Git::Contest::VERSION} (c) 2013 Hiroyuki Sano"
+  version "git-contest #{Git::Contest::VERSION} (c) 2013-2014 Hiroyuki Sano"
   banner get_banner
   stop_on sub_commands
 end
@@ -122,18 +122,21 @@ driver.on(
     puts "@start: submit"
   end
 )
+
 driver.on(
   'before_login',
   Proc.new do
     puts "@submit: logging in..."
   end
 )
+
 driver.on(
   'after_login',
   Proc.new do
     puts "@submit: login ok"
   end
 )
+
 driver.on(
   'before_submit',
   Proc.new do |submit_info|
@@ -141,24 +144,28 @@ driver.on(
     puts "@submit: doing..."
   end
 )
+
 driver.on(
   'after_submit',
   Proc.new do
     puts "@submit: done"
   end
 )
+
 driver.on(
   'before_wait',
   Proc.new do
     print "@result: waiting..."
   end
 )
+
 driver.on(
   'retry',
   Proc.new do
     print "."
   end
 )
+
 driver.on(
   'after_wait',
   Proc.new do |submission_info|
@@ -169,12 +176,14 @@ driver.on(
     puts "  %s: %s" % ["submission id", "#{submission_info[:submission_id]}"]
     puts "  %s: %s" % ["status", "#{submission_info[:status]}"]
     puts ""
+    p submission_info
     if git_contest_is_initialized
       git_do "add #{get_git_add_target($config["submit_rules"]["add"] || ".")}"
       git_do "commit --allow-empty -m '#{submission_info[:result]}'"
     end
   end
 )
+
 driver.on(
   'finish',
   Proc.new do
@@ -182,7 +191,15 @@ driver.on(
   end
 )
 
-opts = driver.get_opts()
-result = driver.submit $sites[site], "main.*", opts
+# global config
+$config["submit_rules"] ||= {}
 
+# set config
+driver.config = $sites[site]
+driver.config.merge! $config
+
+# parse driver options
+driver.options = driver.get_opts()
+
+result = driver.submit()
 

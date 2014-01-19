@@ -1,11 +1,9 @@
-require 'spec_helper'
+require "spec_helper"
+require "contest/driver/kattis"
 
-require 'contest/driver/codeforces'
-require 'mechanize'
-
-describe "T002: Codeforces Driver" do
+describe "T010: Kattis Driver" do
   before :each do
-    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t002"
+    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t010"
     Dir.mkdir @test_dir
     Dir.chdir @test_dir
   end
@@ -16,82 +14,81 @@ describe "T002: Codeforces Driver" do
     FileUtils.remove_dir @test_dir, :force => true
   end
 
-  before(:each) do
-    @driver = Contest::Driver::Codeforces.new
+  before do
+    @driver = Contest::Driver::Kattis.new
     @driver.stub(:sleep).and_return(0)
   end
 
-  context "A001: #get_status_wait" do
-    before do
-      # basic status_log
-      WebMock.stub_request(
-        :get,
-        /http:\/\/codeforces.com\/contest\/[0-9A-Z]*\/my/
-      ).to_return(
-        :status => 200,
-        :body => read_file('/mock/t002/my_submissions.html'),
-        :headers => {
-          'Content-Type' => 'text/html',
-        },
-      )
-
-      @driver.client = Mechanize.new {|agent|
-        agent.user_agent_alias = 'Windows IE 7'
-      }
+  context "A001: #get_submission_id" do
+    subject do
+      dummy_html = read_file('/mock/t010/user_submissions.html')
+      @driver.get_submission_id dummy_html
     end
-
-    it "check status" do
-      ret = @driver.get_status_wait 11111, 22222
-      ret.should include "Accepted"
+    it "must return last submission id" do
+      should eq "111111"
     end
   end
 
-  context "A002: #submit" do
+  context "A002: #get_submissions_status" do
+    context "111111" do
+      subject do
+        dummy_html = read_file('/mock/t010/user_submission_111111.html')
+        @driver.get_submission_status "111111", dummy_html
+      end
+      it "must return the status of specified submission" do
+        should eq "Accepted"
+      end
+    end
+    context "222222" do
+      subject do
+        dummy_html = read_file('/mock/t010/user_submission_222222.html')
+        @driver.get_submission_status "222222", dummy_html
+      end
+      it "must return the status of specified submission" do
+        should eq "Wrong Answer"
+      end
+    end
+  end
+
+  context "A003: #submit" do
     before do
-      FileUtils.touch 'test_source.rb'
+      FileUtils.touch 'test_source.go'
+    end
 
-      # basic status_log
+    before do
+      # login page
       WebMock.stub_request(
         :get,
-        /http:\/\/codeforces.com\/contest\/222222\/my/
-      ).to_return(
+        /^https:\/\/open\.kattis\.com\/login\?email_login=true$/
+      )
+      .to_return(
         :status => 200,
-        :body => read_file('/mock/t002/codeforces_wait_result.html'),
+        :body => read_file('/mock/t010/open_kattis_com_login.html'),
         :headers => {
           'Content-Type' => 'text/html',
         },
       )
 
-      # basic status_log
-      WebMock.stub_request(
-        :get,
-        /http:\/\/codeforces.com\/enter/
-      ).to_return(
-        :status => 200,
-        :body => read_file('/mock/t002/codeforces_enter.html'),
-        :headers => {
-          'Content-Type' => 'text/html',
-        },
-      )
-
-      # enter page
+      # login
       WebMock.stub_request(
         :post,
-        /http:\/\/codeforces.com\/enter/
-      ).to_return(
+        /^https:\/\/open\.kattis\.com\/login\?email_login=true$/
+      )
+      .to_return(
         :status => 200,
         :headers => {
           'Content-Type' => 'text/html',
         },
       )
 
-      # submit
+      # submit page
       WebMock.stub_request(
         :get,
-        /http:\/\/codeforces.com\/contest\/[0-9]*\/submit/
-      ).to_return(
+        /^https:\/\/open\.kattis\.com\/submit$/,
+      )
+      .to_return(
         :status => 200,
-        :body => read_file('/mock/t002/codeforces_submit.html'),
+        :body => read_file('/mock/t010/open_kattis_com_submit.html'),
         :headers => {
           'Content-Type' => 'text/html',
         },
@@ -100,22 +97,36 @@ describe "T002: Codeforces Driver" do
       # submit
       WebMock.stub_request(
         :post,
-        /http:\/\/codeforces.com\/contest\/[0-9]*\/submit.*/
-      ).to_return(
-        :status => 302,
+        /^https:\/\/open\.kattis\.com\/submit$/,
+      )
+      .to_return(
+        :status => 200,
         :headers => {
           'Content-Type' => 'text/html',
-          'Location' => 'http://codeforces.com/after_submit',
         },
       )
 
-      # problemst status
+      # user submissions
       WebMock.stub_request(
         :get,
-        /http:\/\/codeforces.com\/after_submit/
-      ).to_return(
+        /^https:\/\/open\.kattis\.com\/users\/test_user\?show=submissions$/
+      )
+      .to_return(
         :status => 200,
-        :body => read_file('/mock/t002/codeforces_after_submit.html'),
+        :body => read_file('/mock/t010/open_kattis_com_user_submissions.html'),
+        :headers => {
+          'Content-Type' => 'text/html',
+        },
+      )
+
+      # submission 999999
+      WebMock.stub_request(
+        :get,
+        /^https:\/\/open\.kattis\.com\/submission\?id=999999$/
+      )
+      .to_return(
+        :status => 200,
+        :body => read_file('/mock/t010/open_kattis_com_user_submissions.html'),
         :headers => {
           'Content-Type' => 'text/html',
         },
@@ -128,11 +139,10 @@ describe "T002: Codeforces Driver" do
         "password" => "password",
       )
       @driver.options.merge!(
-        :contest_id => '222222',
-        :problem_id => 'A',
-        :source => 'test_source.rb',
+        :problem_id => '333333',
+        :source => 'test_source.go',
       )
-      @driver.submit.should include "Codeforces 222222A: Accepted"
+      @driver.submit.should include "Kattis 333333: Wrong Answer"
     end
 
     it "check events" do
@@ -184,11 +194,9 @@ describe "T002: Codeforces Driver" do
         "password" => "password",
       )
       @driver.options.merge!(
-        :contest_id => '222222',
-        :problem_id => 'A',
-        :source => 'test_source.rb',
+        :problem_id => '333333',
+        :source => 'test_source.go',
       )
-
       @driver.submit
 
       @flag = @flag_start && @flag_before_login && @flag_after_login && @flag_before_submit && @flag_after_submit && @flag_before_wait && @flag_after_wait && @flag_finish
