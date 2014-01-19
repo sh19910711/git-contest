@@ -214,7 +214,7 @@ to be written here.
 
 The MIT License (MIT)
 
-Copyright (c) 2013 **Hiroyuki Sano** \<sh19910711 at gmail.com\>
+Copyright (c) 2013-2014 **Hiroyuki Sano** \<sh19910711 at gmail.com\>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

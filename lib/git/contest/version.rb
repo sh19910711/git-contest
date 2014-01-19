@@ -1,7 +1,7 @@
 #
 # version.rb
 #
-# Copyright (c) 2013 Hiroyuki Sano <sh19910711 at gmail.com>
+# Copyright (c) 2013-2014 Hiroyuki Sano <sh19910711 at gmail.com>
 # Licensed under the MIT-License.
 #
 
