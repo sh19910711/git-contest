@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <body>
+    <div id="content" class="content-with-sidebar"> 
+      <form class="submit-form" method="post" action="?csrf_token=dummy" enctype="multipart/form-data">
+        <input type='hidden' name='csrf_token' value='dummy'/>
+        <input type="hidden" name="action" value="submitSolutionFormSubmitted"/>
+        <input type="hidden" name="contestId" value="11111"/>
+        <table class="table-form" style="width:90%;">
+          <tr>
+            <td class="field-name">Problem:</td>
+            <td>
+              <input type="hidden" name="submittedProblemIndex" value="A"/>
+              11111A - Problem Name
+            </td>
+          </tr>
+          <tr class="subscription-row">
+            <td>&nbsp;</td>
+            <td>
+              <div class="shiftUp error__submittedProblemIndex" style="width: 300px;">
+                <span class="error for__submittedProblemIndex" style="display:none;">&nbsp;</span>
+                <span class="notice for__submittedProblemIndex">&nbsp;</span>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="field-name">Language:</td>
+            <td>
+              <select style="width: 300px;" name="programTypeId">
+                <option value="10">GNU C 4</option>
+                <option value="1"
+                selected="true">GNU C++ 4.7</option>
+                <option value="16"
+                >GNU C++0x 4</option>
+                <option value="2"
+                >Microsoft Visual C++ 2010</option>
+                <option value="9"
+                >C# Mono 2.10</option>
+                <option value="29"
+                >MS C# .NET 4</option>
+                <option value="28"
+                >D DMD32 Compiler v2</option>
+                <option value="32"
+                >Go 1.2</option>
+                <option value="12"
+                >Haskell GHC 7.6</option>
+                <option value="5"
+                >Java 6</option>
+                <option value="23"
+                >Java 7</option>
+                <option value="19"
+                >OCaml 4</option>
+                <option value="3"
+                >Delphi 7</option>
+                <option value="4"
+                >Free Pascal 2</option>
+                <option value="13"
+                >Perl 5.12</option>
+                <option value="6"
+                >PHP 5.3</option>
+                <option value="7"
+                >Python 2.7</option>
+                <option value="31"
+                >Python 3.3</option>
+                <option value="8"
+                >Ruby 2</option>
+                <option value="20"
+                >Scala 2.10</option>
+                <option value="34"
+                >JavaScript V8 3</option>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="field-name">Source code:</td>
+            <td>
+              <textarea id="sourceCodeTextarea" name="source" style="width: 100%; height: 300px;"></textarea>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="field-name">Or choose file:</td>
+            <td>
+              <input name="sourceFile" type="file" value=""/>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="field-name">&nbsp;</td>
+            <td>
+              <div style="font-size: 11px; width: 100%;">
+                Be careful: there is 50 points penalty for submission which fails the pretests or resubmission (except failure on the first test, denial of judgement or similar verdicts). "Passed pretests" submission verdict doesn't guarantee that the solution is absolutely correct and it will pass system tests.
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td colspan="2">
+              <div style="text-align: center;">
+                <input class="submit" type="submit" value="Submit"/>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </body>
+</html>                                       

@@ -3,7 +3,19 @@ require 'spec_helper'
 require 'mechanize'
 require 'contest/driver/aizu_online_judge'
 
-describe "T001: Contest::Driver::AizuOnlineJudge" do
+describe "T001: AizuOnlineJudge Driver" do
+  before :each do
+    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t001"
+    Dir.mkdir @test_dir
+    Dir.chdir @test_dir
+  end
+
+  after :each do
+    Dir.chdir @test_dir
+    Dir.chdir '..'
+    FileUtils.remove_dir @test_dir, :force => true
+  end
+
   before do
     # setup driver
     @driver = Contest::Driver::AizuOnlineJudge.new
@@ -56,26 +68,14 @@ describe "T001: Contest::Driver::AizuOnlineJudge" do
       },
     )
 
-    # servlet/Submit
-    WebMock
-    .stub_request(
-      :post,
-      /http:\/\/judge\.u-aizu\.ac\.jp\/onlinejudge\/servlet\/Submit/,
-    )
-    .to_return(
-      :status => 200,
-      :body => '',
-      :headers => {
-        'Content-Type' => 'text/html',
-      },
-    )
   end
 
-  describe "001: #get_status_wait" do
+  context "A001: #get_status_wait" do
     it "001: Check Status" do
       ret = @driver.get_status_wait 'test_user', '111'
       ret.should === "Wrong Answer"
     end
+
     it "002: Check Timeout" do
       @flag = false
       proc = Proc.new do
@@ -86,6 +86,7 @@ describe "T001: Contest::Driver::AizuOnlineJudge" do
       @driver.off 'timeout', proc
       @flag.should === true
     end
+
     it "002: Check Timeout noset" do
       @flag = false
       proc = Proc.new do
@@ -98,7 +99,7 @@ describe "T001: Contest::Driver::AizuOnlineJudge" do
     end
   end
 
-  describe "002: #get_status_wait" do
+  context "A002: #get_status_wait" do
     before do
       # has 2 statuses
       WebMock.stub_request(
@@ -112,6 +113,7 @@ describe "T001: Contest::Driver::AizuOnlineJudge" do
         },
       )
     end
+
     it "001: Check Status" do
       ret = @driver.get_status_wait 'test_user', '111'
       ret.should === "Wrong Answer"
@@ -120,10 +122,26 @@ describe "T001: Contest::Driver::AizuOnlineJudge" do
     end
   end
 
-  describe "003: #submit" do
-    it "001: Check Event" do
-      FileUtils.touch '/tmp/main.rb'
+  context "A003: #submit" do
+    before do
+      FileUtils.touch 'test_source.rb'
 
+      # servlet/Submit
+      WebMock
+      .stub_request(
+        :post,
+        /http:\/\/judge\.u-aizu\.ac\.jp\/onlinejudge\/servlet\/Submit/,
+      )
+      .to_return(
+        :status => 200,
+        :body => '',
+        :headers => {
+          'Content-Type' => 'text/html',
+        },
+      )
+    end
+
+    it "001: Check Event" do
       @flag_start         = false
       @flag_before_submit = false
       @flag_after_submit  = false
@@ -157,17 +175,16 @@ describe "T001: Contest::Driver::AizuOnlineJudge" do
       @driver.on 'after_wait', proc_after_wait
       @driver.on 'finish', proc_finish
 
-      @driver.submit(
-        {
-          "user" => "test_user",
-          "password" => "password",
-        },
-        '/tmp/main.rb',
-        {
-          :contest_id => '11111',
-          :problem_id => '22222',
-        },
+      @driver.config.merge!(
+        "user" => "test_user",
+        "password" => "password",
       )
+      @driver.options.merge!(
+        :contest_id => '11111',
+        :problem_id => '22222',
+        :source => 'test_source.rb',
+      )
+      @driver.submit()
 
       @flag = @flag_start && @flag_before_submit && @flag_after_submit && @flag_before_wait && @flag_after_wait && @flag_finish
       @flag.should === true

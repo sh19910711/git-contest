@@ -169,7 +169,7 @@ describe "T004: git-contest-submit command" do
     context "B002: submit multiple files" do
       before do
         File.open '1.cpp', 'w' do |file|
-          file.write 'not-ac-code'
+          file.write 'wa-code'
         end
         File.open '2.cpp', 'w' do |file|
           file.write 'ac-code'
@@ -196,6 +196,18 @@ describe "T004: git-contest-submit command" do
 
       it "git contest submit test_dummy -c 100 -p A -s 2.cpp,1.cpp" do
         ret = bin_exec "submit test_dummy -c 100 -p A -s 2.cpp,1.cpp"
+        ret.should include '99999'
+        ret.should include 'Accepted'
+      end
+
+      it "git contest submit test_dummy -c 100 -p A -s 1.*,2.*" do
+        ret = bin_exec "submit test_dummy -c 100 -p A -s 1.*,2.*"
+        ret.should include '99999'
+        ret.should include 'Wrong Answer'
+      end
+
+      it "git contest submit test_dummy -c 100 -p A -s 2.*,1.*" do
+        ret = bin_exec "submit test_dummy -c 100 -p A -s 2.*,1.*"
         ret.should include '99999'
         ret.should include 'Accepted'
       end

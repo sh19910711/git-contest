@@ -61,25 +61,25 @@ module Contest
         end
       end
 
-      def submit_ext(config, source_path, options)
+      def submit_ext
         # start
         trigger 'start'
-        problem_id = "%04d" % options[:problem_id]
+        problem_id = "%04d" % @options[:problem_id]
 
         @client = Mechanize.new {|agent|
           agent.user_agent_alias = 'Windows IE 7'
         }
 
         # submit
-        trigger 'before_submit', options
+        trigger 'before_submit', @options
         submit_page = @client.get "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=0000"
         submit_page.parser.encoding = "SHIFT_JIS"
         res_page = submit_page.form_with(:action => '/onlinejudge/servlet/Submit') do |form|
-          form.userID = config["user"]
-          form.password = config["password"]
+          form.userID = @config["user"]
+          form.password = @config["password"]
           form.problemNO = problem_id
-          form.language = options[:language]
-          form.sourceCode = File.read(source_path)
+          form.language = @options[:language]
+          form.sourceCode = File.read(@options[:source])
         end.submit
         trigger 'after_submit'
 
@@ -89,18 +89,18 @@ module Contest
         submission_id = get_submission_id status_page.body
 
         # wait result
-        status = get_status_wait config["user"], submission_id
+        status = get_status_wait @config["user"], submission_id
         trigger(
           'after_wait',
           {
             :submission_id => submission_id,
             :status => status,
-            :result => get_commit_message($config["submit_rules"]["message"], status, options),
+            :result => get_commit_message(status),
           }
         )
         trigger 'finish'
 
-        return "AOJ %s: %s\nhttp://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=#{submission_id}" % [problem_id, status]
+        get_commit_message(status)
       end
 
       def get_status_wait(user_id, submission_id)

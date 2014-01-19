@@ -11,7 +11,22 @@ require 'contest/driver/driver_event'
 
 module Contest
   module Driver
+    DEFAULT_SOURCE_PATH = "main.*"
+    DEFAULT_COMMIT_MESSAGE ="${site} ${problem-id}: ${status}"
+
     class DriverBase < DriverEvent
+      attr_accessor :config, :options
+
+      def initialize
+        # submit options
+        @options ||= {}
+        # site config
+        @config ||= {}
+        @config["submit_rules"] ||= {}
+        # call DriverEvent#initialize
+        super
+      end
+
       def get_opts_ext
         # Example:
         # define_options do
@@ -51,7 +66,7 @@ module Contest
       end
 
       def get_opts
-        get_opts_ext
+        get_opts_ext()
         define_options do
           opt(
             :source,
@@ -65,9 +80,16 @@ module Contest
             :type => :string,
             :required => false,
           )
+          opt(
+            :message,
+            "Set git-commit message",
+            :type => :string,
+            :required => false,
+          )
         end
         Trollop::options ARGV, @blocks do |blocks|
           version "git-contest driver"
+          # set driver options
           blocks.each do |b|
             instance_eval &b
           end
@@ -78,25 +100,28 @@ module Contest
         nil
       end
 
-      def get_commit_message rule, status, options
-        message = rule
-        message = message.gsub '${site}', get_site_name
-        message = message.gsub '${problem-id}', get_problem_id(options)
-        message = message.gsub '${status}', status
-        message = "\n#{get_commit_message_ext}" unless get_commit_message_ext.nil?
-        return message
+      def get_commit_message status
+        if @options[:message].nil?
+          message = @config["submit_rules"]["message"] || DEFAULT_COMMIT_MESSAGE
+          message = message.gsub '${site}', get_site_name
+          message = message.gsub '${problem-id}', get_problem_id(options)
+          message = message.gsub '${status}', status
+          message = "\n#{get_commit_message_ext}" unless get_commit_message_ext.nil?
+        else
+          message = @options[:message]
+        end
+        message
       end
 
-      def submit(config, source_path, options)
-        $config = get_config
-        $config["submit_rules"] ||= {}
-        $config["submit_rules"]["message"] ||= "${site} ${problem-id}: ${status}"
-        source_path = Utils.resolve_path(options[:source] || $config["submit_rules"]["source"] || source_path)
-        options[:source] = source_path
-        options[:language] ||= Utils.resolve_language(source_path)
-        options[:language] = resolve_language Utils.normalize_language(options[:language])
-        status = submit_ext(config, source_path, options)
-        get_commit_message($config["submit_rules"]["message"], status, options)
+      # submit a solution
+      def submit
+        @options[:source] = Utils.resolve_path(
+          @options[:source] || @config["submit_rules"]["source"] || DEFAULT_SOURCE_PATH
+        )
+        @options[:language] ||= Utils.resolve_language(@options[:source])
+        @options[:language] = resolve_language Utils.normalize_language(@options[:language])
+
+        submit_ext()
       end
     end
   end

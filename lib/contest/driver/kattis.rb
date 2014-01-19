@@ -71,12 +71,12 @@ module Contest
         end
       end
 
-      def submit_ext(config, source_path, options)
+      def submit_ext
         trigger 'start'
-        problem_id = options[:problem_id]
+        problem_id = @options[:problem_id]
 
-        if (options[:contest_id])
-          subdomain = options[:contest_id]
+        if (@options[:contest_id])
+          subdomain = @options[:contest_id]
         else
           subdomain = 'open'
         end
@@ -85,24 +85,25 @@ module Contest
           agent.user_agent_alias = 'Windows IE 7'
         }
 
-        # Submit
+        # Login
         trigger 'before_login'
         login_page = @client.get "https://#{subdomain}.kattis.com/login?email_login=true"
         login_page.form_with(:action => 'login?email_login=true') do |form|
-          form.user = config['user']
-          form.password = config['password']
+          form.user = @config['user']
+          form.password = @config['password']
         end.submit
         trigger 'after_login'
 
-        trigger 'before_submit', options
+        # Submit
+        trigger 'before_submit', @options
         submit_page = @client.get "https://#{subdomain}.kattis.com/submit"
         res_page = submit_page.form_with(:name => 'upload') do |form|
           form.problem = problem_id
-          form['lang'] = options[:language]
-          form.sub_code = File.read(source_path)
+          form['lang'] = @options[:language]
+          form.sub_code = File.read(@options[:source])
           # Use file name as main class for Java
-          if (options[:language] == resolve_language('java'))
-            form['mainclass'] = source_path.rpartition('.')[0]
+          if (@options[:language] == resolve_language('java'))
+            form['mainclass'] = @options[:source].rpartition('.')[0]
           end
           form.submit(form.button_with(:name => 'submit'))
         end.submit
@@ -110,7 +111,7 @@ module Contest
 
         # Result
         trigger 'before_wait'
-        user = config['user']
+        user = @config['user']
         doc = Nokogiri::HTML(res_page.body)
         # Check for error messages
         error = doc.xpath('//p[@class="error"]')[0];
@@ -126,12 +127,12 @@ module Contest
           {
             :submission_id => submission_id,
             :status => status,
-            :result => get_commit_message($config['submit_rules']['message'], status, options),
+            :result => get_commit_message(status),
           }
         )
 
         trigger 'finish'
-        get_commit_message($config['submit_rules']['message'], status, options)
+        get_commit_message(status)
       end
 
       def get_status_wait(submission_id, subdomain)
