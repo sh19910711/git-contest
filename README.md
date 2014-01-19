@@ -190,31 +190,23 @@ to be written here.
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-## Links
-`git-contest` is inspired by [nvie/gitflow](https://github.com/nvie/gitflow).
+## Contributors
 
-* A successful Git branching model
-    * [http://nvie.com/posts/a-successful-git-branching-model/](http://nvie.com/posts/a-successful-git-branching-model/)
-* nvie/gitflow
-    * [https://github.com/nvie/gitflow](https://github.com/nvie/gitflow)
-* ruby
-    * [https://www.ruby-lang.org/](https://www.ruby-lang.org/)
-* git
-    * [http://git-scm.com/](http://git-scm.com/)
+* [Oskar Sundström](https://github.com/osund)
+    * Added Kattis Driver
 
 ## Author Information
+
 * [Hiroyuki Sano](http://yomogimochi.com/)
     * [GitHub - sh19910711](https://github.com/sh19910711)
     * [Google+](https://plus.google.com/+HiroyukiSano)
-    * [Twitter - @sh19910711](https://twitter.com/sh19910711)
-
 
 ## License Information
 **git-contest** is licensed under the MIT-License, see details followings:
 
 The MIT License (MIT)
 
-Copyright (c) 2013 **Hiroyuki Sano** \<sh19910711 at gmail.com\>
+Copyright (c) 2013-2014 **Hiroyuki Sano** \<sh19910711 at gmail.com\>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -234,16 +226,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-## Index
-* [Branching Model](#branching-model)
-* [Commit Message Examples](#commit-message-examples)
-* [Installation](#installation)
-    * [Requirements](#requirements)
-* [Command Usage](#command-usage)
-* [More Documentation](#more-documentation)
-* [Configuration](#configuration)
-* [Contributing](#contributing)
-* [Links](#links)
-* [Author Information](#author-information)
-* [License Information](#license-information)
+## Links
+`git-contest` is inspired by [nvie/gitflow](https://github.com/nvie/gitflow).
+
+* A successful Git branching model
+    * [http://nvie.com/posts/a-successful-git-branching-model/](http://nvie.com/posts/a-successful-git-branching-model/)
+* nvie/gitflow
+    * [https://github.com/nvie/gitflow](https://github.com/nvie/gitflow)
+* ruby
+    * [https://www.ruby-lang.org/](https://www.ruby-lang.org/)
+* git
+    * [http://git-scm.com/](http://git-scm.com/)
 
