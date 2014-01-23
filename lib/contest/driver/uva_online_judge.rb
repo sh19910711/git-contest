@@ -39,6 +39,8 @@ module Contest
           return "1"
         when "cpp"
           return "3"
+        when "cpp11"
+          return "5"
         when "java"
           return "2"
         when "pascal"
