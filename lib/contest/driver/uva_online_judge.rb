@@ -95,7 +95,7 @@ module Contest
 
       def is_wait_status(status)
         case status
-        when "Sent to judge", "Running", "Compiling", "Linking", "Received"
+        when "Sent to judge", "Running", "Compiling", "Linking", "Received", ""
           true
         else
           false
