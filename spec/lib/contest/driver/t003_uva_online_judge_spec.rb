@@ -194,6 +194,9 @@ describe "T003: UvaOnlineJudge Driver" do
       it "Received" do
         @driver.is_wait_status("Received").should be true
       end
+      it "empty" do
+        @driver.is_wait_status("").should be true
+      end
     end
     context "no wait" do
       it "Accepted" do
