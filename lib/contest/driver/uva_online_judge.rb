@@ -39,6 +39,8 @@ module Contest
           return "1"
         when "cpp"
           return "3"
+        when "cpp11"
+          return "5"
         when "java"
           return "2"
         when "pascal"
@@ -91,6 +93,15 @@ module Contest
         get_commit_message(status)
       end
 
+      def is_wait_status(status)
+        case status
+        when "Sent to judge", "Running", "Compiling", "Linking", "Received", ""
+          true
+        else
+          false
+        end
+      end
+
       def get_status_wait(submission_id)
         submission_id = submission_id.to_s
         # wait result
@@ -98,7 +109,7 @@ module Contest
           sleep 10
           my_page = @client.get 'http://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=9'
           status = get_submission_status(submission_id, my_page.body)
-          return status unless status == 'Sent to judge' || status == ''
+          return status unless is_wait_status status
           trigger 'retry'
         end
         trigger 'timeout'
