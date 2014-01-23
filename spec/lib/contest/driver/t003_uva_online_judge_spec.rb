@@ -176,5 +176,39 @@ describe "T003: UvaOnlineJudge Driver" do
       @flag.should === true
     end
   end
+
+  context "A004: #is_wait_status" do
+    context "wait" do
+      it "Sent to judge" do
+        @driver.is_wait_status("Sent to judge").should be true
+      end
+      it "Running" do
+        @driver.is_wait_status("Running").should be true
+      end
+      it "Compiling" do
+        @driver.is_wait_status("Running").should be true
+      end
+      it "Linking" do
+        @driver.is_wait_status("Linking").should be true
+      end
+      it "Received" do
+        @driver.is_wait_status("Received").should be true
+      end
+    end
+    context "no wait" do
+      it "Accepted" do
+        @driver.is_wait_status("Accepted").should be false
+      end
+      it "Compilation error" do
+        @driver.is_wait_status("Compilation error").should be false
+      end
+      it "Wrong answer" do
+        @driver.is_wait_status("Wrong answer").should be false
+      end
+      it "Runtime error" do
+        @driver.is_wait_status("Runtime error").should be false
+      end
+    end
+  end
 end
 
