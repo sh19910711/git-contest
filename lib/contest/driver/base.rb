@@ -25,6 +25,11 @@ module Contest
         @config["submit_rules"] ||= {}
         # call DriverEvent#initialize
         super
+        initialize_ext
+      end
+      
+      def initialize_ext
+        nil
       end
 
       def get_opts_ext

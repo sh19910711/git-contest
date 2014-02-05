@@ -1,8 +1,0 @@
-submit_rules:
-  message:    "${site} ${problem-id}: ${status}"
-sites:
-  test_dummy:
-    driver:   dummy
-    user:     dummy
-    password: dummy
-

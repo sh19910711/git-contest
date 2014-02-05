@@ -1,8 +1,0 @@
-submit_rules:
-  source: "tle.*"
-sites:
-  test_dummy:
-    driver:   dummy
-    user:     dummy
-    password: dummy
-

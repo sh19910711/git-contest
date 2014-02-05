@@ -1,9 +1,0 @@
-submit_rules:
-  source: "test*.cpp"
-  add:    "test*.cpp input1.txt"
-sites:
-  test_dummy:
-    driver:   dummy
-    user:     dummy
-    password: dummy
-

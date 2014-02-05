@@ -13,7 +13,7 @@ end
 def init_env
   ENV['TEST_MODE'] = 'TRUE'
   ENV['PATH'] = bin_path('') + ':' + ENV['PATH']
-  ENV['GIT_CONTEST_HOME'] = "#{ENV['GIT_CONTEST_TEMP_DIR']}/home"
+  ENV['GIT_CONTEST_HOME'] = get_path('/mock/default_config')
 end
 
 def debug_print
@@ -32,14 +32,25 @@ def bin_exec args
   ret
 end
 
-require 'webmock'
-WebMock.disable_net_connect!
+def set_git_contest_config(body)
+  ENV['GIT_CONTEST_CONFIG'] = "#{@temp_dir}/home/config.yml"
+  File.open ENV['GIT_CONTEST_CONFIG'], "w" do |file|
+    file.write body
+  end
+end
 
-temp_dir = `mktemp -d /tmp/XXXXXXXXXXXXX`.strip
-`mkdir #{temp_dir}/home`
-ENV['GIT_CONTEST_TEMP_DIR'] = temp_dir
-init_env
+require 'webmock'
+
+RSpec.configure do |config|
+  config.before :each do
+    WebMock.disable_net_connect!
+    @temp_dir = `mktemp -d /tmp/XXXXXXXXXXXXX`.strip
+    Dir.chdir "#{@temp_dir}"
+    Dir.mkdir "home"
+    init_env
+  end
+  config.order = 'random'
+end
 
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'git/contest/common'
-

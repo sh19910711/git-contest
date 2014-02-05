@@ -4,18 +4,6 @@ require 'contest/driver/codeforces'
 require 'mechanize'
 
 describe "T003: UvaOnlineJudge Driver" do
-  before :each do
-    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t003"
-    Dir.mkdir @test_dir
-    Dir.chdir @test_dir
-  end
-
-  after :each do
-    Dir.chdir @test_dir
-    Dir.chdir '..'
-    FileUtils.remove_dir @test_dir, :force => true
-  end
-
   before(:each) do
     @driver = Contest::Driver::UvaOnlineJudge.new
     @driver.stub(:sleep).and_return(0)

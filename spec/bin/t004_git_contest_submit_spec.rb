@@ -1,19 +1,29 @@
 require "spec_helper"
 
 describe "T004: git-contest-submit command" do
-  before(:each) do
-    init_env
-    ENV['GIT_CONTEST_HOME'] = get_path('/mock/default_config')
-    ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t004/config.yml')
-    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t004"
-    Dir.mkdir @test_dir
-    Dir.chdir @test_dir
-  end
-
-  after(:each) do
-    Dir.chdir @test_dir
-    Dir.chdir '..'
-    FileUtils.remove_dir @test_dir, :force => true
+  before do
+    ENV['GIT_CONTEST_CONFIG'] = "#{@temp_dir}/config.yml"
+    File.open "#{@temp_dir}/config.yml", 'w' do |file|
+      file.write <<EOF
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+  test_11111:
+    driver:   codeforces
+    user:     dummy
+    password: dummy
+  test_22222:
+    driver:   aizu_online_judge
+    user:     dummy
+    password: dummy
+  test_33333:
+    driver:   uva_online_judge
+    user:     dummy
+    password: dummy
+EOF
+    end
   end
 
   context "A001: --version" do
@@ -35,8 +45,6 @@ describe "T004: git-contest-submit command" do
 
   context "A002: --help" do
     before do
-      Dir.mkdir '002'
-      Dir.chdir '002'
       Dir.mkdir 'working'
       Dir.chdir 'working'
       File.open 'main.cpp', 'w' do |file|
@@ -57,8 +65,6 @@ describe "T004: git-contest-submit command" do
 
   context "A003: after init git repo" do
     before do
-      Dir.mkdir '003'
-      Dir.chdir '003'
       Dir.mkdir 'working'
       Dir.chdir 'working'
       File.open 'main.cpp', 'w' do |file|
@@ -81,8 +87,8 @@ describe "T004: git-contest-submit command" do
 
   context "A004: with commit message" do
     before do
-      Dir.mkdir '004'
-      Dir.chdir '004'
+      Dir.mkdir 'working'
+      Dir.chdir 'working'
       File.open 'main.cpp', 'w' do |file|
         file.write 'ac-code'
       end
@@ -101,8 +107,8 @@ describe "T004: git-contest-submit command" do
 
   context 'A005: normal submit' do
     before do
-      Dir.mkdir '005'
-      Dir.chdir '005'
+      Dir.mkdir 'working'
+      Dir.chdir 'working'
       File.open 'main.cpp', 'w' do |file|
         file.write 'ac-code'
       end
@@ -127,8 +133,8 @@ describe "T004: git-contest-submit command" do
 
   context 'A006: --source' do
     before do
-      Dir.mkdir '006'
-      Dir.chdir '006'
+      Dir.mkdir 'working'
+      Dir.chdir 'working'
     end
 
     context "B001: submit single file" do

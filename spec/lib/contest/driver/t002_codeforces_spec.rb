@@ -4,18 +4,6 @@ require 'contest/driver/codeforces'
 require 'mechanize'
 
 describe "T002: Codeforces Driver" do
-  before :each do
-    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t002"
-    Dir.mkdir @test_dir
-    Dir.chdir @test_dir
-  end
-
-  after :each do
-    Dir.chdir @test_dir
-    Dir.chdir '..'
-    FileUtils.remove_dir @test_dir, :force => true
-  end
-
   before(:each) do
     @driver = Contest::Driver::Codeforces.new
     @driver.stub(:sleep).and_return(0)
@@ -34,14 +22,10 @@ describe "T002: Codeforces Driver" do
           'Content-Type' => 'text/html',
         },
       )
-
-      @driver.client = Mechanize.new {|agent|
-        agent.user_agent_alias = 'Windows IE 7'
-      }
     end
 
     it "check status" do
-      ret = @driver.get_status_wait 11111, 22222
+      ret = @driver.send :get_status_wait, 11111, 22222
       ret.should include "Accepted"
     end
   end

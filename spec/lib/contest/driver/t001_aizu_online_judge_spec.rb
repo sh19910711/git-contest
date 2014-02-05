@@ -1,28 +1,12 @@
 require 'spec_helper'
 
-require 'mechanize'
 require 'contest/driver/aizu_online_judge'
 
-describe "T001: AizuOnlineJudge Driver" do
-  before :each do
-    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t001"
-    Dir.mkdir @test_dir
-    Dir.chdir @test_dir
-  end
-
-  after :each do
-    Dir.chdir @test_dir
-    Dir.chdir '..'
-    FileUtils.remove_dir @test_dir, :force => true
-  end
-
+describe "T001: AizuOnlineJudge Driver" do 
   before do
     # setup driver
     @driver = Contest::Driver::AizuOnlineJudge.new
     @driver.stub(:sleep).and_return(0)
-    @driver.client = Mechanize.new {|agent|
-      agent.user_agent_alias = 'Windows IE 7'
-    }
     ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t001/config.yml')
     init
 
@@ -72,7 +56,7 @@ describe "T001: AizuOnlineJudge Driver" do
 
   context "A001: #get_status_wait" do
     it "001: Check Status" do
-      ret = @driver.get_status_wait 'test_user', '111'
+      ret = @driver.send :get_status_wait, 'test_user', '111'
       ret.should === "Wrong Answer"
     end
 
@@ -82,7 +66,7 @@ describe "T001: AizuOnlineJudge Driver" do
         @flag = true
       end
       @driver.on 'timeout', proc
-      @driver.get_status_wait 'test_user', '999'
+      @driver.send :get_status_wait, 'test_user', '999'
       @driver.off 'timeout', proc
       @flag.should === true
     end
@@ -94,7 +78,7 @@ describe "T001: AizuOnlineJudge Driver" do
       end
       @driver.on 'timeout', proc
       @driver.off 'timeout', proc
-      @driver.get_status_wait 'test_user', '999'
+      @driver.send :get_status_wait, 'test_user', '999'
       @flag.should === false
     end
   end
@@ -115,9 +99,9 @@ describe "T001: AizuOnlineJudge Driver" do
     end
 
     it "001: Check Status" do
-      ret = @driver.get_status_wait 'test_user', '111'
+      ret = @driver.send :get_status_wait, 'test_user', '111'
       ret.should === "Wrong Answer"
-      ret = @driver.get_status_wait 'test_user', '112'
+      ret = @driver.send :get_status_wait, 'test_user', '112'
       ret.should === "Accepted"
     end
   end

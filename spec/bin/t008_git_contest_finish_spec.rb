@@ -3,31 +3,7 @@ require "spec_helper"
 # Do not forget --no-edit option
 
 describe "T008: git-contest-finish" do
-
-  before(:each) do
-    init_env
-    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t008"
-    Dir.mkdir @test_dir
-    Dir.chdir @test_dir
-    # debug_on
-  end
-
-  after(:each) do
-    Dir.chdir '..'
-    FileUtils.remove_dir @test_dir, :force => true
-  end
-
-  describe "001: --keep" do
-
-    before do
-      Dir.mkdir "001"
-      Dir.chdir "001"
-    end
-
-    after do
-      Dir.chdir ".."
-    end
-
+  context "A001: --keep" do
     it "001: init -> start -> empty-commits -> finish" do
       bin_exec "init --defaults"
       bin_exec "start branch1"
@@ -63,17 +39,7 @@ describe "T008: git-contest-finish" do
 
   end
 
-  describe "002: --rebase" do
-
-    before do
-      Dir.mkdir "002"
-      Dir.chdir "002"
-    end
-
-    after do
-      Dir.chdir ".."
-    end
-
+  context "A002: --rebase" do
     it "001: init -> start -> empty-commits -> finish --rebase" do
       # create branches: branch1(normal) -> branch2(rebase) -> branch3(normal)
       bin_exec "init --defaults"
@@ -116,17 +82,7 @@ describe "T008: git-contest-finish" do
 
   end
 
-  describe "003: --force-delete" do
-
-    before do
-      Dir.mkdir "003"
-      Dir.chdir "003"
-    end
-
-    after do
-      Dir.chdir ".."
-    end
-
+  context "A003: --force-delete" do
     # TODO: recheck
     it "001: init -> start -> trigger merge error -> finish --force-delete" do
       # make conflict
@@ -155,20 +111,9 @@ describe "T008: git-contest-finish" do
       ret_branch.include?("contest/branch1").should === false
       ret_branch.include?("contest/branch2").should === false
     end
-
   end
 
-  describe "004: --squash" do
-
-    before do
-      Dir.mkdir "004"
-      Dir.chdir "004"
-    end
-
-    after do
-      Dir.chdir ".."
-    end
-
+  context "A004: --squash" do
     it "001: init -> start -> empty-commits -> finish --squash" do
       bin_exec "init --defaults"
       bin_exec "start branch1"
@@ -185,14 +130,10 @@ describe "T008: git-contest-finish" do
       ret_log1.include?("this is commit").should === true
       ret_log1.include?("Squashed commit").should === true
     end
-
   end
 
-  describe "005: --fetch" do
-
+  context "A005: --fetch" do
     before do
-      Dir.mkdir "005"
-      Dir.chdir "005"
       Dir.mkdir "src"
       Dir.chdir "src"
       bin_exec "init --defaults"
@@ -200,13 +141,7 @@ describe "T008: git-contest-finish" do
       10.times {|x| git_do "commit --allow-empty -m 'this is commit #{x}'" }
       Dir.chdir ".."
       git_do "clone src dest"
-
       Dir.chdir "dest"
-    end
-
-    after do
-      Dir.chdir ".."
-      Dir.chdir ".."
     end
 
     it "001: init -> start -> clone -> checkout@dest -> empty-commits@dest -> finish@dest" do
@@ -222,8 +157,6 @@ describe "T008: git-contest-finish" do
       ret_branch1.include?('branch1').should === true
       ret_branch2.include?('branch1').should === false
     end
-
   end
-
 end
 
