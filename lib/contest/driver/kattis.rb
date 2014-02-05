@@ -19,6 +19,12 @@ require 'contest/driver/common'
 module Contest
   module Driver
     class Kattis < DriverBase
+      def initialize_ext
+        @client = Mechanize.new {|agent|
+          agent.user_agent_alias = 'Windows IE 7'
+        }
+      end
+
       def get_opts_ext
         define_options do
           opt(
@@ -80,10 +86,6 @@ module Contest
         else
           subdomain = 'open'
         end
-
-        @client = Mechanize.new {|agent|
-          agent.user_agent_alias = 'Windows IE 7'
-        }
 
         # Login
         trigger 'before_login'
@@ -157,11 +159,6 @@ module Contest
       def get_submission_status(submission_id, body)
         doc = Nokogiri::HTML(body)
         return doc.xpath('//td[@class="status"]/span').inner_text().strip
-      end
-
-      if is_test_mode?
-        attr_writer :client
-      else
       end
     end
   end

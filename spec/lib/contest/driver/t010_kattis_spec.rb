@@ -1,19 +1,7 @@
 require "spec_helper"
 require "contest/driver/kattis"
 
-describe "T010: Kattis Driver" do
-  before :each do
-    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t010"
-    Dir.mkdir @test_dir
-    Dir.chdir @test_dir
-  end
-
-  after :each do
-    Dir.chdir @test_dir
-    Dir.chdir '..'
-    FileUtils.remove_dir @test_dir, :force => true
-  end
-
+describe "T010: Kattis Driver" do 
   before do
     @driver = Contest::Driver::Kattis.new
     @driver.stub(:sleep).and_return(0)
@@ -200,7 +188,7 @@ describe "T010: Kattis Driver" do
       @driver.submit
 
       @flag = @flag_start && @flag_before_login && @flag_after_login && @flag_before_submit && @flag_after_submit && @flag_before_wait && @flag_after_wait && @flag_finish
-      @flag.should === true
+      expect(@flag).to be true
     end
   end
 end

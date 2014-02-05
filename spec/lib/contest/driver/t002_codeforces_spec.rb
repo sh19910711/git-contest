@@ -1,21 +1,8 @@
 require 'spec_helper'
 
 require 'contest/driver/codeforces'
-require 'mechanize'
 
 describe "T002: Codeforces Driver" do
-  before :each do
-    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t002"
-    Dir.mkdir @test_dir
-    Dir.chdir @test_dir
-  end
-
-  after :each do
-    Dir.chdir @test_dir
-    Dir.chdir '..'
-    FileUtils.remove_dir @test_dir, :force => true
-  end
-
   before(:each) do
     @driver = Contest::Driver::Codeforces.new
     @driver.stub(:sleep).and_return(0)
@@ -34,15 +21,11 @@ describe "T002: Codeforces Driver" do
           'Content-Type' => 'text/html',
         },
       )
-
-      @driver.client = Mechanize.new {|agent|
-        agent.user_agent_alias = 'Windows IE 7'
-      }
     end
 
     it "check status" do
-      ret = @driver.get_status_wait 11111, 22222
-      ret.should include "Accepted"
+      ret = @driver.send :get_status_wait, 11111, 22222
+      expect(ret).to include "Accepted"
     end
   end
 
@@ -132,7 +115,7 @@ describe "T002: Codeforces Driver" do
         :problem_id => 'A',
         :source => 'test_source.rb',
       )
-      @driver.submit.should include "Codeforces 222222A: Accepted"
+      expect(@driver.submit).to include "Codeforces 222222A: Accepted"
     end
 
     it "check events" do
@@ -192,7 +175,7 @@ describe "T002: Codeforces Driver" do
       @driver.submit
 
       @flag = @flag_start && @flag_before_login && @flag_after_login && @flag_before_submit && @flag_after_submit && @flag_before_wait && @flag_after_wait && @flag_finish
-      @flag.should === true
+      expect(@flag).to eq true
     end
   end
 end
