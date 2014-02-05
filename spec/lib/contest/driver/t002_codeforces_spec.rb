@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 require 'contest/driver/codeforces'
-require 'mechanize'
 
 describe "T002: Codeforces Driver" do
   before(:each) do
@@ -26,7 +25,7 @@ describe "T002: Codeforces Driver" do
 
     it "check status" do
       ret = @driver.send :get_status_wait, 11111, 22222
-      ret.should include "Accepted"
+      expect(ret).to include "Accepted"
     end
   end
 
@@ -116,7 +115,7 @@ describe "T002: Codeforces Driver" do
         :problem_id => 'A',
         :source => 'test_source.rb',
       )
-      @driver.submit.should include "Codeforces 222222A: Accepted"
+      expect(@driver.submit).to include "Codeforces 222222A: Accepted"
     end
 
     it "check events" do
@@ -176,7 +175,7 @@ describe "T002: Codeforces Driver" do
       @driver.submit
 
       @flag = @flag_start && @flag_before_login && @flag_after_login && @flag_before_submit && @flag_after_submit && @flag_before_wait && @flag_after_wait && @flag_finish
-      @flag.should === true
+      expect(@flag).to eq true
     end
   end
 end

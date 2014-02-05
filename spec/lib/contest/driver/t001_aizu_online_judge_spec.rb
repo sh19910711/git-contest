@@ -57,7 +57,7 @@ describe "T001: AizuOnlineJudge Driver" do
   context "A001: #get_status_wait" do
     it "001: Check Status" do
       ret = @driver.send :get_status_wait, 'test_user', '111'
-      ret.should === "Wrong Answer"
+      expect(ret).to eq "Wrong Answer"
     end
 
     it "002: Check Timeout" do
@@ -68,7 +68,7 @@ describe "T001: AizuOnlineJudge Driver" do
       @driver.on 'timeout', proc
       @driver.send :get_status_wait, 'test_user', '999'
       @driver.off 'timeout', proc
-      @flag.should === true
+      expect(@flag).to eq true
     end
 
     it "002: Check Timeout noset" do
@@ -79,7 +79,7 @@ describe "T001: AizuOnlineJudge Driver" do
       @driver.on 'timeout', proc
       @driver.off 'timeout', proc
       @driver.send :get_status_wait, 'test_user', '999'
-      @flag.should === false
+      expect(@flag).to eq false
     end
   end
 
@@ -100,9 +100,9 @@ describe "T001: AizuOnlineJudge Driver" do
 
     it "001: Check Status" do
       ret = @driver.send :get_status_wait, 'test_user', '111'
-      ret.should === "Wrong Answer"
+      expect(ret).to eq "Wrong Answer"
       ret = @driver.send :get_status_wait, 'test_user', '112'
-      ret.should === "Accepted"
+      expect(ret).to eq "Accepted"
     end
   end
 
@@ -171,7 +171,7 @@ describe "T001: AizuOnlineJudge Driver" do
       @driver.submit()
 
       @flag = @flag_start && @flag_before_submit && @flag_after_submit && @flag_before_wait && @flag_after_wait && @flag_finish
-      @flag.should === true
+      expect(@flag).to eq true
     end
   end
 end

@@ -188,7 +188,7 @@ describe "T010: Kattis Driver" do
       @driver.submit
 
       @flag = @flag_start && @flag_before_login && @flag_after_login && @flag_before_submit && @flag_after_submit && @flag_before_wait && @flag_after_wait && @flag_finish
-      @flag.should === true
+      expect(@flag).to be true
     end
   end
 end

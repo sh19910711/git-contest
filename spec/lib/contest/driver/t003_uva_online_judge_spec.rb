@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 require 'contest/driver/codeforces'
-require 'mechanize'
 
 describe "T003: UvaOnlineJudge Driver" do
   before(:each) do
@@ -12,19 +11,19 @@ describe "T003: UvaOnlineJudge Driver" do
   context "A001: #get_submission_id" do
     it "should return last submission id" do
       ret = @driver.get_submission_id(read_file('/mock/t003/after_submit.html'))
-      ret.should eq '99999'
+      expect(ret).to eq '99999'
     end
   end
 
   context "A002: #get_submission_status" do
     it "Sent to judge" do
       ret = @driver.get_submission_status('99999', read_file('/mock/t003/my_submissions.sent_to_judge.html'))
-      ret.should eq 'Sent to judge'
+      expect(ret).to eq 'Sent to judge'
     end
 
     it "Compilation error" do
       ret = @driver.get_submission_status('99999', read_file('/mock/t003/my_submissions.compile_error.html'))
-      ret.should eq 'Compilation error'
+      expect(ret).to eq 'Compilation error'
     end
   end
 
@@ -113,7 +112,7 @@ describe "T003: UvaOnlineJudge Driver" do
         :problem_id => '333333',
         :source => 'test_source.java',
       )
-      @driver.submit.should include "UVa 333333: Wrong answer"
+      expect(@driver.submit).to include "UVa 333333: Wrong answer"
     end
 
     it "Check events" do
@@ -161,43 +160,43 @@ describe "T003: UvaOnlineJudge Driver" do
       @driver.submit()
 
       @flag = @flag_start && @flag_before_submit && @flag_after_submit && @flag_before_wait && @flag_after_wait && @flag_finish
-      @flag.should === true
+      expect(@flag).to eq true
     end
   end
 
   context "A004: #is_wait_status" do
     context "wait" do
       it "Sent to judge" do
-        @driver.is_wait_status("Sent to judge").should be true
+        expect(@driver.is_wait_status("Sent to judge")).to be true
       end
       it "Running" do
-        @driver.is_wait_status("Running").should be true
+        expect(@driver.is_wait_status("Running")).to be true
       end
       it "Compiling" do
-        @driver.is_wait_status("Running").should be true
+        expect(@driver.is_wait_status("Running")).to be true
       end
       it "Linking" do
-        @driver.is_wait_status("Linking").should be true
+        expect(@driver.is_wait_status("Linking")).to be true
       end
       it "Received" do
-        @driver.is_wait_status("Received").should be true
+        expect(@driver.is_wait_status("Received")).to be true
       end
       it "empty" do
-        @driver.is_wait_status("").should be true
+        expect(@driver.is_wait_status("")).to be true
       end
     end
     context "no wait" do
       it "Accepted" do
-        @driver.is_wait_status("Accepted").should be false
+        expect(@driver.is_wait_status("Accepted")).to be false
       end
       it "Compilation error" do
-        @driver.is_wait_status("Compilation error").should be false
+        expect(@driver.is_wait_status("Compilation error")).to be false
       end
       it "Wrong answer" do
-        @driver.is_wait_status("Wrong answer").should be false
+        expect(@driver.is_wait_status("Wrong answer")).to be false
       end
       it "Runtime error" do
-        @driver.is_wait_status("Runtime error").should be false
+        expect(@driver.is_wait_status("Runtime error")).to be false
       end
     end
   end

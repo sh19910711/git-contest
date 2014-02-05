@@ -15,20 +15,20 @@ EOF
       end
     end
 
-    describe '001' do 
+    context 'B001' do 
       it '001: init -> start -> submit -> submit -> finish' do
         Dir.mkdir 'test1'
         Dir.chdir 'test1'
 
         # Init
         bin_exec "init --defaults"
-        git_current_branch.should === 'master'
+        expect(git_current_branch).to eq 'master'
         ret = git_do "log --oneline"
-        ret.include?('Initial commit').should === true
+        expect(ret).to include 'Initial commit'
 
         # Start
         bin_exec "start contest1"
-        git_current_branch.should === 'contest/contest1'
+        expect(git_current_branch).to eq 'contest/contest1'
 
         # Edit.1
         File.open 'main.c', 'w' do |file|
@@ -38,9 +38,10 @@ EOF
         # Submit.1
         bin_exec "submit test_dummy -c 1000 -p A"
         ret = git_do "log --oneline"
-        ret.include?('Dummy 1000A: Wrong Answer').should === true
+        expect(ret).to include 'Dummy 1000A: Wrong Answer'
+
         ret = git_do "ls-files"
-        ret.include?('main.c').should === true
+        expect(ret).to include 'main.c'
 
         # Edit.2 fixed
         File.open 'main.c', 'w' do |file|
@@ -50,16 +51,18 @@ EOF
         # Submit.2
         bin_exec "submit test_dummy -c 1000 -p A"
         ret = git_do "log --oneline"
-        ret.include?('Dummy 1000A: Accepted').should === true
+        expect(ret).to include 'Dummy 1000A: Accepted'
+
         ret = git_do "ls-files"
-        ret.include?('main.c').should === true
+        expect(ret).to include 'main.c'
 
         # Finish
         bin_exec "finish --no-edit"
-        git_current_branch.should === 'master'
+        expect(git_current_branch).to eq 'master'
+
         ret = git_do "log --oneline"
-        ret.include?('Dummy 1000A: Wrong Answer').should === true
-        ret.include?('Dummy 1000A: Accepted').should === true
+        expect(ret).to include 'Dummy 1000A: Wrong Answer'
+        expect(ret).to include 'Dummy 1000A: Accepted'
       end
     end
   end

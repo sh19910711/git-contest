@@ -9,12 +9,12 @@ describe "T009: git-contest-init" do
       ret_config1 = git_do("config --get git.contest.branch.master")
       ret2 = bin_exec "init --defaults"
       ret_config1.should                                           === "master"
-      ret1.include?("Error: unknown argument").should              === false
-      ret2.include?("Error: unknown argument").should              === false
-      ret1.include?("Already initialized for git-contest.").should === false
-      ret1.include?("use: git contest init -f").should             === false
-      ret2.include?("Already initialized for git-contest.").should === true
-      ret2.include?("use: git contest init -f").should             === true
+      expect(ret1).not_to include "Error: unknown argument"
+      expect(ret2).not_to include "Error: unknown argument"
+      expect(ret1).not_to include "Already initialized for git-contest."
+      expect(ret1).not_to include "use: git contest init -f"
+      expect(ret2).to include "Already initialized for git-contest."
+      expect(ret2).to include "use: git contest init -f"
     end
 
     it "002: init -> init -f -> init --force" do
@@ -23,15 +23,15 @@ describe "T009: git-contest-init" do
       ret2 = bin_exec "init --defaults -f"
       ret3 = bin_exec "init --defaults --force"
       ret_config1.should === "master"
-      ret1.include?("Error: unknown argument").should              === false
-      ret2.include?("Error: unknown argument").should              === false
-      ret3.include?("Error: unknown argument").should              === false
-      ret1.include?("Already initialized for git-contest.").should === false
-      ret1.include?("use: git contest init -f").should             === false
-      ret2.include?("Already initialized for git-contest.").should === false
-      ret2.include?("use: git contest init -f").should             === false
-      ret3.include?("Already initialized for git-contest.").should === false
-      ret3.include?("use: git contest init -f").should             === false
+      expect(ret1).not_to include "Error: unknown argument"
+      expect(ret2).not_to include "Error: unknown argument"
+      expect(ret3).not_to include "Error: unknown argument"
+      expect(ret1).not_to include "Already initialized for git-contest."
+      expect(ret1).not_to include "use: git contest init -f"
+      expect(ret2).not_to include "Already initialized for git-contest."
+      expect(ret2).not_to include "use: git contest init -f"
+      expect(ret3).not_to include "Already initialized for git-contest."
+      expect(ret3).not_to include "use: git contest init -f"
     end
 
     it "003: init -f -> init -f -> init --force" do
@@ -40,15 +40,15 @@ describe "T009: git-contest-init" do
       ret2 = bin_exec "init --defaults -f"
       ret3 = bin_exec "init --defaults --force"
       ret_config1.should                                           === "master"
-      ret1.include?("Error: unknown argument").should              === false
-      ret2.include?("Error: unknown argument").should              === false
-      ret3.include?("Error: unknown argument").should              === false
-      ret1.include?("Already initialized for git-contest.").should === false
-      ret1.include?("use: git contest init -f").should             === false
-      ret2.include?("Already initialized for git-contest.").should === false
-      ret2.include?("use: git contest init -f").should             === false
-      ret3.include?("Already initialized for git-contest.").should === false
-      ret3.include?("use: git contest init -f").should             === false
+      expect(ret1).not_to include "Error: unknown argument"
+      expect(ret2).not_to include "Error: unknown argument"
+      expect(ret3).not_to include "Error: unknown argument"
+      expect(ret1).not_to include "Already initialized for git-contest."
+      expect(ret1).not_to include "use: git contest init -f"
+      expect(ret2).not_to include "Already initialized for git-contest."
+      expect(ret2).not_to include "use: git contest init -f"
+      expect(ret3).not_to include "Already initialized for git-contest."
+      expect(ret3).not_to include "use: git contest init -f"
     end
   end
 end

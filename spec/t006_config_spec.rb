@@ -22,7 +22,7 @@ sites:
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
-        ret1.include?('Dummy 100A: Accepted').should === true
+        expect(ret1).to include 'Dummy 100A: Accepted'
       end
 
       it "002: ${site}-${problem-id}-${status}" do
@@ -37,7 +37,7 @@ sites:
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
-        ret1.include?('Dummy-100A-Accepted').should === true
+        expect(ret1).to include 'Dummy-100A-Accepted'
       end
 
       it "003: ${status}-${site}" do
@@ -52,7 +52,7 @@ sites:
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
-        ret1.include?('Accepted-Dummy').should === true
+        expect(ret1).to include 'Accepted-Dummy'
       end
 
     end
@@ -82,10 +82,12 @@ sites:
     password: dummy
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
+
         ret1 = git_do "log --oneline"
+        expect(ret1).to include 'Dummy 100A: Accepted'
+
         ret_ls1 = git_do "ls-files"
-        ret1.include?('Dummy 100A: Accepted').should === true
-        ret_ls1.include?('ac.cpp').should === true
+        expect(ret_ls1).to include 'ac.cpp'
       end
 
       it "002: wa.*" do
@@ -99,10 +101,12 @@ sites:
     password: dummy
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
+
         ret1 = git_do "log --oneline"
+        expect(ret1).to include 'Dummy 100A: Wrong Answer'
+
         ret_ls1 = git_do "ls-files"
-        ret1.include?('Dummy 100A: Wrong Answer').should === true
-        ret_ls1.include?('wa.d').should === true
+        expect(ret_ls1).to include 'wa.d'
       end
 
       it "003: tle.*" do
@@ -117,9 +121,10 @@ sites:
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
+        expect(ret1).to include 'Dummy 100A: Time Limit Exceeded'
+
         ret_ls1 = git_do "ls-files"
-        ret1.include?('Dummy 100A: Time Limit Exceeded').should === true
-        ret_ls1.include?('tle.go').should === true
+        expect(ret_ls1).to include 'tle.go'
       end
     end
 
@@ -153,10 +158,10 @@ sites:
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "ls-files"
-        ret1.include?("test1.cpp").should  === true
-        ret1.include?("input1.txt").should === true
-        ret1.include?("test2.c").should    === false
-        ret1.include?("input2.txt").should === false
+        expect(ret1).to include "test1.cpp"
+        expect(ret1).to include "input1.txt"
+        expect(ret1).not_to include "test2.c"
+        expect(ret1).not_to include "input2.txt"
       end
 
       it "002: input2.txt test*.c" do
@@ -172,10 +177,10 @@ sites:
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "ls-files"
-        ret1.include?("test1.cpp").should  === false
-        ret1.include?("input1.txt").should === false
-        ret1.include?("test2.c").should    === true
-        ret1.include?("input2.txt").should === true
+        expect(ret1).not_to include "test1.cpp"
+        expect(ret1).not_to include "input1.txt"
+        expect(ret1).to include "test2.c"
+        expect(ret1).to include "input2.txt"
       end
 
       it "003: input1.txt test1.cpp test2.c input2.txt" do
@@ -191,10 +196,10 @@ sites:
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "ls-files"
-        ret1.include?("test1.cpp").should  === true
-        ret1.include?("input1.txt").should === true
-        ret1.include?("test2.c").should    === true
-        ret1.include?("input2.txt").should === true
+        expect(ret1).to include "test1.cpp"
+        expect(ret1).to include "input1.txt"
+        expect(ret1).to include "test2.c"
+        expect(ret1).to include "input2.txt"
       end
     end
   end

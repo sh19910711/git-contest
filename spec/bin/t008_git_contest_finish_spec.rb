@@ -11,8 +11,8 @@ describe "T008: git-contest-finish" do
       bin_exec "finish --no-edit"
       ret1 = git_do "branch"
       ret_log1 = git_do "log --oneline master"
-      ret1.include?("branch1").should === false
-      ret_log1.include?("this is commit").should === true
+      expect(ret1).not_to include "branch1"
+      expect(ret_log1).to include "this is commit"
     end
 
     it "002: init -> start -> empty-commits -> finish --keep" do
@@ -22,8 +22,8 @@ describe "T008: git-contest-finish" do
       bin_exec "finish --no-edit --keep"
       ret1 = git_do "branch"
       ret_log1 = git_do "log --oneline master"
-      ret1.include?("branch1").should === true
-      ret_log1.include?("this is commit").should === true
+      expect(ret1).to include "branch1"
+      expect(ret_log1).to include "this is commit"
     end
 
     it "003: init -> start -> empty-commits -> finish -k" do
@@ -33,8 +33,8 @@ describe "T008: git-contest-finish" do
       bin_exec "finish --no-edit -k"
       ret1 = git_do "branch"
       ret_log1 = git_do "log --oneline master"
-      ret1.include?("branch1").should === true
-      ret_log1.include?("this is commit").should === true
+      expect(ret1).to include "branch1"
+      expect(ret_log1).to include "this is commit"
     end
 
   end
@@ -71,12 +71,12 @@ describe "T008: git-contest-finish" do
       bin_exec "finish branch3 --no-edit"
       ret_branch_2 = git_do "branch"
       ret_log = git_do "log --oneline"
-      ret_branch_1.include?("branch1").should === true
-      ret_branch_1.include?("branch2").should === true
-      ret_branch_1.include?("branch3").should === true
-      ret_branch_2.include?("branch1").should === false
-      ret_branch_2.include?("branch2").should === false
-      ret_branch_2.include?("branch3").should === false
+      expect(ret_branch_1).to include "branch1"
+      expect(ret_branch_1).to include "branch2"
+      expect(ret_branch_1).to include "branch3"
+      expect(ret_branch_2).not_to include "branch1"
+      expect(ret_branch_2).not_to include "branch2"
+      expect(ret_branch_2).not_to include "branch3"
       (!!ret_log.match(/test-2.*test-3.*test-1/m)).should === true
     end
 
@@ -108,8 +108,8 @@ describe "T008: git-contest-finish" do
       bin_exec "finish branch1 --no-edit"
       bin_exec "finish branch2 --force-delete --no-edit"
       ret_branch = git_do "branch"
-      ret_branch.include?("contest/branch1").should === false
-      ret_branch.include?("contest/branch2").should === false
+      expect(ret_branch).not_to include "contest/branch1"
+      expect(ret_branch).not_to include "contest/branch2"
     end
   end
 
@@ -126,9 +126,9 @@ describe "T008: git-contest-finish" do
       bin_exec "finish --no-edit --squash branch1"
       ret_log1 = git_do "log --oneline"
       ret_branch1 = git_do "branch"
-      ret_branch1.include?("branch1").should === false
-      ret_log1.include?("this is commit").should === true
-      ret_log1.include?("Squashed commit").should === true
+      expect(ret_branch1).not_to include "branch1"
+      expect(ret_log1).to include "this is commit"
+      expect(ret_log1).to include "Squashed commit"
     end
   end
 
@@ -154,8 +154,8 @@ describe "T008: git-contest-finish" do
       Dir.chdir "src"
       ret_branch1 = git_do "branch"
       git_do "checkout master"
-      ret_branch1.include?('branch1').should === true
-      ret_branch2.include?('branch1').should === false
+      expect(ret_branch1).to include 'branch1'
+      expect(ret_branch2).not_to include 'branch1'
     end
   end
 end
