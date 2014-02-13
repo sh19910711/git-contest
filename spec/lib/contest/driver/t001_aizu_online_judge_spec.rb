@@ -174,5 +174,17 @@ describe "T001: AizuOnlineJudge Driver" do
       expect(@flag).to eq true
     end
   end
+
+  context "A004: #normalize_problem_id" do
+    it "1234" do
+      expect(@driver.send(:normalize_problem_id, "1234")).to eq "1234"
+    end
+    it "0240" do
+      expect(@driver.send(:normalize_problem_id, "0240")).to eq "0240"
+    end
+    it "10000" do
+      expect(@driver.send(:normalize_problem_id, "10000")).to eq "10000"
+    end
+  end
 end
 

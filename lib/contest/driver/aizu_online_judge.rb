@@ -70,7 +70,7 @@ module Contest
       def submit_ext
         # start
         trigger 'start'
-        problem_id = "%04d" % @options[:problem_id]
+        problem_id = normalize_problem_id(@options[:problem_id])
 
         # submit
         trigger 'before_submit', @options
@@ -106,6 +106,11 @@ module Contest
       end
 
       private
+      # 180 -> 0180
+      def normalize_problem_id(problem_id)
+        "%04d" % problem_id.to_i
+      end
+
       def get_status_wait(user_id, submission_id)
         # wait result
         5.times do
