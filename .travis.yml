@@ -13,4 +13,12 @@ install:
   - bundle exec rake install
 script:
   - bundle exec rake spec
+deploy:
+  provider: rubygems
+  api_key:
+    master:
+      secure: "LjL6NrPR/KdkSKgUgixtsWiPH7LZrgZrMG9d66G0CY1HLDUXOY17W7HyAP0PYFVLVrJDM7CRx66PSuadYtyuIY1s0iM5hpEA81MlenxZQoApGcbJb2Zd647SPNk4NM+mZCRt9xJyRqrvHHg1d5+4pQVSHl/lGvuQRGXrYXocGLg="
+  gem:
+    master:
+      secure: "Nfw/B5yVdEbf2tULbPlJik/98IolBflsbCFC4pRENVoXS5YdtyGEZlIqCrHJMPjbBCSeSq5qfJzDdnkdhFjCpPymDB4lOKd0p1UgeNws9kxeLcdJKjLZ09lwcfqTObqV7Fa8bB61DjfZ0yVjaq+99/7a9rSeYVK3S2sVQorhBz4="
 
