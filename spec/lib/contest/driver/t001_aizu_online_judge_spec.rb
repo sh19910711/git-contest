@@ -1,28 +1,12 @@
 require 'spec_helper'
 
-require 'mechanize'
 require 'contest/driver/aizu_online_judge'
 
-describe "T001: AizuOnlineJudge Driver" do
-  before :each do
-    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t001"
-    Dir.mkdir @test_dir
-    Dir.chdir @test_dir
-  end
-
-  after :each do
-    Dir.chdir @test_dir
-    Dir.chdir '..'
-    FileUtils.remove_dir @test_dir, :force => true
-  end
-
+describe "T001: AizuOnlineJudge Driver" do 
   before do
     # setup driver
     @driver = Contest::Driver::AizuOnlineJudge.new
     @driver.stub(:sleep).and_return(0)
-    @driver.client = Mechanize.new {|agent|
-      agent.user_agent_alias = 'Windows IE 7'
-    }
     ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t001/config.yml')
     init
 
@@ -72,8 +56,8 @@ describe "T001: AizuOnlineJudge Driver" do
 
   context "A001: #get_status_wait" do
     it "001: Check Status" do
-      ret = @driver.get_status_wait 'test_user', '111'
-      ret.should === "Wrong Answer"
+      ret = @driver.send :get_status_wait, 'test_user', '111'
+      expect(ret).to eq "Wrong Answer"
     end
 
     it "002: Check Timeout" do
@@ -82,9 +66,9 @@ describe "T001: AizuOnlineJudge Driver" do
         @flag = true
       end
       @driver.on 'timeout', proc
-      @driver.get_status_wait 'test_user', '999'
+      @driver.send :get_status_wait, 'test_user', '999'
       @driver.off 'timeout', proc
-      @flag.should === true
+      expect(@flag).to eq true
     end
 
     it "002: Check Timeout noset" do
@@ -94,8 +78,8 @@ describe "T001: AizuOnlineJudge Driver" do
       end
       @driver.on 'timeout', proc
       @driver.off 'timeout', proc
-      @driver.get_status_wait 'test_user', '999'
-      @flag.should === false
+      @driver.send :get_status_wait, 'test_user', '999'
+      expect(@flag).to eq false
     end
   end
 
@@ -115,10 +99,10 @@ describe "T001: AizuOnlineJudge Driver" do
     end
 
     it "001: Check Status" do
-      ret = @driver.get_status_wait 'test_user', '111'
-      ret.should === "Wrong Answer"
-      ret = @driver.get_status_wait 'test_user', '112'
-      ret.should === "Accepted"
+      ret = @driver.send :get_status_wait, 'test_user', '111'
+      expect(ret).to eq "Wrong Answer"
+      ret = @driver.send :get_status_wait, 'test_user', '112'
+      expect(ret).to eq "Accepted"
     end
   end
 
@@ -187,7 +171,19 @@ describe "T001: AizuOnlineJudge Driver" do
       @driver.submit()
 
       @flag = @flag_start && @flag_before_submit && @flag_after_submit && @flag_before_wait && @flag_after_wait && @flag_finish
-      @flag.should === true
+      expect(@flag).to eq true
+    end
+  end
+
+  context "A004: #normalize_problem_id" do
+    it "1234" do
+      expect(@driver.send(:normalize_problem_id, "1234")).to eq "1234"
+    end
+    it "0240" do
+      expect(@driver.send(:normalize_problem_id, "0240")).to eq "0240"
+    end
+    it "10000" do
+      expect(@driver.send(:normalize_problem_id, "10000")).to eq "10000"
     end
   end
 end

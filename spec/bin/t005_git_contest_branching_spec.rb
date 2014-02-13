@@ -1,83 +1,70 @@
 require "spec_helper"
 
-describe "T005" do
-
-  before(:each) do
-    init_env
-    ENV['GIT_CONTEST_HOME'] = get_path('/mock/default_config')
-    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t005"
-    Dir.mkdir @test_dir
-    Dir.chdir @test_dir
-    # ENV['GIT_CONTEST_DEBUG'] = 'ON'
-  end
-
-  after(:each) do
-    Dir.chdir '..'
-    FileUtils.remove_dir @test_dir, :force => true
-  end
-
-  describe "001" do
-
+describe "T005: branching" do
+  context "A001" do
     before do
-      ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t005/001/config.yml')
-      Dir.mkdir '001'
-      Dir.chdir '001'
+      ENV['GIT_CONTEST_CONFIG'] = "#{@temp_dir}/home/config.yml"
+      File.open ENV['GIT_CONTEST_CONFIG'], "w" do |file|
+        file.write <<EOF
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+EOF
+      end
     end
 
-    describe '001' do
-
-      before do
-        Dir.mkdir '001'
-        Dir.chdir '001'
-      end
-
+    context 'B001' do 
       it '001: init -> start -> submit -> submit -> finish' do
         Dir.mkdir 'test1'
         Dir.chdir 'test1'
+
         # Init
         bin_exec "init --defaults"
-        git_current_branch.should === 'master'
+        expect(git_current_branch).to eq 'master'
         ret = git_do "log --oneline"
-        ret.include?('Initial commit').should === true
+        expect(ret).to include 'Initial commit'
+
         # Start
         bin_exec "start contest1"
-        git_current_branch.should === 'contest/contest1'
+        expect(git_current_branch).to eq 'contest/contest1'
+
         # Edit.1
         File.open 'main.c', 'w' do |file|
           file.write 'wa-code'
         end
+
         # Submit.1
         bin_exec "submit test_dummy -c 1000 -p A"
         ret = git_do "log --oneline"
-        ret.include?('Dummy 1000A: Wrong Answer').should === true
+        expect(ret).to include 'Dummy 1000A: Wrong Answer'
+
         ret = git_do "ls-files"
-        ret.include?('main.c').should === true
+        expect(ret).to include 'main.c'
+
         # Edit.2 fixed
         File.open 'main.c', 'w' do |file|
           file.write 'ac-code'
         end
+
         # Submit.2
         bin_exec "submit test_dummy -c 1000 -p A"
         ret = git_do "log --oneline"
-        ret.include?('Dummy 1000A: Accepted').should === true
+        expect(ret).to include 'Dummy 1000A: Accepted'
+
         ret = git_do "ls-files"
-        ret.include?('main.c').should === true
+        expect(ret).to include 'main.c'
+
         # Finish
         bin_exec "finish --no-edit"
-        git_current_branch.should === 'master'
+        expect(git_current_branch).to eq 'master'
+
         ret = git_do "log --oneline"
-        ret.include?('Dummy 1000A: Wrong Answer').should === true
-        ret.include?('Dummy 1000A: Accepted').should === true
-        # Clean
-        FileUtils.remove_dir '.git', :force => true
-        FileUtils.remove 'main.c'
-        Dir.chdir '..'
-        Dir.rmdir 'test1'
+        expect(ret).to include 'Dummy 1000A: Wrong Answer'
+        expect(ret).to include 'Dummy 1000A: Accepted'
       end
-
     end
-
   end
-
 end
 

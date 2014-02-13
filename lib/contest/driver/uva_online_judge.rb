@@ -10,6 +10,12 @@ require 'contest/driver/common'
 module Contest
   module Driver
     class UvaOnlineJudge < DriverBase
+      def initialize_ext
+        @client = Mechanize.new {|agent|
+          agent.user_agent_alias = 'Windows IE 7'
+        }
+      end
+
       def get_opts_ext
         define_options do
           opt(
@@ -53,10 +59,6 @@ module Contest
       def submit_ext
         trigger 'start'
         problem_id = @options[:problem_id]
-
-        @client = Mechanize.new {|agent|
-          agent.user_agent_alias = 'Windows IE 7'
-        }
 
         # submit
         trigger 'before_login'
@@ -134,11 +136,6 @@ module Contest
           end
         end
         'timeout'
-      end
-
-      if is_test_mode?
-        attr_writer :client
-      else
       end
     end
   end
