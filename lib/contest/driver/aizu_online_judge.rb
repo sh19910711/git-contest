@@ -108,7 +108,7 @@ module Contest
       private
       # 180 -> 0180
       def normalize_problem_id(problem_id)
-        "%04d" % problem_id
+        "%04d" % problem_id.to_i
       end
 
       def get_status_wait(user_id, submission_id)
