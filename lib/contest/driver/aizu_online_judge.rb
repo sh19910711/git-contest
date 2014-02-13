@@ -11,6 +11,12 @@ require 'rexml/document'
 module Contest
   module Driver
     class AizuOnlineJudge < DriverBase
+      def initialize_ext
+        @client = Mechanize.new {|agent|
+          agent.user_agent_alias = 'Windows IE 7'
+        }
+      end
+
       def get_opts_ext
         define_options do
           opt(
@@ -66,10 +72,6 @@ module Contest
         trigger 'start'
         problem_id = "%04d" % @options[:problem_id]
 
-        @client = Mechanize.new {|agent|
-          agent.user_agent_alias = 'Windows IE 7'
-        }
-
         # submit
         trigger 'before_submit', @options
         submit_page = @client.get "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=0000"
@@ -103,6 +105,7 @@ module Contest
         get_commit_message(status)
       end
 
+      private
       def get_status_wait(user_id, submission_id)
         # wait result
         5.times do
@@ -143,16 +146,6 @@ module Contest
       def get_submission_id(body)
         doc = Nokogiri::HTML body
         doc.xpath('//table[@id="tableRanking"]//tr[@class="dat"]')[0].search('td')[0].text.strip
-      end
-
-      if is_test_mode?
-        attr_writer :client
-      else
-        private :status_loop
-        private :get_status_wait
-        private :is_waiting
-        private :get_status
-        private :get_submission_id
       end
     end
   end

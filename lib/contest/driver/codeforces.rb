@@ -9,7 +9,13 @@ require 'contest/driver/common'
 
 module Contest
   module Driver
-    class Codeforces < DriverBase 
+    class Codeforces < DriverBase
+      def initialize_ext
+        @client = Mechanize.new {|agent|
+          agent.user_agent_alias = 'Windows IE 7'
+        }
+      end
+
       def get_opts_ext
         define_options do
           opt(
@@ -86,10 +92,6 @@ module Contest
         contest_id = @options[:contest_id]
         problem_id = @options[:problem_id]
 
-        @client = Mechanize.new {|agent|
-          agent.user_agent_alias = 'Windows IE 7'
-        }
-
         # login
         trigger 'before_login'
         login_page = @client.get 'http://codeforces.com/enter'
@@ -154,6 +156,7 @@ module Contest
         get_commit_message(status)
       end
 
+      private
       def get_status_wait(contest_id, submission_id)
         contest_id = contest_id.to_s
         submission_id = submission_id.to_s
@@ -187,15 +190,6 @@ module Contest
         line = doc.xpath('//td/a[contains(./text() , "' + @config["user"] + '")]').xpath('../..')[0]
         elements = line.xpath('//td[contains(concat(" ",@class," "), " status-cell ")]')
         elements[0].attributes()["submissionid"].value.strip
-      end
-
-      if is_test_mode?
-        attr_writer :client
-      else
-        private :get_status_wait
-        private :is_waiting
-        private :get_status
-        private :get_submission_id
       end
     end
   end

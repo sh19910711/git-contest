@@ -1,66 +1,64 @@
 require "spec_helper"
 
-describe "T006: Config Test" do
-
-  before(:each) do
-    init_env
-    ENV['GIT_CONTEST_HOME'] = get_path('/mock/default_config')
-    @test_dir = "#{ENV['GIT_CONTEST_TEMP_DIR']}/t006"
-    Dir.mkdir @test_dir
-    Dir.chdir @test_dir
-    # debug_on
-  end
-
-  after(:each) do
-    Dir.chdir '..'
-    FileUtils.remove_dir @test_dir, :force => true
-  end
-
-  describe "001: submit_rules" do
-
-    describe "001: commit_message" do
-
+describe "T006: Config Test" do 
+  context "A001: submit_rules" do
+    context "B001: commit_message" do
       before do
-        Dir.mkdir '001'
-        Dir.chdir '001'
         File.open "main.d", "w" do |file|
           file.write "ac-code"
         end
         bin_exec "init --defaults"
       end
 
-      after do
-        Dir.chdir '..'
-      end
-
       it "001: ${site} ${problem-id}: ${status}" do
-        ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/001/001/config.yml')
+        set_git_contest_config <<EOF
+submit_rules:
+  message:    "${site} ${problem-id}: ${status}"
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
-        ret1.include?('Dummy 100A: Accepted').should === true
+        expect(ret1).to include 'Dummy 100A: Accepted'
       end
 
       it "002: ${site}-${problem-id}-${status}" do
-        ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/001/002/config.yml')
+        set_git_contest_config <<EOF
+submit_rules:
+  message:    "${site}-${problem-id}-${status}"
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
-        ret1.include?('Dummy-100A-Accepted').should === true
+        expect(ret1).to include 'Dummy-100A-Accepted'
       end
 
       it "003: ${status}-${site}" do
-        ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/001/003/config.yml')
+        set_git_contest_config <<EOF
+submit_rules:
+  message:    "${status}-${site}"
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
-        ret1.include?('Accepted-Dummy').should === true
+        expect(ret1).to include 'Accepted-Dummy'
       end
 
     end
 
-    describe "002: source" do
-
+    context "B002: source" do
       before do
-        Dir.mkdir '002'
-        Dir.chdir '002'
         File.open "ac.cpp", "w" do |file|
           file.write "ac-code"
         end
@@ -73,44 +71,65 @@ describe "T006: Config Test" do
         bin_exec "init --defaults"
       end
 
-      after do
-        Dir.chdir '..'
-      end
-
       it "001: ac.*" do
-        ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/002/001/config.yml')
+        set_git_contest_config <<EOF
+submit_rules:
+  source: "ac.*"
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+EOF
         bin_exec "submit test_dummy -c 100 -p A"
+
         ret1 = git_do "log --oneline"
+        expect(ret1).to include 'Dummy 100A: Accepted'
+
         ret_ls1 = git_do "ls-files"
-        ret1.include?('Dummy 100A: Accepted').should === true
-        ret_ls1.include?('ac.cpp').should === true
+        expect(ret_ls1).to include 'ac.cpp'
       end
 
       it "002: wa.*" do
-        ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/002/002/config.yml')
+        set_git_contest_config <<EOF
+submit_rules:
+  source: "wa.*"
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+EOF
         bin_exec "submit test_dummy -c 100 -p A"
+
         ret1 = git_do "log --oneline"
+        expect(ret1).to include 'Dummy 100A: Wrong Answer'
+
         ret_ls1 = git_do "ls-files"
-        ret1.include?('Dummy 100A: Wrong Answer').should === true
-        ret_ls1.include?('wa.d').should === true
+        expect(ret_ls1).to include 'wa.d'
       end
 
       it "003: tle.*" do
-        ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/002/003/config.yml')
+        set_git_contest_config <<EOF
+submit_rules:
+  source: "tle.*"
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "log --oneline"
-        ret_ls1 = git_do "ls-files"
-        ret1.include?('Dummy 100A: Time Limit Exceeded').should === true
-        ret_ls1.include?('tle.go').should === true
-      end
+        expect(ret1).to include 'Dummy 100A: Time Limit Exceeded'
 
+        ret_ls1 = git_do "ls-files"
+        expect(ret_ls1).to include 'tle.go'
+      end
     end
 
-    describe "003: add" do
-
+    context "B003: add" do
       before do
-        Dir.mkdir '003'
-        Dir.chdir '003'
         File.open "test1.cpp", "w" do |file|
           file.write "ac-code"
         end
@@ -125,44 +144,64 @@ describe "T006: Config Test" do
         end
         bin_exec "init --defaults"
       end
-      
-      after do
-        Dir.chdir ".."
-      end
 
       it "001: test*.cpp input1.txt" do
-        ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/003/001/config.yml')
+        set_git_contest_config <<EOF
+submit_rules:
+  source: "test*.cpp"
+  add:    "test*.cpp input1.txt"
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "ls-files"
-        ret1.include?("test1.cpp").should  === true
-        ret1.include?("input1.txt").should === true
-        ret1.include?("test2.c").should    === false
-        ret1.include?("input2.txt").should === false
+        expect(ret1).to include "test1.cpp"
+        expect(ret1).to include "input1.txt"
+        expect(ret1).not_to include "test2.c"
+        expect(ret1).not_to include "input2.txt"
       end
 
       it "002: input2.txt test*.c" do
-        ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/003/002/config.yml')
+        set_git_contest_config <<EOF
+submit_rules:
+  source: "test*.c"
+  add:    "input2.txt test*.c"
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "ls-files"
-        ret1.include?("test1.cpp").should  === false
-        ret1.include?("input1.txt").should === false
-        ret1.include?("test2.c").should    === true
-        ret1.include?("input2.txt").should === true
+        expect(ret1).not_to include "test1.cpp"
+        expect(ret1).not_to include "input1.txt"
+        expect(ret1).to include "test2.c"
+        expect(ret1).to include "input2.txt"
       end
 
       it "003: input1.txt test1.cpp test2.c input2.txt" do
-        ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t006/001/003/003/config.yml')
+        set_git_contest_config <<EOF
+submit_rules:
+  source: "test*.cpp"
+  add:    "input1.txt test1.cpp test2.c input2.txt"
+sites:
+  test_dummy:
+    driver:   dummy
+    user:     dummy
+    password: dummy
+EOF
         bin_exec "submit test_dummy -c 100 -p A"
         ret1 = git_do "ls-files"
-        ret1.include?("test1.cpp").should  === true
-        ret1.include?("input1.txt").should === true
-        ret1.include?("test2.c").should    === true
-        ret1.include?("input2.txt").should === true
+        expect(ret1).to include "test1.cpp"
+        expect(ret1).to include "input1.txt"
+        expect(ret1).to include "test2.c"
+        expect(ret1).to include "input2.txt"
       end
-
     end
-
   end
-
 end
 
