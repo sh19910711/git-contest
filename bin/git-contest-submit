@@ -192,6 +192,7 @@ driver.on(
 
 # global config
 $config["submit_rules"] ||= {}
+$config["file"] ||= {}
 
 # set config
 driver.config = $sites[site]

@@ -41,6 +41,24 @@ module Contest
         end
       end
 
+      def self.get_file_ext filename
+        File.extname(filename)[1..-1]
+      end
+
+      def self.check_file_map label, ext_map
+        if ext_map.is_a? Hash
+          ext = get_file_ext(label)
+          ext_map.has_key?(ext)
+        else
+          false
+        end
+      end
+
+      def self.resolve_file_map label, ext_map
+        ext = get_file_ext(label)
+        ext_map[ext]
+      end
+
       def self.normalize_language label
         case label
         when "c", "C"
