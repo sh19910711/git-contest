@@ -203,5 +203,67 @@ EOF
       end
     end
   end
+
+  context "A002: file" do
+    context "B001: ext" do
+      before do
+        File.open "test1.dummy", "w" do |f|
+          f.write "wa-code"
+        end
+        File.open "test2.cpp", "w" do |f|
+          f.write "wa-code"
+        end
+      end
+
+      it "dummy -> c++11" do
+        set_git_contest_config <<EOF
+file:
+  ext:
+    dummy: c++11
+sites:
+  test_dummy:
+    driver: dummy
+    user: dummy
+    password: dummy
+EOF
+        
+        ret1 = bin_exec "submit test_dummy -c 100 -p A -s test1.dummy"
+        expect(ret1).not_to include "unknown language"
+      end
+
+      it "cpp -> dummy" do
+        set_git_contest_config <<EOF
+file:
+  ext:
+    cpp: dummy
+sites:
+  test_dummy:
+    driver: dummy
+    user: dummy
+    password: dummy
+EOF
+        
+        ret1 = bin_exec "submit test_dummy -c 100 -p A -s test2.cpp"
+        expect(ret1).to include "unknown language"
+      end
+
+      it "cpp -> cpp11" do
+        set_git_contest_config <<EOF
+file:
+  ext:
+    cpp: dummy
+sites:
+  test_dummy:
+    driver: dummy
+    user: dummy
+    password: dummy
+EOF
+        
+        ret1 = bin_exec "submit test_dummy -c 100 -p A -s test2.cpp"
+        expect(ret1).to include "unknown language"
+      end
+    end
+  end
+
 end
 
