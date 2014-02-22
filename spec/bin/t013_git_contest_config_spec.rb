@@ -22,14 +22,13 @@ EOF
     end
 
     it "git contest config set key value" do
-      ret1 = bin_exec "config set key1 value2"
-      p ret1
+      bin_exec "config set key1 value2"
       ret2 = YAML.load_file "#{@temp_dir}/config.yml"
       expect(ret2["key1"]).to eq "value2"
     end
 
     it "git contest config set key (input from pipe)" do
-      bin_exec "config set key1", "value2"
+      ret1 = bin_exec "config set key1", "value2"
       ret2 = YAML.load_file "#{@temp_dir}/config.yml"
       expect(ret2["key1"]).to eq "value2"
     end

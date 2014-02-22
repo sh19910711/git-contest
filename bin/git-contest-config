@@ -11,6 +11,8 @@
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'git/contest/common'
 require 'trollop'
+require 'active_support/core_ext/hash'
+
 
 # Show Banner
 def usage
@@ -32,8 +34,6 @@ end
 
 init
 
-$config = get_config() || {}
-
 sub_commands = %w(sites)
 $options = Trollop::options do
   version "git-contest #{Git::Contest::VERSION} (c) 2013-2014 Hiroyuki Sano"
@@ -46,8 +46,56 @@ type = ARGV.shift.to_s.strip
 case type
 when "get"
   puts "get value"
+  p ARGV
 when "set"
-  puts "set value"
+  if ARGV.length == 1
+    # read values
+    keys = ARGV.shift.to_s.strip.split('.')
+    puts "input value"
+    value = gets.strip
+
+    # update yaml value
+    config = get_config
+    new_config = {}
+    cur = new_config
+    while ! keys.empty?
+      key = keys.shift
+      if keys.empty?
+        cur[key] = value
+      else
+        cur[key] = {}
+        cur = cur[key]
+      end
+    end
+    config.deep_merge! new_config
+
+    # save file
+    File.open($GIT_CONTEST_CONFIG, 'w') {|f| f.write config.to_yaml }
+  elsif ARGV.length == 2
+    # read values from command args
+    keys = ARGV.shift.to_s.strip.split('.')
+    value = ARGV.shift.to_s.strip
+
+    # update yaml value
+    config = get_config
+    new_config = {}
+    cur = new_config
+    while ! keys.empty?
+      key = keys.shift
+      if keys.empty?
+        cur[key] = value
+      else
+        cur[key] = {}
+        cur = cur[key]
+      end
+    end
+    config.deep_merge! new_config
+
+    # save file
+    File.open($GIT_CONTEST_CONFIG, 'w') {|f| f.write config.to_yaml }
+  else
+    # TODO: show help
+  end
 else
   usage
 end
