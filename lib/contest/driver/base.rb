@@ -22,6 +22,7 @@ module Contest
         @options ||= {}
         # site config
         @config ||= {}
+        @config["file"] ||= {}
         @config["submit_rules"] ||= {}
         # call DriverEvent#initialize
         super
@@ -123,7 +124,11 @@ module Contest
         @options[:source] = Utils.resolve_path(
           @options[:source] || @config["submit_rules"]["source"] || DEFAULT_SOURCE_PATH
         )
-        @options[:language] ||= Utils.resolve_language(@options[:source])
+        if Utils.check_file_map(@options[:source], @config["file"]["ext"])
+          @options[:language] ||= Utils.resolve_file_map(@options[:source], @config["file"]["ext"])
+        else
+          @options[:language] ||= Utils.resolve_language(@options[:source])
+        end
         @options[:language] = resolve_language Utils.normalize_language(@options[:language])
 
         submit_ext()
