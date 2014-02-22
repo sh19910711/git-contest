@@ -45,8 +45,22 @@ type = ARGV.shift.to_s.strip
 
 case type
 when "get"
-  puts "get value"
-  p ARGV
+  if ARGV.length == 1
+    config = get_config
+    cur = config
+    keys = ARGV.shift.to_s.strip.split('.')
+    while ! keys.empty?
+      key = keys.shift
+      if cur.has_key? key
+        cur = cur[key]
+      else
+        # TODO: not found
+      end
+    end
+    puts cur
+  else
+    # TODO: show help
+  end
 when "set"
   if ARGV.length == 1
     # read values

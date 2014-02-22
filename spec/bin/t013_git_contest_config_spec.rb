@@ -28,7 +28,7 @@ EOF
     end
 
     it "git contest config set key (input from pipe)" do
-      ret1 = bin_exec "config set key1", "value2"
+      bin_exec "config set key1", "value2"
       ret2 = YAML.load_file "#{@temp_dir}/config.yml"
       expect(ret2["key1"]).to eq "value2"
     end
@@ -41,6 +41,20 @@ EOF
   end
 
   context "git contest config get" do
+    before(:each) do
+      # create config file
+      File.open "#{@temp_dir}/config.yml", 'w' do |file|
+        file.write <<EOF
+key1: value1
+sites:
+  test_site1:
+    driver: test_driver1
+    user: test_user1
+    password: test_password1
+EOF
+      end
+    end
+
     it "git contest config get key1" do
       ret = bin_exec "config get key1"
       expect(ret.strip).to eq "value1"
