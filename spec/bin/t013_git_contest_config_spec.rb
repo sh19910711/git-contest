@@ -64,6 +64,21 @@ EOF
       ret = bin_exec "config get sites.test_site1.user"
       expect(ret.strip).to eq "test_user1"
     end
+
+    it "return keys" do
+      ret = bin_exec "config get sites.test_site1"
+      expect(ret).to include "driver"
+      expect(ret).to include "user"
+      expect(ret).to include "password"
+      expect(ret).not_to include "test_driver1"
+      expect(ret).not_to include "test_user1"
+      expect(ret).not_to include "test_password1"
+    end
+
+    it "raise error: not found" do
+      ret = bin_exec("config get foo.bar")
+      expect(ret).to include "ERROR"
+    end
   end
 
 end
