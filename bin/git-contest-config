@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+
+#
+# git-contest-config
+# https://github.com/sh19910711/git-contest
+#
+# Copyright (c) 2014 Hiroyuki Sano <sh19910711 at gmail.com>
+# Licensed under the MIT-License.
+#
+
+$:.unshift File.expand_path('../../lib', __FILE__)
+require 'git/contest/common'
+require 'trollop'
+
+# Show Banner
+def usage
+  puts get_banner
+  return 0
+end
+
+# Get Banner Text
+def get_banner
+  res = ""
+  res += "usage: git contest config [type]\n"
+  res += "\n"
+  res += "Available types are:\n"
+  res += "  %-8s: set value\n" % "set"
+  res += "  %-8s: get value\n" % "get"
+  res += " \n"
+  return res
+end
+
+init
+
+$config = get_config() || {}
+
+sub_commands = %w(sites)
+$options = Trollop::options do
+  version "git-contest #{Git::Contest::VERSION} (c) 2013-2014 Hiroyuki Sano"
+  banner get_banner
+  stop_on sub_commands
+end
+
+type = ARGV.shift.to_s.strip
+
+case type
+when "get"
+  puts "get value"
+when "set"
+  puts "set value"
+else
+  usage
+end
+
