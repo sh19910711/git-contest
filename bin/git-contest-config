@@ -20,6 +20,33 @@ def usage
   return 0
 end
 
+def show_get_usage
+  res = ""
+  res += "usage: git contest config get [key]\n"
+  res += "\n"
+  res += "Example Usage:\n"
+  res += "  $ git contest config get key1\n"
+  res += "  $ git contest config get namespace1.key1\n"
+  res += "  $ git contest config get sites.some_judge.user\n"
+  res += " \n"
+  puts res
+end
+
+def show_set_usage
+  res = ""
+  res += "usage: git contest config set [key] <value>\n"
+  res += "\n"
+  res += "Example Usage:\n"
+  res += "  $ git contest config set key1 value1\n"
+  res += "    -> key1 = value1\n"
+  res += "  $ git contest config set key1\n"
+  res += "    -> set value from command-line\n"
+  res += "  $ git contest config set namespace1.key1 value1\n"
+  res += "  $ git contest config set sites.some_judge.user username\n"
+  res += " \n"
+  puts res
+end
+
 # Get Banner Text
 def get_banner
   res = ""
@@ -54,12 +81,16 @@ when "get"
       if cur.has_key? key
         cur = cur[key]
       else
-        # TODO: not found
+        abort "ERROR: Not Found"
       end
     end
-    puts cur
+    if cur.is_a? Hash
+      puts "keys = #{cur.keys.join(', ')}"
+    else
+      puts cur
+    end
   else
-    # TODO: show help
+    show_get_usage
   end
 when "set"
   if ARGV.length == 1
@@ -108,7 +139,7 @@ when "set"
     # save file
     File.open($GIT_CONTEST_CONFIG, 'w') {|f| f.write config.to_yaml }
   else
-    # TODO: show help
+    show_set_usage
   end
 else
   usage
