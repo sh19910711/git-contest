@@ -30,6 +30,16 @@ module Contest
         }
       end
 
+      #
+      # Load Plugins
+      #
+      def self.load_plugins
+        # load drivers
+        Dir.glob("#{$GIT_CONTEST_HOME}/plugins/**") do |path|
+          require path if /\/.*_driver\.rb$/.match path
+        end
+      end
+
       def self.resolve_wild_card path
         `ls #{path} | cat | head -n 1`.strip
       end

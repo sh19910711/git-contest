@@ -13,16 +13,6 @@ require 'git/contest/common'
 require 'trollop'
 
 #
-# Load Plugins
-#
-def load_plugins
-  # load drivers
-  Dir.glob("#{$GIT_CONTEST_HOME}/plugins/**") do |path|
-    require path if /\/.*_driver\.rb$/.match path
-  end
-end
-
-#
 # Load Drivers
 #
 def load_drivers
@@ -75,7 +65,7 @@ if $config.has_key? 'sites'
   $sites = $config["sites"]
 end
 
-load_plugins
+Contest::Driver::Utils.load_plugins
 
 $drivers = {}
 load_drivers
