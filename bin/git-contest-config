@@ -69,6 +69,16 @@ def show_site_add_usage
   puts res
 end
 
+def show_site_rm_usage
+  res = ""
+  res += "usage: git contest config site rm <site-name>\n"
+  res += "\n"
+  res += "Example Usage:\n"
+  res += "  $ git contest config site rm site1\n"
+  res += " \n"
+  puts res
+end
+
 # Get Banner Text
 def get_banner
   res = ""
@@ -100,6 +110,7 @@ when "site"
     type = ARGV.shift.to_s.strip
     case type
     when "add"
+      # git-contest-config site add
       if ARGV.length == 1
         puts "# input site config (password will be hidden)"
 
@@ -128,6 +139,34 @@ when "site"
       else
         show_site_add_usage
       end
+
+    when "rm"
+      # git-contest-config site rm
+      if ARGV.length == 1
+        # TODO: to check not found
+        site_name = ARGV.shift.to_s.strip
+
+        puts "Are you sure you want to remove `#{site_name}`?"
+        this_is_yes = ask("when you remove the site, type `yes` > ").to_s
+
+        if this_is_yes == "yes"
+          # update config
+          config = get_config
+          config["sites"].delete site_name
+          # save config
+          File.open($GIT_CONTEST_CONFIG, 'w') {|f| f.write config.to_yaml }
+          puts ""
+          puts "updated successfully!!"
+          puts ""
+        else
+          puts ""
+          puts "operation cancelled"
+          puts ""
+        end
+      else
+        show_site_rm_usage
+      end
+
     else
       show_site_usage
     end
