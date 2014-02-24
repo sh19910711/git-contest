@@ -50,13 +50,21 @@ end
 
 def show_site_usage
   res = ""
-  res += "usage: git contest config site <site-name>\n"
+  res += "usage: git contest config site <type>\n"
+  res += "\n"
+  res += "Available types are:\n"
+  res += "  %-8s: add site\n" % "add"
+  res += " \n"
+  puts res
+end
+
+def show_site_add_usage
+  res = ""
+  res += "usage: git contest config site add <site-name>\n"
   res += "\n"
   res += "Example Usage:\n"
-  res += "  $ git contest config site\n"
-  res += "  -> enter driver name\n"
-  res += "  -> enter user name\n"
-  res += "  -> enter password\n"
+  res += "  $ git contest config site add site1\n"
+  res += "  -> input information\n"
   res += " \n"
   puts res
 end
@@ -88,25 +96,41 @@ type = ARGV.shift.to_s.strip
 case type
 
 when "site"
-  if ARGV.length == 1
-    # read info
-    site_name = ARGV.shift.to_s.strip
-    config = get_config
+  if ARGV.length >= 1
+    type = ARGV.shift.to_s.strip
+    case type
+    when "add"
+      if ARGV.length == 1
+        puts "# input site config (password will be hidden)"
 
-    # init config
-    config["sites"][site_name] = {}
+        # read info
+        site_name = ARGV.shift.to_s.strip
+        config = get_config
 
-    # input site info
-    # TODO: to check not found
-    config["sites"][site_name]["driver"] = ask("driver_name > ").to_s
-    # TODO: to depend on above driver
-    config["sites"][site_name]["user"] = ask("user id > ").to_s
-    config["sites"][site_name]["password"] = ask("password [hidden] > ") do |q|
-      q.echo = false
-    end.to_s
+        # init config
+        config["sites"][site_name] = {}
 
-    # set config
-    File.open($GIT_CONTEST_CONFIG, 'w') {|f| f.write config.to_yaml }
+        # input site info
+        # TODO: to check not found
+        config["sites"][site_name]["driver"] = ask("%10s > " % "driver").to_s
+        # TODO: to depend on above driver
+        config["sites"][site_name]["user"] = ask("%10s > " % "user id").to_s
+        config["sites"][site_name]["password"] = ask("%10s > " % "password") do |q|
+          q.echo = false
+        end.to_s
+
+        # set config
+        File.open($GIT_CONTEST_CONFIG, 'w') {|f| f.write config.to_yaml }
+        
+        puts ""
+        puts "updated successfully!!"
+        puts ""
+      else
+        show_site_add_usage
+      end
+    else
+      show_site_usage
+    end
   else
     show_site_usage
   end
