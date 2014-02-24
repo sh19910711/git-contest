@@ -25,6 +25,7 @@ def get_banner
   res += "\n"
   res += "Available types are:\n"
   res += "  %-8s: show sites\n" % "sites"
+  res += "  %-8s: show drivers\n" % "drivers"
   res += " \n"
   return res
 end
@@ -37,7 +38,7 @@ if $config.has_key? 'sites'
   $sites = $config["sites"]
 end
 
-sub_commands = %w(sites)
+sub_commands = %w(sites drivers)
 $options = Trollop::options do
   version "git-contest #{Git::Contest::VERSION} (c) 2013-2014 Hiroyuki Sano"
   banner get_banner
@@ -47,7 +48,20 @@ end
 type = ARGV.shift.to_s.strip
 
 case type
+when "drivers"
+  # show all drivers
+  puts "#"
+  puts "# Available Drivers"
+  puts "#"
+  puts ""
+  drivers = Contest::Driver::Utils.get_all_drivers
+  drivers.each {|driver_info|
+    puts "  #{driver_info[:class_name]}"
+    puts "    #{driver_info[:site_info][:desc]}"
+    puts ""
+  }
 when "sites"
+  # show all sites
   $sites.keys.each do |site_name|
     puts "# #{site_name}"
     keys = ["driver", "user"]
