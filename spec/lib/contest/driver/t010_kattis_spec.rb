@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "T010: Kattis Driver" do 
   before do
-    @driver = Contest::Driver::Kattis.new
+    @driver = Contest::Driver::KattisDriver.new
     @driver.stub(:sleep).and_return(0)
   end
 

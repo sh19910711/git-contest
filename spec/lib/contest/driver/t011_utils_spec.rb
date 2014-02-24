@@ -41,6 +41,12 @@ describe "T011: Common" do
         expect(ret).to eq "cpp11"
       end
     end
+
+    context "get_all_drivers" do
+      it "test" do
+        p Contest::Driver::Utils.get_all_drivers
+      end
+    end
   end
 end
 

@@ -9,7 +9,7 @@ require 'contest/driver/common'
 
 module Contest
   module Driver
-    class UvaOnlineJudge < DriverBase
+    class UvaOnlineJudgeDriver < DriverBase
       def initialize_ext
         @client = Mechanize.new {|agent|
           agent.user_agent_alias = 'Windows IE 7'

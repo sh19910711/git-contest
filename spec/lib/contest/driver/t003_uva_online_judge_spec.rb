@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "T003: UvaOnlineJudge Driver" do
   before(:each) do
-    @driver = Contest::Driver::UvaOnlineJudge.new
+    @driver = Contest::Driver::UvaOnlineJudgeDriver.new
     @driver.stub(:sleep).and_return(0)
   end
 

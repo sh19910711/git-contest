@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "T001: AizuOnlineJudge Driver" do 
   before do
     # setup driver
-    @driver = Contest::Driver::AizuOnlineJudge.new
+    @driver = Contest::Driver::AizuOnlineJudgeDriver.new
     @driver.stub(:sleep).and_return(0)
     ENV['GIT_CONTEST_CONFIG'] = get_path('/mock/t001/config.yml')
     init
