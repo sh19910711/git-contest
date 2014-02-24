@@ -96,8 +96,14 @@ EOF
     end
 
     it "add site" do
-      ret = bin_exec "config site add test_site2"
-      p ret
+      bin_exec "config site add test_site2", "test_driver2\ntest_user2\ntest_password2"
+      ret1 = YAML.load_file "#{@temp_dir}/config.yml"
+      expect(ret1["sites"]["test_site1"]["driver"]).to eq "test_driver1"
+      expect(ret1["sites"]["test_site1"]["user"]).to eq "test_user1"
+      expect(ret1["sites"]["test_site1"]["password"]).to eq "test_password1"
+      expect(ret1["sites"]["test_site2"]["driver"]).to eq "test_driver2"
+      expect(ret1["sites"]["test_site2"]["user"]).to eq "test_user2"
+      expect(ret1["sites"]["test_site2"]["password"]).to eq "test_password2"
     end
   end
 
