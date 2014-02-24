@@ -13,6 +13,33 @@ require 'contest/driver/base'
 module Contest
   module Driver
     module Utils
+      # find all driver
+      def self.get_all_drivers
+        return [] unless defined? Contest::Driver
+        Contest::Driver.constants.select {|class_name|
+          /.*Driver$/ =~ class_name.to_s
+        }.map {|driver_class_name|
+          driver = Contest::Driver.const_get(driver_class_name).new
+          {
+            :class_name => driver_class_name,
+            :site_info => {
+              :name => driver.get_site_name(),
+              :desc => driver.get_desc(),
+            },
+          }
+        }
+      end
+
+      #
+      # Load Plugins
+      #
+      def self.load_plugins
+        # load drivers
+        Dir.glob("#{$GIT_CONTEST_HOME}/plugins/**") do |path|
+          require path if /\/.*_driver\.rb$/.match path
+        end
+      end
+
       def self.resolve_wild_card path
         `ls #{path} | cat | head -n 1`.strip
       end
