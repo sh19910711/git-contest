@@ -107,4 +107,32 @@ EOF
     end
   end
 
+  context "git contest config site rm" do
+    before(:each) do
+      # create config
+      File.open "#{@temp_dir}/config.yml", "w" do |file|
+        file.write <<EOF
+sites:
+  test_site1:
+    driver: test_driver1
+    user: test_user1
+    password: test_password1
+  test_site2:
+    driver: test_driver2
+    user: test_user2
+    password: test_password2
+EOF
+      end
+    end
+
+    it "remove site: input yes" do
+      bin_exec "config site rm test_site1", "yes"
+      ret1 = YAML.load_file "#{@temp_dir}/config.yml"
+      expect(ret1["sites"]["test_site1"]).to be_nil
+      expect(ret1["sites"]["test_site2"]["driver"]).to eq "test_driver2"
+      expect(ret1["sites"]["test_site2"]["user"]).to eq "test_user2"
+      expect(ret1["sites"]["test_site2"]["password"]).to eq "test_password2"
+    end
+  end
+
 end
