@@ -1,6 +1,8 @@
 require 'webmock'
+
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'git/contest/common'
+require 'contest/driver'
 
 module SpecHelpers
   def read_file path

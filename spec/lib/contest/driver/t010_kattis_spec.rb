@@ -1,5 +1,4 @@
 require "spec_helper"
-require "contest/driver/kattis"
 
 describe "T010: Kattis Driver" do 
   before do

@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-require 'contest/driver/codeforces'
-
 describe "T003: UvaOnlineJudge Driver" do
   before(:each) do
     @driver = Contest::Driver::UvaOnlineJudge.new

@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-require 'contest/driver/aizu_online_judge'
-
 describe "T001: AizuOnlineJudge Driver" do 
   before do
     # setup driver

@@ -6,13 +6,13 @@
 #
 
 # http://judge.u-aizu.ac.jp/onlinejudge/
-require 'contest/driver/aizu_online_judge'
+require 'contest/driver/aizu_online_judge_driver'
 
 # http://codeforces.com/
-require 'contest/driver/codeforces'
+require 'contest/driver/codeforces_driver'
 
 # http://uva.onlinejudge.org/
-require 'contest/driver/uva_online_judge'
+require 'contest/driver/uva_online_judge_driver'
 
 # https://open.kattis.com/
-require 'contest/driver/kattis'
+require 'contest/driver/kattis_driver'

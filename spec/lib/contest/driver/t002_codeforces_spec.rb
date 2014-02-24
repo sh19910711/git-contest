@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-require 'contest/driver/codeforces'
-
 describe "T002: Codeforces Driver" do
   before(:each) do
     @driver = Contest::Driver::Codeforces.new
