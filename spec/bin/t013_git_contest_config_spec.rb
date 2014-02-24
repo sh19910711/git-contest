@@ -81,4 +81,24 @@ EOF
     end
   end
 
+  context "git contest config site add" do
+    before(:each) do
+      # create config
+      File.open "#{@temp_dir}/config.yml", "w" do |file|
+        file.write <<EOF
+sites:
+  test_site1:
+    driver: test_driver1
+    user: test_user1
+    password: test_password1
+EOF
+      end
+    end
+
+    it "add site" do
+      ret = bin_exec "config site add test_site2"
+      p ret
+    end
+  end
+
 end
