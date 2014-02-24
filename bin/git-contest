@@ -20,13 +20,15 @@ def usage
   puts "  %-12s Start a new feature branch." % ["start"]
   puts "  %-12s Finish a feature branch." % ["finish"]
   puts "  %-12s Submit a solution." % ["submit"]
+  puts "  %-12s Show information (sites, drivers)." % ["list"]
+  puts "  %-12s Get/Set a config value." % ["config"]
   puts ""
   puts "Try 'git contest <subcommand> help' for details."
 end
 
 init
 
-sub_commands = %w(init start finish submit rebase)
+sub_commands = %w(init start finish submit rebase list config)
 global_opts = Trollop::options do
   version "git-contest #{Git::Contest::VERSION} (c) 2013-2014 Hiroyuki Sano"
   stop_on sub_commands
@@ -34,7 +36,7 @@ end
 
 cmd = ARGV.shift
 case cmd
-when "init", "start", "finish", "submit", "rebase"
+when "init", "start", "finish", "submit", "rebase", "list", "config"
   load File.expand_path("../git-contest-#{cmd}", __FILE__)
 else
   usage

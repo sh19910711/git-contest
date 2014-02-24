@@ -13,6 +13,33 @@ require 'contest/driver/base'
 module Contest
   module Driver
     module Utils
+      # find all driver
+      def self.get_all_drivers
+        return [] unless defined? Contest::Driver
+        Contest::Driver.constants.select {|class_name|
+          /.*Driver$/ =~ class_name.to_s
+        }.map {|driver_class_name|
+          driver = Contest::Driver.const_get(driver_class_name).new
+          {
+            :class_name => driver_class_name,
+            :site_info => {
+              :name => driver.get_site_name(),
+              :desc => driver.get_desc(),
+            },
+          }
+        }
+      end
+
+      #
+      # Load Plugins
+      #
+      def self.load_plugins
+        # load drivers
+        Dir.glob("#{$GIT_CONTEST_HOME}/plugins/**") do |path|
+          require path if /\/.*_driver\.rb$/.match path
+        end
+      end
+
       def self.resolve_wild_card path
         `ls #{path} | cat | head -n 1`.strip
       end
@@ -39,6 +66,24 @@ module Contest
         else
           return nil
         end
+      end
+
+      def self.get_file_ext filename
+        File.extname(filename)[1..-1]
+      end
+
+      def self.check_file_map label, ext_map
+        if ext_map.is_a? Hash
+          ext = get_file_ext(label)
+          ext_map.has_key?(ext)
+        else
+          false
+        end
+      end
+
+      def self.resolve_file_map label, ext_map
+        ext = get_file_ext(label)
+        ext_map[ext]
       end
 
       def self.normalize_language label

@@ -10,7 +10,7 @@ require 'rexml/document'
 
 module Contest
   module Driver
-    class AizuOnlineJudge < DriverBase
+    class AizuOnlineJudgeDriver < DriverBase
       def initialize_ext
         @client = Mechanize.new {|agent|
           agent.user_agent_alias = 'Windows IE 7'

@@ -13,16 +13,6 @@ require 'git/contest/common'
 require 'trollop'
 
 #
-# Load Plugins
-#
-def load_plugins
-  # load drivers
-  Dir.glob("#{$GIT_CONTEST_HOME}/plugins/**") do |path|
-    require path if /\/driver_.*\.rb$/.match path
-  end
-end
-
-#
 # Load Drivers
 #
 def load_drivers
@@ -31,7 +21,7 @@ def load_drivers
     class_name = driver_name.clone
     class_name.gsub!(/^[a-z]/) {|c| c.upcase }
     class_name.gsub!(/(_)([a-z])/) {|c, b| $2.upcase }
-    $drivers[driver_name] = Contest::Driver.const_get "#{class_name}"
+    $drivers[driver_name] = Contest::Driver.const_get "#{class_name}Driver"
   end
 end
 
@@ -75,7 +65,7 @@ if $config.has_key? 'sites'
   $sites = $config["sites"]
 end
 
-load_plugins
+Contest::Driver::Utils.load_plugins
 
 $drivers = {}
 load_drivers
@@ -192,6 +182,7 @@ driver.on(
 
 # global config
 $config["submit_rules"] ||= {}
+$config["file"] ||= {}
 
 # set config
 driver.config = $sites[site]

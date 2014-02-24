@@ -1,6 +1,8 @@
 require 'webmock'
+
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'git/contest/common'
+require 'contest/driver'
 
 module SpecHelpers
   def read_file path
@@ -31,9 +33,11 @@ module SpecHelpers
     ENV['GIT_CONTEST_DEBUG'] = 'ON'
   end
 
-  def bin_exec(args)
+  def bin_exec(args, input=nil)
     puts "Commmand: #{bin_path('git-contest')} #{args}" if ENV['GIT_CONTEST_DEBUG'] == 'ON'
-    ret = `#{bin_path('git-contest')} #{args} 2>&1`
+    pipe_cmd = ""
+    pipe_cmd = "printf \" #{input}\" | " unless input.nil?
+    ret = `#{pipe_cmd}#{bin_path('git-contest')} #{args} 2>&1`
     ret
   end
 

@@ -3,7 +3,7 @@ require 'rexml/document'
 
 module Contest
   module Driver
-    class Dummy < DriverBase
+    class DummyDriver < DriverBase
       def get_opts_ext
         define_options do
           opt(
