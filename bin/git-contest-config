@@ -11,6 +11,7 @@
 $:.unshift File.expand_path('../../lib', __FILE__)
 require 'git/contest/common'
 require 'trollop'
+require 'highline/import'
 require 'active_support/core_ext/hash'
 
 
@@ -47,6 +48,37 @@ def show_set_usage
   puts res
 end
 
+def show_site_usage
+  res = ""
+  res += "usage: git contest config site <type>\n"
+  res += "\n"
+  res += "Available types are:\n"
+  res += "  %-8s: add site\n" % "add"
+  res += " \n"
+  puts res
+end
+
+def show_site_add_usage
+  res = ""
+  res += "usage: git contest config site add <site-name>\n"
+  res += "\n"
+  res += "Example Usage:\n"
+  res += "  $ git contest config site add site1\n"
+  res += "  -> input information\n"
+  res += " \n"
+  puts res
+end
+
+def show_site_rm_usage
+  res = ""
+  res += "usage: git contest config site rm <site-name>\n"
+  res += "\n"
+  res += "Example Usage:\n"
+  res += "  $ git contest config site rm site1\n"
+  res += " \n"
+  puts res
+end
+
 # Get Banner Text
 def get_banner
   res = ""
@@ -55,6 +87,7 @@ def get_banner
   res += "Available types are:\n"
   res += "  %-8s: set value\n" % "set"
   res += "  %-8s: get value\n" % "get"
+  res += "  %-8s: set site info\n" % "site"
   res += " \n"
   return res
 end
@@ -71,8 +104,79 @@ end
 type = ARGV.shift.to_s.strip
 
 case type
+
+when "site"
+  if ARGV.length >= 1
+    type = ARGV.shift.to_s.strip
+    case type
+    when "add"
+      # git-contest-config site add
+      if ARGV.length == 1
+        puts "# input site config (password will be hidden)"
+
+        # read info
+        site_name = ARGV.shift.to_s.strip
+        config = get_config
+
+        # init config
+        config["sites"][site_name] = {}
+
+        # input site info
+        # TODO: to check not found
+        config["sites"][site_name]["driver"] = ask("%10s > " % "driver").to_s
+        # TODO: to depend on above driver
+        config["sites"][site_name]["user"] = ask("%10s > " % "user id").to_s
+        config["sites"][site_name]["password"] = ask("%10s > " % "password") do |q|
+          q.echo = false
+        end.to_s
+
+        # set config
+        File.open($GIT_CONTEST_CONFIG, 'w') {|f| f.write config.to_yaml }
+        
+        puts ""
+        puts "updated successfully!!"
+        puts ""
+      else
+        show_site_add_usage
+      end
+
+    when "rm"
+      # git-contest-config site rm
+      if ARGV.length == 1
+        # TODO: to check not found
+        site_name = ARGV.shift.to_s.strip
+
+        puts "Are you sure you want to remove `#{site_name}`?"
+        this_is_yes = ask("when you remove the site, type `yes` > ").to_s
+
+        if this_is_yes == "yes"
+          # update config
+          config = get_config
+          config["sites"].delete site_name
+          # save config
+          File.open($GIT_CONTEST_CONFIG, 'w') {|f| f.write config.to_yaml }
+          puts ""
+          puts "updated successfully!!"
+          puts ""
+        else
+          puts ""
+          puts "operation cancelled"
+          puts ""
+        end
+      else
+        show_site_rm_usage
+      end
+
+    else
+      show_site_usage
+    end
+  else
+    show_site_usage
+  end
+
 when "get"
   if ARGV.length == 1
+    # read key
     config = get_config
     cur = config
     keys = ARGV.shift.to_s.strip.split('.')
@@ -84,6 +188,7 @@ when "get"
         abort "ERROR: Not Found"
       end
     end
+    # output
     if cur.is_a? Hash
       puts "keys = #{cur.keys.join(', ')}"
     else
@@ -92,6 +197,7 @@ when "get"
   else
     show_get_usage
   end
+
 when "set"
   if ARGV.length == 1
     # read values
@@ -141,6 +247,7 @@ when "set"
   else
     show_set_usage
   end
+
 else
   usage
 end

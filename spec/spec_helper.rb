@@ -34,7 +34,7 @@ module SpecHelpers
   def bin_exec(args, input=nil)
     puts "Commmand: #{bin_path('git-contest')} #{args}" if ENV['GIT_CONTEST_DEBUG'] == 'ON'
     pipe_cmd = ""
-    pipe_cmd = "echo #{input} | " unless input.nil?
+    pipe_cmd = "printf \" #{input}\" | " unless input.nil?
     ret = `#{pipe_cmd}#{bin_path('git-contest')} #{args} 2>&1`
     ret
   end
