@@ -35,7 +35,7 @@ Installation process takes a step, type a following command:
 Need to install:
 
 * [Ruby](https://www.ruby-lang.org/)
-    * `ruby --version` >= 1.9.2
+    * `ruby --version` >= 1.9.3
 * [Git](http://git-scm.com/)
     * `git --version` >= 1.7
 
