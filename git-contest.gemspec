@@ -20,11 +20,13 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
+  spec.required_ruby_version = '>= 1.9.3' 
+
   spec.add_dependency "mechanize"
   spec.add_dependency "nokogiri"
   spec.add_dependency "trollop"
   spec.add_dependency "highline"
-  spec.add_dependency "active_support"
+  spec.add_dependency "activesupport"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
