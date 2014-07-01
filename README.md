@@ -194,6 +194,8 @@ to be written here.
 
 * [Oskar Sundström](https://github.com/osund)
     * Added Kattis Driver
+* [Wei Jianwen](https://github.com/weijianwen)
+    * Fixed gem dependency
 
 ## Author Information
 
