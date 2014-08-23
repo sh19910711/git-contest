@@ -59,7 +59,7 @@ describe "T010: Kattis Driver" do
       # login
       WebMock.stub_request(
         :post,
-        /^https:\/\/open\.kattis\.com\/login\?email_login=true$/
+        /^https:\/\/open\.kattis\.com\/login\/email$/
       )
       .to_return(
         :status => 200,
@@ -121,6 +121,7 @@ describe "T010: Kattis Driver" do
     end
 
     it "should return commit message" do
+
       @driver.config.merge!(
         "user" => "test_user",
         "password" => "password",
@@ -129,7 +130,7 @@ describe "T010: Kattis Driver" do
         :problem_id => '333333',
         :source => 'test_source.go',
       )
-      @driver.submit.should include "Kattis 333333: Wrong Answer"
+      expect(@driver.submit).to include "Kattis 333333: Wrong Answer"
     end
 
     it "check events" do
