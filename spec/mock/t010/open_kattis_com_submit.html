@@ -25,9 +25,9 @@
                     <ul class="file_list">
                     </ul>
                   </div>
-                  <input type="file" name="sub_file[]" id="sub_files_input" multiple onChange="hideEditor('sub_code'); document.getElementById('cancel').disabled=false; fileDialogEnabled();" />
+                  <input type="file" name="sub_file[]" id="sub_files_input" multiple />
                 </div>
-                <a class="open-ace" href="#" id="show_editor_button_sub_code" name="editor_visible" type="button" onClick="showEditor('sub_code'); document.getElementById('file_dialog').style.display='none'; document.getElementById('editor_dialog').style.display='block'; document.getElementById('cancel').disabled=false; editorEnabled();">
+                <a class="open-ace" href="#" id="show_editor_button_sub_code" name="editor_visible" type="button">
                   <div class="switch_button">
                     <div class="message">
                       <div class="upper"><span class="dnd">Switch to editor</span></div>
@@ -41,7 +41,7 @@
                 </div>
               </div>
               <input type='hidden' id='sub_code_submit' name='sub_code' value='' />
-              <a class="open-ace" href="#" onClick="hideEditor('sub_code'); document.getElementById('file_dialog').style.display='block';  document.getElementById('editor_dialog').style.display='none'; document.getElementById('cancel').disabled=true; ">
+              <a class="open-ace" href="#">
                 <div class="switch_button">
                   <div class="message">
                     <div class="upper"><span class="dnd">Switch to file upload</span></div>
@@ -59,14 +59,14 @@
           </div>
           <div class="form-group col-md-3">
             <label for="language_select">Language</label>
-            <input class="form-control selectify-style" id="language_select" name="lang" onChange="setLanguageChoice(parseInt(document.upload.lang.value), &quot;&quot;)" type="text" value="1" />
+            <input class="form-control selectify-style" id="language_select" name="lang" type="text" value="1" />
           </div>
           <div class="col-md-2">
             <span id="mainBox"></span>
           </div>
           <div class="col-md-offset-1 col-md-3" style="text-align:right;margin-top:25px;">
-            <button id="cancel" name="cancel" type="button" class="btn btn-default" onClick="window.location='submit';" disabled>Cancel</button>
-            <input type="submit" name="submit"  class="btn btn-default" onClick="setEditorValues();" value="Submit" />
+            <button id="cancel" name="cancel" type="button" class="btn btn-default" disabled>Cancel</button>
+            <input type="submit" name="submit"  class="btn btn-default" value="Submit" />
             <input type="hidden" name="submit_ctr" value="1" />
           </div>
         </div>
