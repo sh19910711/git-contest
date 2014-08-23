@@ -154,7 +154,7 @@ module Contest
 
       def get_submission_id(body)
         doc = Nokogiri::HTML(body)
-        return doc.xpath('//*[@id="wrapper"]/div/div[2]/section/table/tbody/tr[1]/td[1]')[0].inner_text().strip
+        return doc.xpath('//*[@id="wrapper"]/div/div[2]/section/table/tbody/tr[1]/td[1]/a')[0].inner_text().strip
       end
 
       def get_submission_status(submission_id, body)
