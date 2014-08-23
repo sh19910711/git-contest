@@ -138,6 +138,15 @@ module Contest
         get_commit_message(status)
       end
 
+      def is_wait_status(status)
+        case status
+        when "Running", "Compiling", ""
+          true
+        else
+          false
+        end
+      end
+
       def get_status_wait(submission_id, subdomain)
         submission_id = submission_id.to_s
         # Wait for result
@@ -145,7 +154,7 @@ module Contest
           sleep 10
           submission_page = @client.get "https://#{subdomain}.kattis.com/submissions/#{submission_id}"
           status = get_submission_status(submission_id, submission_page.body)
-          return status unless status == 'Running'
+          return status unless is_wait_status status
           trigger 'retry'
         end
         trigger 'timeout'

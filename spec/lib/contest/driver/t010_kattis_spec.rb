@@ -113,7 +113,7 @@ describe "T010: Kattis Driver" do
       )
       .to_return(
         :status => 200,
-        :body => read_file('/mock/t010/open_kattis_com_user_submissions.html'),
+        :body => read_file('/mock/t010/user_submission.html'),
         :headers => {
           'Content-Type' => 'text/html',
         },
