@@ -1,28 +1,92 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <div class='container'>
-      <h1>test user</h1>
-      <div id='stats'>
-        <table id='submissions'>
-          <tr>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Problem</th>
-            <th>Status</th>
-            <th>CPU</th>
-            <th>Lang</th>
-          </tr>
-          <tr>
-            <td><a href='submission?id=999999'>999999</a></td>
-            <td>2014-01-01 00:00:00</td>
-            <td><a href="problems/333333">Problem Name</a></td>
-            <td class='status'><span class="rejected">Wrong Answer</span></td>
-            <td class='runtime'>0.00&nbsp;s</td>
-            <td>C++</td>
-          </tr>
-        </table>
+<body class="page-profile">
+  <div id="wrapper">
+    <div class="wrap">
+      <div class="page-content boxed clearfix">
+        <section class="box clearfix main-content">
+          <div class="page-headline clearfix">
+            <div class="user-info clearfix">
+              <div class="basic-info clearfix">
+                <img class="user-img" src="/images/site/content/default-userpic-outline.png" />
+                <div class="col-md-8">
+                  <div class="fullname row no-padding">
+                    <h1>test user</h1>
+                  </div>
+                  <div class="row">
+                  </div>
+                </div>
+              </div>
+              <div class="fr score_wrapper">
+                <div class="score clearfix">
+                  <span>Score</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="page-content boxed clearfix">
+        <section class="box clearfix main-content">
+          <h2>Submissions</h2>
+          <div class="row" style="margin-bottom: 20px;">
+            <div class="col-md-8">
+            </div>
+            <div class="col-md-4">
+              <form action="" method="get" id="filter">
+                <input type="hidden" id="filter_by" name="filter_by" value="all" />
+                <div class="input-group">
+                  <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="main_filter_text">show all</span> <span class="caret"></span></button>
+                    <!-- <select name="filter_by"> -->
+                    <ul class="dropdown-menu">
+                      <!-- <option value="all">show all</option> -->
+                      <li data-value="all"><a href="javascript:void(0);">show all</a></li>
+                      <!-- <option value="problem"> -->
+                      <li data-value="problem"><a href="javascript:void(0);">problem</a></li>
+                      <!-- </option> -->
+                      <!-- <option value="group"> -->
+                      <li data-value="group"><a href="javascript:void(0);">problem group</a></li>
+                      <!-- </option> -->
+                    </ul>
+                  </div>
+                  <input class="form-control" id="filter_by_value" type="text" name="value" size="10" disabled />
+                  <span class="input-group-btn">
+                    <input class="btn btn-default" type="submit" value="Filter"/>
+                  </span>
+                </div>
+              </form>
+            </div>
+          </div>
+          <table class="table table-responsive table-kattis table-hover table-submissions table-compact">
+            <thead>
+              <tr>
+                <th class="nowrap submission_id" >ID</th>
+                <th class="nowrap">Date</th>
+                <th class="nowrap">Problem</th>
+                <th class="nowrap">Status</th>
+                <th class="nowrap">CPU</th>
+                <th class="nowrap">Lang</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="submission_id"><a href="/submissions/999999">999999</a></td>
+                <td class="middle">00:00:00</td>
+                <td class="middle"><a href="/problems/333333">Problem Name</a></td>
+                <td class="status rejected middle"><span class="rejected"><i class="glyphicon glyphicon-remove"></i>Wrong Answer</span></td>
+                <td class="runtime middle"></td>
+                <td class="middle">C++</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="dataTables_paginate paging_two_button" id="problem_list_paginate">
+            <a class="paginate_disabled_previous disabled" role="button" id="problem_list_previous">Previous</a><a href="/users/osund?page=1" class="paginate_enabled_next enabled" role="button" id="problem_list_next">Next</a>
+          </div>
+          <div class="clearfix"></div>
+        </section>
       </div>
     </div>
-  </body>
+  </div>
+</body>
 </html>

@@ -1,79 +1,83 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <div class="container">
-      <h1>Submission</h1>
-      <table id="judge_table">
-        <tbody>
-          <tr>
-            <th>ID</th>
-            <th>Date</th>
-            <th>Problem</th>
-            <th>Status</th>
-            <th>CPU</th>
-            <th>Lang</th>
-            <th>Test cases</th>
-          </tr>
-          <tr>
-            <td><a href="submission?id=222222">222222</a></td>
-            <td>04:43:57</td>
-            <td><a href="problems/aaah">Aaah!</a></td>
-            <td class="status"><span class="rejected">Wrong Answer</span></td>
-            <td class="runtime">0.00&nbsp;s</td>
-            <td>C++</td>
-            <td>
-              <div class="testcases"><span class="accepted" title="Test case 1/52: Accepted"> ✔ </span><span class="accepted" title="Test case 2/52: Accepted"> ✔ </span><span class="accepted" title="Test case 3/52: Accepted"> ✔ </span><span class="rejected" title="Test case 4/52: Wrong Answer"> ✘ </span><span title="Test case 5/52: not checked
-                  "> &nbsp; </span><span title="Test case 6/52: not checked
-                  "> &nbsp; </span><span title="Test case 7/52: not checked
-                  "> &nbsp; </span><span title="Test case 8/52: not checked
-                  "> &nbsp; </span><span title="Test case 9/52: not checked
-                  "> &nbsp; </span><span title="Test case 10/52: not checked
-                  "> &nbsp; </span><span title="Test case 11/52: not checked
-                  "> &nbsp; </span><span title="Test case 12/52: not checked
-                  "> &nbsp; </span><span title="Test case 13/52: not checked
-                  "> &nbsp; </span><span title="Test case 14/52: not checked
-                  "> &nbsp; </span><span title="Test case 15/52: not checked
-                  "> &nbsp; </span><span title="Test case 16/52: not checked
-                  "> &nbsp; </span><span title="Test case 17/52: not checked
-                  "> &nbsp; </span><span title="Test case 18/52: not checked
-                  "> &nbsp; </span><span title="Test case 19/52: not checked
-                  "> &nbsp; </span><span title="Test case 20/52: not checked
-                  "> &nbsp; </span><span title="Test case 21/52: not checked
-                  "> &nbsp; </span><span title="Test case 22/52: not checked
-                  "> &nbsp; </span><span title="Test case 23/52: not checked
-                  "> &nbsp; </span><span title="Test case 24/52: not checked
-                  "> &nbsp; </span><span title="Test case 25/52: not checked
-                  "> &nbsp; </span><span title="Test case 26/52: not checked
-                  "> &nbsp; </span><span title="Test case 27/52: not checked
-                  "> &nbsp; </span><span title="Test case 28/52: not checked
-                  "> &nbsp; </span><span title="Test case 29/52: not checked
-                  "> &nbsp; </span><span title="Test case 30/52: not checked
-                  "> &nbsp; </span><span title="Test case 31/52: not checked
-                  "> &nbsp; </span><span title="Test case 32/52: not checked
-                  "> &nbsp; </span><span title="Test case 33/52: not checked
-                  "> &nbsp; </span><span title="Test case 34/52: not checked
-                  "> &nbsp; </span><span title="Test case 35/52: not checked
-                  "> &nbsp; </span><span title="Test case 36/52: not checked
-                  "> &nbsp; </span><span title="Test case 37/52: not checked
-                  "> &nbsp; </span><span title="Test case 38/52: not checked
-                  "> &nbsp; </span><span title="Test case 39/52: not checked
-                  "> &nbsp; </span><span title="Test case 40/52: not checked
-                  "> &nbsp; </span><span title="Test case 41/52: not checked
-                  "> &nbsp; </span><span title="Test case 42/52: not checked
-                  "> &nbsp; </span><span title="Test case 43/52: not checked
-                  "> &nbsp; </span><span title="Test case 44/52: not checked
-                  "> &nbsp; </span><span title="Test case 45/52: not checked
-                  "> &nbsp; </span><span title="Test case 46/52: not checked
-                  "> &nbsp; </span><span title="Test case 47/52: not checked
-                  "> &nbsp; </span><span title="Test case 48/52: not checked
-                  "> &nbsp; </span><span title="Test case 49/52: not checked
-                  "> &nbsp; </span><span title="Test case 50/52: not checked
-                  "> &nbsp; </span><span title="Test case 51/52: not checked
-                  "> &nbsp; </span><span title="Test case 52/52: not checked
-                  "> &nbsp; </span></div></td>
-          </tr>
-        </tbody>
-      </table>
+<body class="">
+  <div id="wrapper">
+    <div class="wrap">
+      <div class="page-content boxed clearfix">
+        <section class="box clearfix main-content">
+          <div class="page-headline clearfix">
+            <div class="fl">
+              <h1>Submission</h1>
+            </div>
+          </div>
+          <table id="judge_table" class="table table-responsive table-kattis table-hover">
+            <thead>
+              <tr>
+                <th class="nowrap submission_id" rowspan="2">ID</th>
+                <th class="nowrap">Date</th>
+                <th class="nowrap">Problem</th>
+                <th class="nowrap">Status</th>
+                <th class="nowrap">CPU</th>
+                <th class="nowrap">Lang</th>
+              </tr>
+              <tr>
+                <th class="nowrap" colspan="5">Test cases</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="submission_id" rowspan="2"><a href="/submissions/222222">222222</a></td>
+                <td class="middle">04:46:40</td>
+                <td class="middle"><a href="/problems/aaah">Aaah!</a></td>
+                <td class="status rejected middle"><span class="rejected"><i class="glyphicon glyphicon-remove"></i>Wrong Answer</span></td>
+                <td class="runtime middle"></td>
+                <td class="middle">C++</td>
+              </tr>
+              <tr>
+                <td class="middle" colspan="5"><div class="testcases"></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+      <div class="page-content boxed clearfix">
+        <section class="box clearfix main-content">
+          <div id="extrainfo"></div>
+          <p>
+            <table class="table table-hover table-kattis filelist" id="submission_files">
+              <caption>
+                <p>
+                  Submission contains 1 file:
+                  <a class="btn btn-default btn-sm" href="/download/submissiondata?id=222222&amp;type=src">download zip archive</a>
+                </p>
+              </caption>
+              <thead>
+                <tr>
+                  <th>Filename</th>
+                  <th>Filesize</th>
+                  <th>SHA-1 sum</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>main.cc</td>
+                  <td>4711 bytes</td>
+                  <td><tt>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</tt></td>
+                  <td>
+                    <a class="btn btn-default btn-sm" href="/download/submissiondata?id=222222&amp;type=src&amp;file=main.cc">download</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </p>
+          <p><a href="/submissions/222222/resubmit">Edit and resubmit</a> this submission.</p>
+          <h3>main.cc</h3>
+          <div class="submission_code_wrapper">
+          </div>
+        </section>
+      </div>
     </div>
-  </body>
+  </div>
+</body>
 </html>

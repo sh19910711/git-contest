@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "T010: Kattis Driver" do 
+describe "T010: Kattis Driver" do
   before do
     @driver = Contest::Driver::KattisDriver.new
     @driver.stub(:sleep).and_return(0)
@@ -96,7 +96,7 @@ describe "T010: Kattis Driver" do
       # user submissions
       WebMock.stub_request(
         :get,
-        /^https:\/\/open\.kattis\.com\/users\/test_user\?show=submissions$/
+        /^https:\/\/open\.kattis\.com\/users\/test_user$/
       )
       .to_return(
         :status => 200,
@@ -109,7 +109,7 @@ describe "T010: Kattis Driver" do
       # submission 999999
       WebMock.stub_request(
         :get,
-        /^https:\/\/open\.kattis\.com\/submission\?id=999999$/
+        /^https:\/\/open\.kattis\.com\/submissions\/999999$/
       )
       .to_return(
         :status => 200,
@@ -191,4 +191,3 @@ describe "T010: Kattis Driver" do
     end
   end
 end
-
