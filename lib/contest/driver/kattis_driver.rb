@@ -10,7 +10,7 @@
 #
 # Using the Python script you would write:
 #  $ python3 submit3.py -p aaah Main.java
-# 
+#
 # To do the same thing using git-contest you instead write:
 #  $ git contest submit kattis -p aaah -s Main.java
 
@@ -52,7 +52,7 @@ module Contest
 
       def get_problem_id(options)
         "#{options[:problem_id]}"
-      end      
+      end
 
       def resolve_language(label)
         case label
@@ -122,7 +122,7 @@ module Contest
           abort "Problem ID not found in database."
         end
         sleep 2
-        submissions_page = @client.get "https://#{subdomain}.kattis.com/users/#{user}?show=submissions"
+        submissions_page = @client.get "https://#{subdomain}.kattis.com/users/#{user}"
         submission_id = get_submission_id(submissions_page.body)
         status = get_status_wait(submission_id, subdomain)
         trigger(
