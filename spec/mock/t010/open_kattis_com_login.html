@@ -1,20 +1,45 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <div class='container'>
-      <h1><center>Log in or sign up for Kattis</center></h1><br />
-      <div class="login">
-        <div class="login-right">
-          <form action="login?email_login=true" method="post">
-            <input type='hidden' name='csrf_token' value='this is dummy' />
-            Username or email<br />
-            <input name="user" type="text" title="user" /><br />
-            Password<br />
-            <input name="password" type="password" title="pass" /><br /><br />
-            <input type="submit" name="submit" value="Submit" />
-          </form>
-        </div>
+<body class="">
+  <div id="wrapper">
+    <div class="wrap">
+      <div class="page-content boxed clearfix">
+        <section class="box clearfix main-content">
+          <div class="page-headline clearfix">
+            <div style="text-align:center">
+              <h1>Log in or sign up for Kattis</h1>
+            </div>
+          </div>
+          <br />
+          <div class="login">
+            <div class="login-left">
+            </div>
+            <div class="login-right">
+              <center>
+                <br /><br />
+                <form action="/login/email" method="post">
+                  <input type="hidden" name="csrf_token" value="this is dummy" />
+                  <div class="form-group">
+                    <label for="user_input">Username or e-mail</label>
+                    <input id="user_input" name="user" type="text" class="form-control" />
+                  </div>
+                  <div class="form-group">
+                    <label for="password_input">Password</label>
+                    <input id="password_input" name="password" type="password" class="form-control" />
+                  </div>
+                  <input type="submit" name="submit" class="btn btn-default" value="Submit" />
+                </form>
+                <p>
+                  <a href="/forgot-password">I have forgotten my Kattis password</a>
+                  <br />
+                  <a href="/register">Sign up for a Kattis account</a>
+                </p>
+              </center>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
-  </body>
+  </div>
+</body>
 </html>

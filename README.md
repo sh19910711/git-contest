@@ -176,6 +176,7 @@ Available drivers:
 * codeforces
 * aizu\_online\_judge
 * uva\_online\_judge
+* kattis
 
 You can write driver plugin on `${GIT_CONTEST_HOME}/plugins/driver_***.rb`
 
@@ -239,4 +240,3 @@ THE SOFTWARE.
     * [https://www.ruby-lang.org/](https://www.ruby-lang.org/)
 * git
     * [http://git-scm.com/](http://git-scm.com/)
-

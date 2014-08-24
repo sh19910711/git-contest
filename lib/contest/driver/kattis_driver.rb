@@ -2,15 +2,15 @@
 # kattis.rb
 #
 # Copyright (c) 2013-2014 Hiroyuki Sano <sh19910711 at gmail.com>
-# Copyright (c) 2014 Oskar Sundström <oskar.sundstrom@gmail.com>
+# Copyright (c) 2014 Oskar Sundström <oskar.sundstrom at gmail.com>
 # Licensed under the MIT-License.
 #
 # An official Python submission script can be found at
-# https://open.kattis.com/doc/submit
+# https://open.kattis.com/help/submit
 #
 # Using the Python script you would write:
 #  $ python3 submit3.py -p aaah Main.java
-# 
+#
 # To do the same thing using git-contest you instead write:
 #  $ git contest submit kattis -p aaah -s Main.java
 
@@ -52,7 +52,7 @@ module Contest
 
       def get_problem_id(options)
         "#{options[:problem_id]}"
-      end      
+      end
 
       def resolve_language(label)
         case label
@@ -90,9 +90,9 @@ module Contest
         # Login
         trigger 'before_login'
         login_page = @client.get "https://#{subdomain}.kattis.com/login?email_login=true"
-        login_page.form_with(:action => 'login?email_login=true') do |form|
-          form.user = @config['user']
-          form.password = @config['password']
+        login_page.form_with(:action => '/login/email') do |form|
+          form.user = @config["user"]
+          form.password = @config["password"]
         end.submit
         trigger 'after_login'
 
@@ -121,7 +121,8 @@ module Contest
             (/Problem-id inte funnet i databasen./ =~ error))
           abort "Problem ID not found in database."
         end
-        submissions_page = @client.get "https://#{subdomain}.kattis.com/users/#{user}?show=submissions"
+        sleep 2
+        submissions_page = @client.get "https://#{subdomain}.kattis.com/users/#{user}"
         submission_id = get_submission_id(submissions_page.body)
         status = get_status_wait(submission_id, subdomain)
         trigger(
@@ -137,14 +138,23 @@ module Contest
         get_commit_message(status)
       end
 
+      def is_wait_status(status)
+        case status
+        when "Running", "Compiling", ""
+          true
+        else
+          false
+        end
+      end
+
       def get_status_wait(submission_id, subdomain)
         submission_id = submission_id.to_s
         # Wait for result
         12.times do
           sleep 10
-          submission_page = @client.get "https://#{subdomain}.kattis.com/submission?id=#{submission_id}"
+          submission_page = @client.get "https://#{subdomain}.kattis.com/submissions/#{submission_id}"
           status = get_submission_status(submission_id, submission_page.body)
-          return status unless status == 'Running'
+          return status unless is_wait_status status
           trigger 'retry'
         end
         trigger 'timeout'
@@ -153,12 +163,12 @@ module Contest
 
       def get_submission_id(body)
         doc = Nokogiri::HTML(body)
-        return doc.xpath('//a[starts-with(@href,"submission")]')[0].inner_text().strip
+        return doc.xpath('//*[@id="wrapper"]/div/div[2]/section/table/tbody/tr[1]/td[1]/a')[0].inner_text().strip
       end
 
       def get_submission_status(submission_id, body)
         doc = Nokogiri::HTML(body)
-        return doc.xpath('//td[@class="status"]/span').inner_text().strip
+        return doc.xpath('//*[@id="judge_table"]/tbody/tr[1]/td[4]/span').inner_text().strip
       end
     end
   end
