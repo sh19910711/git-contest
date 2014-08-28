@@ -193,16 +193,12 @@ to be written here.
 
 ## Contributors
 
+* [Hiroyuki Sano](https://github.com/sh19910711)
+    * Created git-contest
 * [Oskar Sundström](https://github.com/osund)
     * Added Kattis Driver
 * [Wei Jianwen](https://github.com/weijianwen)
     * Fixed gem dependency
-
-## Author Information
-
-* [Hiroyuki Sano](http://yomogimochi.com/)
-    * [GitHub - sh19910711](https://github.com/sh19910711)
-    * [Google+](https://plus.google.com/+HiroyukiSano)
 
 ## License Information
 **git-contest** is licensed under the MIT-License, see details followings:
