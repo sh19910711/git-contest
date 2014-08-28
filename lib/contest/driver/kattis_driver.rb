@@ -1,5 +1,5 @@
 #
-# kattis.rb
+# kattis_driver.rb
 #
 # Copyright (c) 2013-2014 Hiroyuki Sano <sh19910711 at gmail.com>
 # Copyright (c) 2014 Oskar Sundström <oskar.sundstrom at gmail.com>
@@ -13,6 +13,7 @@
 #
 # To do the same thing using git-contest you instead write:
 #  $ git contest submit kattis -p aaah -s Main.java
+#
 
 require 'contest/driver/common'
 
@@ -72,6 +73,14 @@ module Contest
           return '10'
         when 'objc'
            return '11'
+        when 'haskell'
+        	return '12'
+        when 'prolog'
+        	return '13'
+        when 'javascript'
+        	return '14'
+        when 'php'
+        	return '15'
         else
           abort 'unknown language'
         end
