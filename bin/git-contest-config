@@ -131,7 +131,7 @@ when "site"
         end.to_s
 
         # set config
-        File.open($GIT_CONTEST_CONFIG, 'w') {|f| f.write config.to_yaml }
+        File.open($git_contest_config, 'w') {|f| f.write config.to_yaml }
         
         puts ""
         puts "updated successfully!!"
@@ -154,7 +154,7 @@ when "site"
           config = get_config
           config["sites"].delete site_name
           # save config
-          File.open($GIT_CONTEST_CONFIG, 'w') {|f| f.write config.to_yaml }
+          File.open($git_contest_config, 'w') {|f| f.write config.to_yaml }
           puts ""
           puts "updated successfully!!"
           puts ""
@@ -221,7 +221,7 @@ when "set"
     config.deep_merge! new_config
 
     # save file
-    File.open($GIT_CONTEST_CONFIG, 'w') {|f| f.write config.to_yaml }
+    File.open($git_contest_config, 'w') {|f| f.write config.to_yaml }
   elsif ARGV.length == 2
     # read values from command args
     keys = ARGV.shift.to_s.strip.split('.')
@@ -243,7 +243,7 @@ when "set"
     config.deep_merge! new_config
 
     # save file
-    File.open($GIT_CONTEST_CONFIG, 'w') {|f| f.write config.to_yaml }
+    File.open($git_contest_config, 'w') {|f| f.write config.to_yaml }
   else
     show_set_usage
   end
