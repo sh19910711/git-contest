@@ -17,8 +17,8 @@ def init
 end
 
 def init_global
-  $GIT_CONTEST_HOME   = File.expand_path(ENV['GIT_CONTEST_HOME'] || "~/.git-contest")
-  $GIT_CONTEST_CONFIG = File.expand_path(ENV['GIT_CONTEST_CONFIG'] || "#{$GIT_CONTEST_HOME}/config.yml")
+  $git_contest_home   = File.expand_path(ENV['GIT_CONTEST_HOME'] || "~/.git-contest")
+  $git_contest_config = File.expand_path(ENV['GIT_CONTEST_CONFIG'] || "#{$git_contest_home}/config.yml")
   if git_do_no_echo 'branch'
     $MASTER = git_do 'config --get git.contest.branch.master'
     $PREFIX = git_do 'config --get git.contest.branch.prefix'
@@ -33,16 +33,16 @@ def init_global
 end
 
 def init_home
-  if ! FileTest.exists? $GIT_CONTEST_HOME
-    FileUtils.mkdir $GIT_CONTEST_HOME
+  if ! FileTest.exists? $git_contest_home
+    FileUtils.mkdir $git_contest_home
   end
-  if ! FileTest.exists? $GIT_CONTEST_CONFIG
-    FileUtils.touch $GIT_CONTEST_CONFIG
+  if ! FileTest.exists? $git_contest_config
+    FileUtils.touch $git_contest_config
   end
 end
 
 def get_config
-  config_path = File.expand_path($GIT_CONTEST_CONFIG)
+  config_path = File.expand_path($git_contest_config)
   YAML.load_file config_path
 end
 
