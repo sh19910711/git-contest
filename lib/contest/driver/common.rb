@@ -35,7 +35,7 @@ module Contest
       #
       def self.load_plugins
         # load drivers
-        Dir.glob("#{$GIT_CONTEST_HOME}/plugins/**") do |path|
+        Dir.glob("#{$git_contest_home}/plugins/**") do |path|
           require path if /\/.*_driver\.rb$/.match path
         end
       end
