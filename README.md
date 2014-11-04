@@ -199,6 +199,8 @@ to be written here.
     * Added Kattis Driver
 * [Wei Jianwen](https://github.com/weijianwen)
     * Fixed gem dependency
+* [takuti](https://github.com/takuti)
+    * Fixed for python support in AOJ Driver
 
 ## License Information
 **git-contest** is licensed under the MIT-License, see details followings:
