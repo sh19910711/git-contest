@@ -8,4 +8,10 @@
 # Licensed under the MIT-License.
 #
 
+require "git/contest/command_line"
+
+cli = CommandLine::SubCommands::ConfigCommand.new ARGV
+cli.init
+cli.run
+
 

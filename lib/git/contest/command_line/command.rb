@@ -64,7 +64,11 @@ module CommandLine
       else
         parsed = args[0 .. last_ind]
       end
-      @args = opt_parser.parse(parsed).concat(args[last_ind + 1..-1])
+      if last_ind.nil?
+        @args = opt_parser.parse(parsed)
+      else
+        @args = opt_parser.parse(parsed).concat(args[last_ind + 1..-1])
+      end
     end
 
     def last_line_option_index

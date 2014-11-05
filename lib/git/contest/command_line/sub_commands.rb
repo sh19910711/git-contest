@@ -1,5 +1,6 @@
 require_relative "sub_commands/config_command"
 require_relative "sub_commands/submit_command"
+require_relative "sub_commands/init_command"
 
 module CommandLine
 
