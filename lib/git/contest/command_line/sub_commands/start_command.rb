@@ -50,7 +50,7 @@ module CommandLine
 
         # require equal
         if Git.branch_exists "#{$ORIGIN}/#{$MASTER}"
-            Git.require_branches_equal "#{$MASTER}", "#{$ORIGIN}/#{$MASTER}"
+          Git.require_branches_equal "#{$MASTER}", "#{$ORIGIN}/#{$MASTER}"
         end
 
         # create branch
