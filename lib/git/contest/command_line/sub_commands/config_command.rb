@@ -24,7 +24,7 @@ module CommandLine
       def set_default_options
       end
 
-      def run
+      def run(input = "")
         type = next_token
         case type
 
