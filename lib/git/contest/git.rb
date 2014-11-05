@@ -122,7 +122,7 @@ module Git
     commit1 = Git.do "rev-parse \"#{first}\""
     commit2 = Git.do "rev-parse \"#{second}\""
     if commit1 != commit2
-      if Git.do_no_echo("merge-base \"#{commit1}\" \"#{commit2}\"") > 0
+      if !! Git.do_no_echo("merge-base \"#{commit1}\" \"#{commit2}\"")
         return 4
       else
         base = Git.do "merge-base \"#{commit1}\" \"#{commit2}\""

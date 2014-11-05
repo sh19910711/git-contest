@@ -72,7 +72,7 @@ module CommandLine
         #
         # Submit Start
         #
-        driver = $drivers[driver_name].new
+        driver = $drivers[driver_name].new(args)
 
         $submit_info = {}
 
@@ -138,6 +138,7 @@ module CommandLine
             puts "  %s: %s" % ["status", "#{submission_info[:status]}"]
             puts ""
             if Git.contest_is_initialized
+              puts "@commit"
               Git.do "add #{get_git_add_target($config["submit_rules"]["add"] || ".")}"
               Git.do "commit --allow-empty -m '#{submission_info[:result]}'"
             end
