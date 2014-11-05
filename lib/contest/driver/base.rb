@@ -15,9 +15,12 @@ module Contest
     DEFAULT_COMMIT_MESSAGE ="${site} ${problem-id}: ${status}"
 
     class DriverBase < DriverEvent
-      attr_accessor :config, :options
+      attr_accessor :config
+      attr_accessor :options
+      attr_reader :args
 
-      def initialize
+      def initialize(new_args = [])
+        @args = new_args.clone
         # submit options
         @options ||= {}
         # site config
@@ -25,7 +28,7 @@ module Contest
         @config["file"] ||= {}
         @config["submit_rules"] ||= {}
         # call DriverEvent#initialize
-        super
+        super()
         initialize_ext
       end
       
@@ -93,7 +96,7 @@ module Contest
             :required => false,
           )
         end
-        Trollop::options ARGV, @blocks do |blocks|
+        Trollop::options args, @blocks do |blocks|
           version "git-contest driver"
           # set driver options
           blocks.each do |b|
