@@ -30,7 +30,9 @@ module CommandLine
       @args = new_args.clone
       @options = {}
       @tokens = [] # init after parse options
-      @opt_parser = OptionParser.new
+      @opt_parser = OptionParser.new do |opt|
+        opt.version = Git::Contest::VERSION
+      end
     end
 
     def define_options

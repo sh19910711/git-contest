@@ -33,7 +33,7 @@ module CommandLine
         cli.init
         cli.run
       else
-        ::SubCommands.show_usage
+        SubCommands.usage
       end
     end
 

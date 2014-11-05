@@ -29,17 +29,20 @@ EOF
   context "A001: --version" do
     it "git-contest-submit --version" do
       ret = `#{bin_path("git-contest-submit")} --version`
-      expect(ret).to match /git-contest [0-9]+\.[0-9]+\.[0-9]+/
+      expect(ret).to match /git-contest/
+      expect(ret).to match /[0-9]+\.[0-9]+\.[0-9]+/
     end
 
     it "git-contest submit --version" do
       ret = `#{bin_path("git-contest submit")} --version`
-      expect(ret).to match /git-contest [0-9]+\.[0-9]+\.[0-9]+/
+      expect(ret).to match /git-contest/
+      expect(ret).to match /[0-9]+\.[0-9]+\.[0-9]+/
     end
 
     it "git contest submit --version" do
       ret = `git contest submit --version`
-      expect(ret).to match /git-contest [0-9]+\.[0-9]+\.[0-9]+/
+      expect(ret).to match /git-contest/
+      expect(ret).to match /[0-9]+\.[0-9]+\.[0-9]+/
     end
   end
 
