@@ -39,20 +39,20 @@ if ARGV.length == 2
 end
 contest_branch_name = "#{ARGV[0]}"
 contest_branch = "#{$PREFIX}/#{contest_branch_name}"
-require_branch_absent contest_branch
+Git.require_branch_absent contest_branch
 
 # fetch origin/master
 if options[:fetch]
-  git_do "fetch -q \"#{$ORIGIN}\""
+  Git.do "fetch -q \"#{$ORIGIN}\""
 end
 
 # require equal
-if git_branch_exists "#{$ORIGIN}/#{$MASTER}"
-  require_branches_equal "#{$MASTER}", "#{$ORIGIN}/#{$MASTER}"
+if Git.branch_exists "#{$ORIGIN}/#{$MASTER}"
+  Git.require_branches_equal "#{$MASTER}", "#{$ORIGIN}/#{$MASTER}"
 end
 
 # create branch
-if ! git_do "checkout -b \"#{contest_branch}\" \"#{base_branch_name}\""
+if ! Git.do "checkout -b \"#{contest_branch}\" \"#{base_branch_name}\""
   abort "Could not create contest branch #{contest_branch}"
 end
 

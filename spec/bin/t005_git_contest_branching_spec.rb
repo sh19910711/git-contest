@@ -22,13 +22,13 @@ EOF
 
         # Init
         bin_exec "init --defaults"
-        expect(git_current_branch).to eq 'master'
-        ret = git_do "log --oneline"
+        expect(Git.current_branch).to eq 'master'
+        ret = Git.do "log --oneline"
         expect(ret).to include 'Initial commit'
 
         # Start
         bin_exec "start contest1"
-        expect(git_current_branch).to eq 'contest/contest1'
+        expect(Git.current_branch).to eq 'contest/contest1'
 
         # Edit.1
         File.open 'main.c', 'w' do |file|
@@ -37,10 +37,10 @@ EOF
 
         # Submit.1
         bin_exec "submit test_dummy -c 1000 -p A"
-        ret = git_do "log --oneline"
+        ret = Git.do "log --oneline"
         expect(ret).to include 'Dummy 1000A: Wrong Answer'
 
-        ret = git_do "ls-files"
+        ret = Git.do "ls-files"
         expect(ret).to include 'main.c'
 
         # Edit.2 fixed
@@ -50,17 +50,17 @@ EOF
 
         # Submit.2
         bin_exec "submit test_dummy -c 1000 -p A"
-        ret = git_do "log --oneline"
+        ret = Git.do "log --oneline"
         expect(ret).to include 'Dummy 1000A: Accepted'
 
-        ret = git_do "ls-files"
+        ret = Git.do "ls-files"
         expect(ret).to include 'main.c'
 
         # Finish
         bin_exec "finish --no-edit"
-        expect(git_current_branch).to eq 'master'
+        expect(Git.current_branch).to eq 'master'
 
-        ret = git_do "log --oneline"
+        ret = Git.do "log --oneline"
         expect(ret).to include 'Dummy 1000A: Wrong Answer'
         expect(ret).to include 'Dummy 1000A: Accepted'
       end

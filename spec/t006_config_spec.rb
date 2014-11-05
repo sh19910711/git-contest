@@ -21,7 +21,7 @@ sites:
     password: dummy
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
-        ret1 = git_do "log --oneline"
+        ret1 = Git.do "log --oneline"
         expect(ret1).to include 'Dummy 100A: Accepted'
       end
 
@@ -36,7 +36,7 @@ sites:
     password: dummy
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
-        ret1 = git_do "log --oneline"
+        ret1 = Git.do "log --oneline"
         expect(ret1).to include 'Dummy-100A-Accepted'
       end
 
@@ -51,7 +51,7 @@ sites:
     password: dummy
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
-        ret1 = git_do "log --oneline"
+        ret1 = Git.do "log --oneline"
         expect(ret1).to include 'Accepted-Dummy'
       end
 
@@ -83,10 +83,10 @@ sites:
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
 
-        ret1 = git_do "log --oneline"
+        ret1 = Git.do "log --oneline"
         expect(ret1).to include 'Dummy 100A: Accepted'
 
-        ret_ls1 = git_do "ls-files"
+        ret_ls1 = Git.do "ls-files"
         expect(ret_ls1).to include 'ac.cpp'
       end
 
@@ -102,10 +102,10 @@ sites:
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
 
-        ret1 = git_do "log --oneline"
+        ret1 = Git.do "log --oneline"
         expect(ret1).to include 'Dummy 100A: Wrong Answer'
 
-        ret_ls1 = git_do "ls-files"
+        ret_ls1 = Git.do "ls-files"
         expect(ret_ls1).to include 'wa.d'
       end
 
@@ -120,10 +120,10 @@ sites:
     password: dummy
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
-        ret1 = git_do "log --oneline"
+        ret1 = Git.do "log --oneline"
         expect(ret1).to include 'Dummy 100A: Time Limit Exceeded'
 
-        ret_ls1 = git_do "ls-files"
+        ret_ls1 = Git.do "ls-files"
         expect(ret_ls1).to include 'tle.go'
       end
     end
@@ -157,7 +157,7 @@ sites:
     password: dummy
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
-        ret1 = git_do "ls-files"
+        ret1 = Git.do "ls-files"
         expect(ret1).to include "test1.cpp"
         expect(ret1).to include "input1.txt"
         expect(ret1).not_to include "test2.c"
@@ -176,7 +176,7 @@ sites:
     password: dummy
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
-        ret1 = git_do "ls-files"
+        ret1 = Git.do "ls-files"
         expect(ret1).not_to include "test1.cpp"
         expect(ret1).not_to include "input1.txt"
         expect(ret1).to include "test2.c"
@@ -195,7 +195,7 @@ sites:
     password: dummy
 EOF
         bin_exec "submit test_dummy -c 100 -p A"
-        ret1 = git_do "ls-files"
+        ret1 = Git.do "ls-files"
         expect(ret1).to include "test1.cpp"
         expect(ret1).to include "input1.txt"
         expect(ret1).to include "test2.c"

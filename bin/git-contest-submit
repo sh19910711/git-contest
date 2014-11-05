@@ -166,9 +166,9 @@ driver.on(
     puts "  %s: %s" % ["submission id", "#{submission_info[:submission_id]}"]
     puts "  %s: %s" % ["status", "#{submission_info[:status]}"]
     puts ""
-    if git_contest_is_initialized
-      git_do "add #{get_git_add_target($config["submit_rules"]["add"] || ".")}"
-      git_do "commit --allow-empty -m '#{submission_info[:result]}'"
+    if Git.contest_is_initialized
+      Git.do "add #{get_git_add_target($config["submit_rules"]["add"] || ".")}"
+      Git.do "commit --allow-empty -m '#{submission_info[:result]}'"
     end
   end
 )

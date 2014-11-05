@@ -36,20 +36,20 @@ options = Trollop::options do
   stop_on sub_commands
 end
 
-if git_contest_is_initialized && ! options[:force]
+if Git.contest_is_initialized && ! options[:force]
   puts "Already initialized for git-contest."
   puts "To force reinitialization, use: git contest init -f"
   exit 0
 end
 
 # run commands
-if ! git_do_no_echo 'rev-parse --git-dir'
-  git_do 'init'
+if ! Git.do_no_echo 'rev-parse --git-dir'
+  Git.do 'init'
 end
 
 # init main
-if git_contest_has_master_configured
-  master_branch = git_do 'config --get git.contest.branch.master'
+if Git.contest_has_master_configured
+  master_branch = Git.do 'config --get git.contest.branch.master'
 elsif options[:defaults]
   master_branch = 'master'
 else
@@ -66,12 +66,12 @@ else
   end
 end
 
-if git_repo_is_headless
-  git_do 'symbolic-ref', 'HEAD', "\"refs/heads/#{master_branch}\""
-  git_do 'commit --allow-empty --quiet -m "Initial commit"'
+if Git.repo_is_headless
+  Git.do 'symbolic-ref', 'HEAD', "\"refs/heads/#{master_branch}\""
+  Git.do 'commit --allow-empty --quiet -m "Initial commit"'
 end
 
 # save config
-git_do 'config', 'git.contest.branch.master', master_branch
-git_do 'config', 'git.contest.branch.prefix', prefix
+Git.do 'config', 'git.contest.branch.master', master_branch
+Git.do 'config', 'git.contest.branch.prefix', prefix
 

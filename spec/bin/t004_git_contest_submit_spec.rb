@@ -100,7 +100,7 @@ EOF
 
     it "git contest submit test_dummy -c 100 -p A -m '...'" do
       bin_exec "submit test_dummy -c 100 -p A -m 'this is commit message'"
-      ret = git_do "log --oneline"
+      ret = Git.do "log --oneline"
       expect(ret).to include "this is commit message"
     end
   end
