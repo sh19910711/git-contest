@@ -8,68 +8,8 @@
 # Licensed under the MIT-License.
 #
 
-$:.unshift File.expand_path('../../lib', __FILE__)
-require 'git/contest/common'
-require 'trollop'
+require_relative "../lib/git/contest/command_line"
 
-# Show Banner
-def usage
-  puts get_banner
-  return 0
-end
-
-# Get Banner Text
-def get_banner
-  res = ""
-  res += "usage: git contest list <type>\n"
-  res += "\n"
-  res += "Available types are:\n"
-  res += "  %-8s: show sites\n" % "sites"
-  res += "  %-8s: show drivers\n" % "drivers"
-  res += " \n"
-  return res
-end
-
-init
-Contest::Driver::Utils.load_plugins
-
-$config = get_config() || {}
-$sites  = {}
-if $config.has_key? 'sites'
-  $sites = $config["sites"]
-end
-
-sub_commands = %w(sites drivers)
-$options = Trollop::options do
-  version "git-contest #{Git::Contest::VERSION} (c) 2013-2014 Hiroyuki Sano"
-  banner get_banner
-  stop_on sub_commands
-end
-
-type = ARGV.shift.to_s.strip
-
-case type
-when "drivers"
-  # show all drivers
-  puts "#"
-  puts "# Available Drivers"
-  puts "#"
-  puts ""
-  drivers = Contest::Driver::Utils.get_all_drivers
-  drivers.each {|driver_info|
-    puts "  #{driver_info[:class_name]}"
-    puts "    #{driver_info[:site_info][:desc]}"
-    puts ""
-  }
-when "sites"
-  # show all sites
-  $sites.keys.each do |site_name|
-    puts "# #{site_name}"
-    keys = ["driver", "user"]
-    keys.each {|key| puts "    %-8s: %s" % [ key, $sites[site_name][key] ] }
-    puts " \n"
-  end
-else
-  usage
-end
-
+cli = CommandLine::SubCommands::ListCommand.new(ARGV)
+cli.init
+cli.run
