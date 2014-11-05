@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "T002: Codeforces Driver" do
   before(:each) do
     @driver = Contest::Driver::CodeforcesDriver.new
-    @driver.stub(:sleep).and_return(0)
+    allow(@driver).to receive(:sleep).and_return(0)
   end
 
   context "A001: #get_status_wait" do
