@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "T003: UvaOnlineJudge Driver" do
   before(:each) do
     @driver = Contest::Driver::UvaOnlineJudgeDriver.new
-    @driver.stub(:sleep).and_return(0)
+    allow(@driver).to receive(:sleep).and_return(0)
   end
 
   context "A001: #get_submission_id" do
