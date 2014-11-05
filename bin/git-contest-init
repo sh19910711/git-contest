@@ -8,70 +8,9 @@
 # Licensed under the MIT-License.
 #
 
-$:.unshift File.expand_path('../../lib', __FILE__)
-require 'git/contest/common'
-require 'trollop'
-require 'highline/import'
+require_relative "../lib/git/contest/command_line"
 
-init
-
-sub_commands = %w()
-options = Trollop::options do
-  version "git-contest #{Git::Contest::VERSION} (c) 2013-2014 Hiroyuki Sano"
-  opt(
-    :defaults,
-    "Use default branch naming conventions.",
-    :type => :flag,
-    :default => false,
-    :required => false,
-  )
-  opt(
-    :force,
-    "force setting of git-contest branches, even if already configured.",
-    :short => :f,
-    :type => :flag,
-    :default => false,
-    :required => false,
-  )
-  stop_on sub_commands
-end
-
-if Git.contest_is_initialized && ! options[:force]
-  puts "Already initialized for git-contest."
-  puts "To force reinitialization, use: git contest init -f"
-  exit 0
-end
-
-# run commands
-if ! Git.do_no_echo 'rev-parse --git-dir'
-  Git.do 'init'
-end
-
-# init main
-if Git.contest_has_master_configured
-  master_branch = Git.do 'config --get git.contest.branch.master'
-elsif options[:defaults]
-  master_branch = 'master'
-else
-  master_branch = ask('Master branch name: ') do |q|
-    q.default = 'master'
-  end
-end
-
-if options[:defaults]
-  prefix = 'contest'
-else
-  prefix = ask('Prefix of contest branch name:  ') do |q|
-    q.default = 'contest'
-  end
-end
-
-if Git.repo_is_headless
-  Git.do 'symbolic-ref', 'HEAD', "\"refs/heads/#{master_branch}\""
-  Git.do 'commit --allow-empty --quiet -m "Initial commit"'
-end
-
-# save config
-Git.do 'config', 'git.contest.branch.master', master_branch
-Git.do 'config', 'git.contest.branch.prefix', prefix
+cli = CommandLine::SubCommands::InitCommand.new(ARGV)
+cli.init
+cli.run
 

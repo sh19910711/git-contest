@@ -11,8 +11,8 @@ describe "T008: git-contest-finish" do
       bin_exec "finish --no-edit"
       ret1 = Git.do "branch"
       ret_log1 = Git.do "log --oneline master"
-      expect(ret1).not_to include "branch1"
-      expect(ret_log1).to include "this is commit"
+      expect(ret1.split(/\s+/)).not_to include /branch1/
+      expect(ret_log1).to match /this is commit/
     end
 
     it "002: init -> start -> empty-commits -> finish --keep" do
@@ -22,8 +22,8 @@ describe "T008: git-contest-finish" do
       bin_exec "finish --no-edit --keep"
       ret1 = Git.do "branch"
       ret_log1 = Git.do "log --oneline master"
-      expect(ret1).to include "branch1"
-      expect(ret_log1).to include "this is commit"
+      expect(ret1.split(/\s+/)).to include /branch1/
+      expect(ret_log1).to match /this is commit/
     end
 
     it "003: init -> start -> empty-commits -> finish -k" do
@@ -33,8 +33,8 @@ describe "T008: git-contest-finish" do
       bin_exec "finish --no-edit -k"
       ret1 = Git.do "branch"
       ret_log1 = Git.do "log --oneline master"
-      expect(ret1).to include "branch1"
-      expect(ret_log1).to include "this is commit"
+      expect(ret1.split(/\s+/)).to include /branch1/
+      expect(ret_log1).to match /this is commit/
     end
 
   end
@@ -66,18 +66,18 @@ describe "T008: git-contest-finish" do
       }
       # finish branches
       ret_branch_1 = Git.do "branch"
-      bin_exec "finish branch1 --no-edit"
-      bin_exec "finish branch2 --no-edit --rebase"
-      bin_exec "finish branch3 --no-edit"
+      bin_exec "finish --no-edit branch1"
+      bin_exec "finish --no-edit --rebase branch2"
+      bin_exec "finish --no-edit branch3"
       ret_branch_2 = Git.do "branch"
       ret_log = Git.do "log --oneline"
-      expect(ret_branch_1).to include "branch1"
-      expect(ret_branch_1).to include "branch2"
-      expect(ret_branch_1).to include "branch3"
-      expect(ret_branch_2).not_to include "branch1"
-      expect(ret_branch_2).not_to include "branch2"
-      expect(ret_branch_2).not_to include "branch3"
-      expect(!!ret_log.match(/test-2.*test-3.*test-1/m)).to be_truthy
+      expect(ret_branch_1.split(/\s+/)).to include /branch1/
+      expect(ret_branch_1.split(/\s+/)).to include /branch2/
+      expect(ret_branch_1.split(/\s+/)).to include /branch3/
+      expect(ret_branch_2.split(/\s+/)).not_to include /branch1/
+      expect(ret_branch_2.split(/\s+/)).not_to include /branch2/
+      expect(ret_branch_2.split(/\s+/)).not_to include /branch3/
+      expect(ret_log).to match /test-2.*test-3.*test-1/m
     end
 
   end
@@ -105,11 +105,11 @@ describe "T008: git-contest-finish" do
       Git.do "add test.txt"
       Git.do "commit -m 'Edit test.txt @ branch2'"
       # finish
-      bin_exec "finish branch1 --no-edit"
-      bin_exec "finish branch2 --force-delete --no-edit"
+      bin_exec "finish --no-edit branch1"
+      bin_exec "finish --no-edit --force-delete branch2"
       ret_branch = Git.do "branch"
-      expect(ret_branch).not_to include "contest/branch1"
-      expect(ret_branch).not_to include "contest/branch2"
+      expect(ret_branch.split(/\s+/)).not_to include /contest\/branch1/
+      expect(ret_branch.split(/\s+/)).not_to include /contest\/branch2/
     end
   end
 
@@ -117,18 +117,18 @@ describe "T008: git-contest-finish" do
     it "001: init -> start -> empty-commits -> finish --squash" do
       bin_exec "init --defaults"
       bin_exec "start branch1"
-      10.times {|x|
+      10.times do |x|
         filename = "test#{x}.txt"
         FileUtils.touch filename
         Git.do "add #{filename}"
         Git.do "commit -m 'this is commit #{x}'"
-      }
+      end
       bin_exec "finish --no-edit --squash branch1"
       ret_log1 = Git.do "log --oneline"
       ret_branch1 = Git.do "branch"
-      expect(ret_branch1).not_to include "branch1"
-      expect(ret_log1).to include "this is commit"
-      expect(ret_log1).to include "Squashed commit"
+      expect(ret_branch1.split(/\s+/)).not_to include /branch1/
+      expect(ret_log1).to match /this is commit/
+      expect(ret_log1).to match /Squashed commit/
     end
   end
 
@@ -148,14 +148,14 @@ describe "T008: git-contest-finish" do
       Git.do "checkout -b master origin/master"
       bin_exec "init --defaults"
       bin_exec "start --fetch branch1"
-      bin_exec "finish --fetch branch1 --no-edit"
+      bin_exec "finish --no-edit --fetch branch1"
       ret_branch2 = Git.do "branch"
       Dir.chdir ".."
       Dir.chdir "src"
       ret_branch1 = Git.do "branch"
       Git.do "checkout master"
-      expect(ret_branch1).to include 'branch1'
-      expect(ret_branch2).not_to include 'branch1'
+      expect(ret_branch1.split(/\s+/)).to include /branch1/
+      expect(ret_branch2.split(/\s+/)).not_to include /branch1/
     end
   end
 end

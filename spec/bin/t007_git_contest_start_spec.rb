@@ -73,14 +73,14 @@ describe "T007: git-contest-start" do
       ret2 = Git.do "log --oneline origin/master"
       expect(ret2).not_to include "this is commit"
 
-      ret_start1 = bin_exec "start branch1 --fetch"
+      ret_start1 = bin_exec "start --fetch branch1" # TODO: support: start branch1 --fetch
       expect(ret_start1).not_to include "Summary of actions:"
 
       ret3 = Git.do "log --oneline origin/master"
       expect(ret3).to include "this is commit"
 
       Git.do "pull origin master"
-      ret_start2 = bin_exec "start branch2 --fetch"
+      ret_start2 = bin_exec "start --fetch branch2"
       expect(ret_start2).to include "Summary of actions:"
     end
   end
