@@ -6,7 +6,7 @@ describe "T009: git-contest-init" do
   context "A001: --force" do
     it "001: init -> init" do
       ret1 = bin_exec "init --defaults"
-      ret_config1 = git_do("config --get git.contest.branch.master")
+      ret_config1 = Git.do("config --get git.contest.branch.master")
       ret2 = bin_exec "init --defaults"
       ret_config1.should                                           === "master"
       expect(ret1).not_to include "Error: unknown argument"
@@ -19,7 +19,7 @@ describe "T009: git-contest-init" do
 
     it "002: init -> init -f -> init --force" do
       ret1 = bin_exec "init --defaults"
-      ret_config1 = git_do("config --get git.contest.branch.master")
+      ret_config1 = Git.do("config --get git.contest.branch.master")
       ret2 = bin_exec "init --defaults -f"
       ret3 = bin_exec "init --defaults --force"
       ret_config1.should === "master"
@@ -36,7 +36,7 @@ describe "T009: git-contest-init" do
 
     it "003: init -f -> init -f -> init --force" do
       ret1 = bin_exec "init --defaults -f"
-      ret_config1 = git_do("config --get git.contest.branch.master")
+      ret_config1 = Git.do("config --get git.contest.branch.master")
       ret2 = bin_exec "init --defaults -f"
       ret3 = bin_exec "init --defaults --force"
       ret_config1.should                                           === "master"

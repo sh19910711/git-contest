@@ -13,7 +13,7 @@ require 'git/contest/common'
 require 'trollop'
 
 def use_current_branch
-  current_branch = git_current_branch
+  current_branch = Git.current_branch
   if current_branch.start_with? $PREFIX
     $BRANCH = current_branch.strip
     $NAME = $BRANCH[$PREFIX.length+1..-1]
@@ -30,23 +30,23 @@ def expand_contest_branch
   else
     $NAME = ARGV[0]
     $BRANCH = "#{$PREFIX}/#{$NAME}"
-    require_branch $BRANCH
+    Git.require_branch $BRANCH
   end
 end
 
 def helper_finish_cleanup
-  require_branch $BRANCH
-  require_clean_working_tree
+  Git.require_branch $BRANCH
+  Git.require_clean_working_tree
 
   if $options[:fetch]
-    git_do "push \"#{$ORIGIN}\" \":refs/heads/#{$BRANCH}\""
+    Git.do "push \"#{$ORIGIN}\" \":refs/heads/#{$BRANCH}\""
   end
 
   if ! $options[:keep]
     if $options[:force_delete]
-      git_do "branch -D #{$BRANCH}"
+      Git.do "branch -D #{$BRANCH}"
     else
-      git_do "branch -d #{$BRANCH}"
+      Git.do "branch -d #{$BRANCH}"
     end
   end
 
@@ -109,23 +109,23 @@ $options = Trollop::options do
 end
 
 expand_contest_branch()
-require_branch $BRANCH
+Git.require_branch $BRANCH
 
-require_clean_working_tree
+Git.require_clean_working_tree
 
-if git_remote_branches().include?("#{$ORIGIN}/#{$BRANCH}")
+if Git.remote_branches().include?("#{$ORIGIN}/#{$BRANCH}")
   if $options[:fetch]
-    git_do "fetch -q \"#{$ORIGIN}\" \"#{$BRANCH}\""
-    git_do "fetch -q \"#{$ORIGIN}\" \"#{$MASTER}\""
+    Git.do "fetch -q \"#{$ORIGIN}\" \"#{$BRANCH}\""
+    Git.do "fetch -q \"#{$ORIGIN}\" \"#{$MASTER}\""
   end
 end
 
-if git_remote_branches().include?("#{$ORIGIN}/#{$BRANCH}")
-  require_branches_equal $BRANCH, "#{$ORIGIN}/#{$BRANCH}"
+if Git.remote_branches().include?("#{$ORIGIN}/#{$BRANCH}")
+  Git.require_branches_equal $BRANCH, "#{$ORIGIN}/#{$BRANCH}"
 end
 
-if git_remote_branches().include?("#{$ORIGIN}/#{$MASTER}")
-  require_branches_equal $MASTER, "#{$ORIGIN}/#{$MASTER}"
+if Git.remote_branches().include?("#{$ORIGIN}/#{$MASTER}")
+  Git.require_branches_equal $MASTER, "#{$ORIGIN}/#{$MASTER}"
 end
 
 merge_options = ""
@@ -134,7 +134,7 @@ if $options[:no_edit]
 end
 
 if $options[:rebase]
-  ret = git_do "contest rebase \"#{$NAME}\" \"#{$MASTER}\""
+  ret = Git.do "contest rebase \"#{$NAME}\" \"#{$MASTER}\""
   exitcode = $?.to_i
   if ! $?
     puts "Finish was aborted due to conflicts during rebase."
@@ -142,20 +142,20 @@ if $options[:rebase]
   end
 end
 
-git_do "checkout #{$MASTER}"
-if git_do("rev-list -n2 \"#{$MASTER}..#{$BRANCH}\"").lines.to_a.length == 1
-  git_do "merge --ff \"#{$BRANCH}\" #{merge_options}"
+Git.do "checkout #{$MASTER}"
+if Git.do("rev-list -n2 \"#{$MASTER}..#{$BRANCH}\"").lines.to_a.length == 1
+  Git.do "merge --ff \"#{$BRANCH}\" #{merge_options}"
 else
   if $options[:squash]
-    git_do "merge --squash \"#{$BRANCH}\" #{merge_options}"
+    Git.do "merge --squash \"#{$BRANCH}\" #{merge_options}"
     if $options[:no_edit]
-      git_do "commit -m 'Squashed commit'"
+      Git.do "commit -m 'Squashed commit'"
     else
-      git_do "commit"
+      Git.do "commit"
     end
-    git_do "merge \"#{$BRANCH}\" #{merge_options}"
+    Git.do "merge \"#{$BRANCH}\" #{merge_options}"
   else
-    git_do "merge --no-ff \"#{$BRANCH}\" #{merge_options}"
+    Git.do "merge --no-ff \"#{$BRANCH}\" #{merge_options}"
   end
 end
 

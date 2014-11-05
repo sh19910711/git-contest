@@ -19,10 +19,10 @@ end
 def init_global
   $git_contest_home   = File.expand_path(ENV['GIT_CONTEST_HOME'] || "~/.git-contest")
   $git_contest_config = File.expand_path(ENV['GIT_CONTEST_CONFIG'] || "#{$git_contest_home}/config.yml")
-  if git_do_no_echo 'branch'
-    $MASTER = git_do 'config --get git.contest.branch.master'
-    $PREFIX = git_do 'config --get git.contest.branch.prefix'
-    $ORIGIN = git_do 'config --get git.contest.origin'
+  if Git.do_no_echo 'branch'
+    $MASTER = Git.do 'config --get git.contest.branch.master'
+    $PREFIX = Git.do 'config --get git.contest.branch.prefix'
+    $ORIGIN = Git.do 'config --get git.contest.origin'
     if $ORIGIN == ''
       $ORIGIN = 'origin'
     end

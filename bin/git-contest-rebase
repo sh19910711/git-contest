@@ -13,7 +13,7 @@ require 'git/contest/common'
 require 'trollop'
 
 def use_current_branch
-  current_branch = git_current_branch
+  current_branch = Git.current_branch
   if current_branch.start_with? $PREFIX
     $BRANCH = current_branch.strip
     $NAME = $BRANCH[$PREFIX.length+1..-1]
@@ -25,7 +25,7 @@ def use_current_branch
 end
 
 def expand_nameprefix_arg name, prefix
-  expanded_name = git_contest_resolve_nameprefix name, prefix
+  expanded_name = Git.contest_resolve_nameprefix name, prefix
   exitcode = $?.to_i
   if $? == 0
     $NAME = expanded_name
@@ -38,7 +38,7 @@ end
 def expand_nameprefix_arg_or_current
   if ARGV.length > 0
     expand_nameprefix_arg ARGV[0], $PREFIX
-    require_branch "#{$PREFIX}/#{$NAME}"
+    Git.require_branch "#{$PREFIX}/#{$NAME}"
   else
     use_current_branch
   end
@@ -63,14 +63,14 @@ expand_nameprefix_arg_or_current
 
 puts "Will try to rebase '#{$NAME}'..."
 
-require_clean_working_tree
-require_branch $BRANCH
+Git.require_clean_working_tree
+Git.require_branch $BRANCH
 
-git_do "checkout -q \"#{$BRANCH}\""
+Git.do "checkout -q \"#{$BRANCH}\""
 rebase_options = ""
 if $options[:interactive]
   rebase_options += " -i"
 end
 
-puts git_do "rebase #{rebase_options} #{$MASTER}"
+puts Git.do "rebase #{rebase_options} #{$MASTER}"
 
