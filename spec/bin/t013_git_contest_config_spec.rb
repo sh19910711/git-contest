@@ -2,6 +2,13 @@ require 'spec_helper'
 require 'yaml'
 
 describe "T013: git-contest-config" do
+
+  def call_main(args)
+    cli = CommandLine::MainCommand.new(args)
+    cli.init
+    cli
+  end
+
   before do
     ENV['GIT_CONTEST_CONFIG'] = "#{@temp_dir}/config.yml"
   end
@@ -22,7 +29,7 @@ EOF
     end
 
     it "git contest config set key value" do
-      bin_exec "config set key1 value2"
+      bin_exec "config set key1", "value2"
       ret2 = YAML.load_file "#{@temp_dir}/config.yml"
       expect(ret2["key1"]).to eq "value2"
     end
@@ -34,7 +41,8 @@ EOF
     end
 
     it "git contest config set sites.test_site1.driver test_driver2" do
-      bin_exec "config set sites.test_site1.driver test_driver2"
+      expect { call_main(["config", "set", "sites.test_site1.driver", "test_driver2"]).run }.to output(/.*/).to_stdout
+
       ret1 = YAML.load_file "#{@temp_dir}/config.yml"
       expect(ret1["sites"]["test_site1"]["driver"]).to eq "test_driver2"
     end
@@ -56,28 +64,25 @@ EOF
     end
 
     it "git contest config get key1" do
-      ret = bin_exec "config get key1"
-      expect(ret.strip).to eq "value1"
+      expect { call_main(["config", "get", "key1"]).run }.to output(/value1/).to_stdout
     end
 
     it "git contest config get sites.test_site1.user" do
-      ret = bin_exec "config get sites.test_site1.user"
-      expect(ret.strip).to eq "test_user1"
+      expect { call_main(["config", "get", "sites.test_site1.user"]).run }.to output(/test_user1/).to_stdout
     end
 
-    it "return keys" do
-      ret = bin_exec "config get sites.test_site1"
-      expect(ret).to include "driver"
-      expect(ret).to include "user"
-      expect(ret).to include "password"
-      expect(ret).not_to include "test_driver1"
-      expect(ret).not_to include "test_user1"
-      expect(ret).not_to include "test_password1"
+    context "config get sites.test_site1" do
+      subject { lambda { call_main(["config", "get", "sites.test_site1"]).run } }
+      it { should output(/driver/).to_stdout }
+      it { should output(/user/).to_stdout }
+      it { should output(/password/).to_stdout }
+      it { should_not output(/test_driver1/).to_stdout }
+      it { should_not output(/test_user1/).to_stdout }
+      it { should_not output(/test_password1/).to_stdout }
     end
 
     it "raise error: not found" do
-      ret = bin_exec("config get foo.bar")
-      expect(ret).to include "ERROR"
+      expect { call_main(["config", "get", "foo.bar"]).run }.to output(/ERROR/).to_stderr.and raise_error SystemExit
     end
   end
 

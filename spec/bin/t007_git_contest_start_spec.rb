@@ -1,19 +1,26 @@
 require "spec_helper"
 
 describe "T007: git-contest-start" do
+
+  def call_main(args)
+    cli = CommandLine::MainCommand.new(args)
+    cli.init
+    cli
+  end
+
   context "A001: specify based branch" do
     before do
-      bin_exec "init --defaults"
+      expect { call_main(["init", "--defaults"]).run }.to output(/.*/).to_stdout
     end
 
     it "001" do
       Git.do "checkout -b base1"
       Git.do "commit --allow-empty -m 'this is commit'"
       Git.do "checkout master"
-      bin_exec "start test1"
+      expect { call_main(["start", "test1"]).run }.to output(/.*/).to_stdout
       ret1 = Git.do "log --oneline"
       expect(ret1).not_to include "this is commit"
-      bin_exec "start test2 base1"
+      expect { call_main(["start", "test2", "base1"]).run }.to output(/.*/).to_stdout
       ret2 = Git.do "log --oneline"
       expect(ret2).to include "this is commit"
     end
@@ -22,10 +29,10 @@ describe "T007: git-contest-start" do
       Git.do "checkout -b base1"
       Git.do "commit --allow-empty -m 'this is commit'"
       Git.do "checkout master"
-      bin_exec "start test1 base1"
+      expect { call_main(["start", "test1", "base1"]).run }.to output(/.*/).to_stdout
       ret1 = Git.do "log --oneline"
       expect(ret1).to include "this is commit"
-      bin_exec "start test2"
+      expect { call_main(["start", "test2"]).run }.to output(/.*/).to_stdout
       ret2 = Git.do "log --oneline"
       expect(ret2).not_to include "this is commit"
     end
@@ -33,10 +40,10 @@ describe "T007: git-contest-start" do
     it "003" do
       Git.do "checkout -b base1"
       Git.do "commit --allow-empty -m 'this is commit'"
-      bin_exec "start test1 base1"
+      expect { call_main(["start", "test1", "base1"]).run }.to output(/.*/).to_stdout
       ret1 = Git.do "log --oneline"
       expect(ret1).to include "this is commit"
-      bin_exec "start test2"
+      expect { call_main(["start", "test2"]).run }.to output(/.*/).to_stdout
       ret2 = Git.do "log --oneline"
       expect(ret2).not_to include "this is commit"
     end
@@ -44,10 +51,10 @@ describe "T007: git-contest-start" do
     it "004" do
       Git.do "checkout -b base1"
       Git.do "commit --allow-empty -m 'this is commit'"
-      bin_exec "start test1"
+      expect { call_main(["start", "test1"]).run }.to output(/.*/).to_stdout
       ret1 = Git.do "log --oneline"
       expect(ret1).not_to include "this is commit"
-      bin_exec "start test2 base1"
+      expect { call_main(["start", "test2", "base1"]).run }.to output(/.*/).to_stdout
       ret2 = Git.do "log --oneline"
       expect(ret2).to include "this is commit"
     end
@@ -57,31 +64,31 @@ describe "T007: git-contest-start" do
     it "001" do
       Dir.mkdir "test1"
       Dir.chdir "test1"
-      bin_exec "init --defaults"
+      expect { call_main(["init", "--defaults"]).run }.to output(/.*/).to_stdout
+      expect { call_main(["start", "branch1"]).run }.to output(/.*/).to_stdout
       Dir.chdir ".."
-      Git.do "clone test1 test2"
+      Git.do "clone -b master test1 test2"
       Dir.chdir "test1"
-      10.times {|x| Git.do "commit --allow-empty -m 'this is commit'" }
-      ret1 = Git.do "log --oneline master"
+      3.times {|x| Git.do "commit --allow-empty -m 'this is commit'" }
+      ret1 = Git.do "log --oneline"
       expect(ret1).to include "this is commit"
 
       Dir.chdir ".."
       Dir.chdir "test2"
       # init
-      bin_exec "init --defaults"
+      expect { call_main(["init", "--defaults"]).run }.to output(/.*/).to_stdout
       # fetch
       ret2 = Git.do "log --oneline origin/master"
       expect(ret2).not_to include "this is commit"
 
-      ret_start1 = bin_exec "start --fetch branch1" # TODO: support: start branch1 --fetch
-      expect(ret_start1).not_to include "Summary of actions:"
+      # TODO: support: start branch1 --fetch
+      expect { call_main(["start", "--fetch", "branch1"]).run }.to output(/.*/).to_stdout
 
-      ret3 = Git.do "log --oneline origin/master"
-      expect(ret3).to include "this is commit"
+      ret3 = Git.do "log --oneline"
+      expect(ret3).to_not include "this is commit"
 
       Git.do "pull origin master"
-      ret_start2 = bin_exec "start --fetch branch2"
-      expect(ret_start2).to include "Summary of actions:"
+      expect { call_main(["start", "--fetch", "branch2"]).run }.to output(/Summary of actions/).to_stdout
     end
   end
 end

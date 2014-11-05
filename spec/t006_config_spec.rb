@@ -1,13 +1,22 @@
 require "spec_helper"
 
 describe "T006: Config Test" do 
+
+  def call_main(args)
+    cli = CommandLine::MainCommand.new(args)
+    cli.init
+    cli
+  end
+
   context "A001: submit_rules" do
+
     context "B001: commit_message" do
+
       before do
         File.open "main.d", "w" do |file|
           file.write "ac-code"
         end
-        bin_exec "init --defaults"
+        expect { call_main(["init", "--defaults"]).run }.to output(/.*/).to_stdout
       end
 
       it "001: ${site} ${problem-id}: ${status}" do
@@ -20,7 +29,7 @@ sites:
     user:     dummy
     password: dummy
 EOF
-        bin_exec "submit test_dummy -c 100 -p A"
+        expect { call_main(["submit", "test_dummy", "-c", "100", "-p", "A"]).run }.to output(/.*/).to_stdout
         ret1 = Git.do "log --oneline"
         expect(ret1).to include 'Dummy 100A: Accepted'
       end
@@ -35,7 +44,7 @@ sites:
     user:     dummy
     password: dummy
 EOF
-        bin_exec "submit test_dummy -c 100 -p A"
+        expect { call_main(["submit", "test_dummy", "-c", "100", "-p", "A"]).run }.to output(/.*/).to_stdout
         ret1 = Git.do "log --oneline"
         expect(ret1).to include 'Dummy-100A-Accepted'
       end
@@ -50,7 +59,7 @@ sites:
     user:     dummy
     password: dummy
 EOF
-        bin_exec "submit test_dummy -c 100 -p A"
+        expect { call_main(["submit", "test_dummy", "-c", "100", "-p", "A"]).run }.to output(/.*/).to_stdout
         ret1 = Git.do "log --oneline"
         expect(ret1).to include 'Accepted-Dummy'
       end
@@ -68,7 +77,7 @@ EOF
         File.open "tle.go", "w" do |file|
           file.write "tle-code"
         end
-        bin_exec "init --defaults"
+        expect { call_main(["init", "--defaults"]).run }.to output(/.*/).to_stdout
       end
 
       it "001: ac.*" do
@@ -81,7 +90,7 @@ sites:
     user:     dummy
     password: dummy
 EOF
-        bin_exec "submit test_dummy -c 100 -p A"
+        expect { call_main(["submit", "test_dummy", "-c", "100", "-p", "A"]).run }.to output(/.*/).to_stdout
 
         ret1 = Git.do "log --oneline"
         expect(ret1).to include 'Dummy 100A: Accepted'
@@ -100,7 +109,7 @@ sites:
     user:     dummy
     password: dummy
 EOF
-        bin_exec "submit test_dummy -c 100 -p A"
+        expect { call_main(["submit", "test_dummy", "-c", "100", "-p", "A"]).run }.to output(/.*/).to_stdout
 
         ret1 = Git.do "log --oneline"
         expect(ret1).to include 'Dummy 100A: Wrong Answer'
@@ -119,7 +128,7 @@ sites:
     user:     dummy
     password: dummy
 EOF
-        bin_exec "submit test_dummy -c 100 -p A"
+        expect { call_main(["submit", "test_dummy", "-c", "100", "-p", "A"]).run }.to output(/.*/).to_stdout
         ret1 = Git.do "log --oneline"
         expect(ret1).to include 'Dummy 100A: Time Limit Exceeded'
 
@@ -142,7 +151,7 @@ EOF
         File.open "input2.txt", "w" do |file|
           file.write "test2"
         end
-        bin_exec "init --defaults"
+        expect { call_main(["init", "--defaults"]).run }.to output(/.*/).to_stdout
       end
 
       it "001: test*.cpp input1.txt" do
@@ -156,7 +165,7 @@ sites:
     user:     dummy
     password: dummy
 EOF
-        bin_exec "submit test_dummy -c 100 -p A"
+        expect { call_main(["submit", "test_dummy", "-c", "100", "-p", "A"]).run }.to output(/.*/).to_stdout
         ret1 = Git.do "ls-files"
         expect(ret1).to include "test1.cpp"
         expect(ret1).to include "input1.txt"
@@ -175,7 +184,7 @@ sites:
     user:     dummy
     password: dummy
 EOF
-        bin_exec "submit test_dummy -c 100 -p A"
+        expect { call_main(["submit", "test_dummy", "-c", "100", "-p", "A"]).run }.to output(/.*/).to_stdout
         ret1 = Git.do "ls-files"
         expect(ret1).not_to include "test1.cpp"
         expect(ret1).not_to include "input1.txt"
@@ -194,7 +203,7 @@ sites:
     user:     dummy
     password: dummy
 EOF
-        bin_exec "submit test_dummy -c 100 -p A"
+        expect { call_main(["submit", "test_dummy", "-c", "100", "-p", "A"]).run }.to output(/.*/).to_stdout
         ret1 = Git.do "ls-files"
         expect(ret1).to include "test1.cpp"
         expect(ret1).to include "input1.txt"
@@ -227,8 +236,7 @@ sites:
     password: dummy
 EOF
         
-        ret1 = bin_exec "submit test_dummy -c 100 -p A -s test1.dummy"
-        expect(ret1).not_to include "unknown language"
+        expect { call_main(["submit", "test_dummy", "-c", "100", "-p", "A", "-s", "test1.dummy"]).run }.to_not output(/unknown language/).to_stdout
       end
 
       it "cpp -> dummy" do
@@ -243,15 +251,14 @@ sites:
     password: dummy
 EOF
         
-        ret1 = bin_exec "submit test_dummy -c 100 -p A -s test2.cpp"
-        expect(ret1).to include "unknown language"
+        expect { call_main(["submit", "test_dummy", "-c", "100", "-p", "A", "-s", "test2.cpp"]).run }.to output(/unknown language/).to_stderr.and raise_error SystemExit
       end
 
       it "cpp -> cpp11" do
         set_git_contest_config <<EOF
 file:
   ext:
-    cpp: dummy
+    cpp: cpp11
 sites:
   test_dummy:
     driver: dummy
@@ -259,8 +266,7 @@ sites:
     password: dummy
 EOF
         
-        ret1 = bin_exec "submit test_dummy -c 100 -p A -s test2.cpp"
-        expect(ret1).to include "unknown language"
+        expect { call_main(["submit", "test_dummy", "-c", "100", "-p", "A", "-s", "test2.cpp"]).run }.to output(/unknown language/).to_stderr.and raise_error SystemExit
       end
     end
   end
