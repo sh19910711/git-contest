@@ -8,7 +8,7 @@
 # Licensed under the MIT-License.
 #
 
-require "git/contest/command_line"
+require_relative "../lib/git/contest/command_line"
 
 cli = CommandLine::SubCommands::SubmitCommand.new ARGV
 cli.init
