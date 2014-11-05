@@ -1,6 +1,7 @@
 require 'webmock'
 
 $:.unshift File.expand_path('../../lib', __FILE__)
+require "git/contest/command_line"
 require 'git/contest/common'
 require 'contest/driver'
 
