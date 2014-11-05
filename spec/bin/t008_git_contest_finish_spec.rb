@@ -113,7 +113,7 @@ describe "T008: git-contest-finish" do
     end
   end
 
-  context "A004: --squash", :current => true do
+  context "A004: --squash" do
     it "001: init -> start -> empty-commits -> finish --squash" do
       bin_exec "init --defaults"
       bin_exec "start branch1"

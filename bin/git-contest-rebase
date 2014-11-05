@@ -8,69 +8,9 @@
 # Licensed under the MIT-License.
 #
 
-$:.unshift File.expand_path('../../lib', __FILE__)
-require 'git/contest/common'
-require 'trollop'
+require_relative "../lib/git/contest/command_line"
 
-def use_current_branch
-  current_branch = Git.current_branch
-  if current_branch.start_with? $PREFIX
-    $BRANCH = current_branch.strip
-    $NAME = $BRANCH[$PREFIX.length+1..-1]
-  else
-    puts "The current HEAD is no feature branch."
-    puts "Please spefcify a <name> argument."
-    abort ''
-  end
-end
-
-def expand_nameprefix_arg name, prefix
-  expanded_name = Git.contest_resolve_nameprefix name, prefix
-  exitcode = $?.to_i
-  if $? == 0
-    $NAME = expanded_name
-    $BRANCH = "#{$PREFIX}/#{$NAME}"
-  else
-    return 1
-  end
-end
-
-def expand_nameprefix_arg_or_current
-  if ARGV.length > 0
-    expand_nameprefix_arg ARGV[0], $PREFIX
-    Git.require_branch "#{$PREFIX}/#{$NAME}"
-  else
-    use_current_branch
-  end
-end
-
-init
-
-sub_commands = %w()
-$options = Trollop::options do
-  version "git-contest #{Git::Contest::VERSION} (c) 2013-2014 Hiroyuki Sano"
-  opt(
-    :interactive,
-    "Do an interactive rebase.",
-    :type => :flag,
-    :default => false,
-    :required => false,
-  )
-  stop_on sub_commands
-end
-
-expand_nameprefix_arg_or_current
-
-puts "Will try to rebase '#{$NAME}'..."
-
-Git.require_clean_working_tree
-Git.require_branch $BRANCH
-
-Git.do "checkout -q \"#{$BRANCH}\""
-rebase_options = ""
-if $options[:interactive]
-  rebase_options += " -i"
-end
-
-puts Git.do "rebase #{rebase_options} #{$MASTER}"
+cli = CommandLine::SubCommands::RebaseCommand.new(ARGV)
+cli.init
+cli.run
 

@@ -3,6 +3,7 @@ require_relative "sub_commands/submit_command"
 require_relative "sub_commands/init_command"
 require_relative "sub_commands/start_command"
 require_relative "sub_commands/finish_command"
+require_relative "sub_commands/rebase_command"
 
 module CommandLine
 
