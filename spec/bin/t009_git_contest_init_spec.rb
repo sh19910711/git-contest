@@ -3,53 +3,83 @@ require "spec_helper"
 # Don't forget --defaults option
 
 describe "T009: git-contest-init" do
-  context "A001: --force" do
-    it "001: init -> init" do
-      ret1 = bin_exec "init --defaults"
-      ret_config1 = Git.do("config --get git.contest.branch.master")
-      ret2 = bin_exec "init --defaults"
-      expect(ret_config1).to eq "master"
-      expect(ret1).not_to include "Error: unknown argument"
-      expect(ret2).not_to include "Error: unknown argument"
-      expect(ret1).not_to include "Already initialized for git-contest."
-      expect(ret1).not_to include "use: git contest init -f"
-      expect(ret2).to include "Already initialized for git-contest."
-      expect(ret2).to include "use: git contest init -f"
-    end
 
-    it "002: init -> init -f -> init --force" do
-      ret1 = bin_exec "init --defaults"
-      ret_config1 = Git.do("config --get git.contest.branch.master")
-      ret2 = bin_exec "init --defaults -f"
-      ret3 = bin_exec "init --defaults --force"
-      expect(ret_config1).to eq "master"
-      expect(ret1).not_to include "Error: unknown argument"
-      expect(ret2).not_to include "Error: unknown argument"
-      expect(ret3).not_to include "Error: unknown argument"
-      expect(ret1).not_to include "Already initialized for git-contest."
-      expect(ret1).not_to include "use: git contest init -f"
-      expect(ret2).not_to include "Already initialized for git-contest."
-      expect(ret2).not_to include "use: git contest init -f"
-      expect(ret3).not_to include "Already initialized for git-contest."
-      expect(ret3).not_to include "use: git contest init -f"
-    end
-
-    it "003: init -f -> init -f -> init --force" do
-      ret1 = bin_exec "init --defaults -f"
-      ret_config1 = Git.do("config --get git.contest.branch.master")
-      ret2 = bin_exec "init --defaults -f"
-      ret3 = bin_exec "init --defaults --force"
-      expect(ret_config1).to eq "master"
-      expect(ret1).not_to include "Error: unknown argument"
-      expect(ret2).not_to include "Error: unknown argument"
-      expect(ret3).not_to include "Error: unknown argument"
-      expect(ret1).not_to include "Already initialized for git-contest."
-      expect(ret1).not_to include "use: git contest init -f"
-      expect(ret2).not_to include "Already initialized for git-contest."
-      expect(ret2).not_to include "use: git contest init -f"
-      expect(ret3).not_to include "Already initialized for git-contest."
-      expect(ret3).not_to include "use: git contest init -f"
-    end
+  def call_main(args)
+    cli = CommandLine::MainCommand.new(args)
+    cli.init
+    cli
   end
-end
+
+  describe "--force option" do
+
+    context "$ git contest init" do
+
+      before do
+        expect { call_main(["init", "--defaults"]).run }.to output("").to_stdout
+      end
+
+      context "config --get" do
+        it { expect(Git.do "config --get git.contest.branch.master").to eq "master" }
+
+        context "$ git contest init" do
+          subject { lambda { call_main(["init", "--defaults"]).run } }
+          it { should output(/Already initialized/).to_stdout.and raise_error SystemExit }
+          it { should output(/init -f/).to_stdout.and raise_error SystemExit }
+        end
+
+        context "$ git contest init -f" do
+          before do
+            expect { call_main(["init", "--defaults", "-f"]).run }.to output("").to_stdout
+          end
+
+          context "$ git contest init --force" do
+            before do
+              expect { call_main(["init", "--defaults", "--force"]).run }.to output("").to_stdout
+            end
+            context "config --get" do
+              it { expect(Git.do "config --get git.contest.branch.master").to eq "master" }
+            end
+          end
+        end
+
+      end
+
+    end # git contest init
+
+    context "$ git contest init -f" do
+
+      before do
+        expect { call_main(["init", "--defaults", "-f"]).run }.to output("").to_stdout
+      end
+
+      context "config --get" do
+        it { expect(Git.do "config --get git.contest.branch.master").to eq "master" }
+
+        context "$ git contest init" do
+          subject { lambda { call_main(["init", "--defaults"]).run } }
+          it { should output(/Already initialized/).to_stdout.and raise_error SystemExit }
+          it { should output(/init -f/).to_stdout.and raise_error SystemExit }
+        end
+
+        context "$ git contest init -f" do
+          before do
+            expect { call_main(["init", "--defaults", "-f"]).run }.to output("").to_stdout
+          end
+
+          context "$ git contest init --force" do
+            before do
+              expect { call_main(["init", "--defaults", "--force"]).run }.to output("").to_stdout
+            end
+            context "config --get" do
+              it { expect(Git.do "config --get git.contest.branch.master").to eq "master" }
+            end
+          end
+        end
+
+      end
+
+    end # git contest init -f
+
+  end # --force option
+end # git-contest-init
 
