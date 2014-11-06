@@ -1,6 +1,13 @@
 require 'spec_helper'
 
 describe "T012: git-contest-list" do
+
+  def call_main(args)
+    cli = CommandLine::MainCommand.new(args)
+    cli.init
+    cli
+  end
+
   before do
     ENV['GIT_CONTEST_CONFIG'] = "#{@temp_dir}/config.yml"
     ENV['GIT_CONTEST_HOME'] = @temp_dir
@@ -28,25 +35,33 @@ EOF
       end
     end
 
-    it "should include site name" do
-      ret = bin_exec "list sites"
-      (1..3).each {|x| expect(ret).to include "test_site#{x}" }
+    context "git-contest list sites" do
+      subject { lambda { call_main(["list", "sites"]).run } }
+      describe "site" do
+        it { should output(/test_site1/).to_stdout }
+        it { should output(/test_site2/).to_stdout }
+        it { should output(/test_site3/).to_stdout }
+      end 
+
+      describe "user" do
+        it { should output(/test_user1/).to_stdout }
+        it { should output(/test_user2/).to_stdout }
+        it { should output(/test_user3/).to_stdout }
+      end
+
+      describe "driver" do
+        it { should output(/test_driver1/).to_stdout }
+        it { should output(/test_driver2/).to_stdout }
+        it { should output(/test_driver3/).to_stdout }
+      end
+
+      describe "password (hidden)" do
+        it { should_not output(/test_password1/).to_stdout }
+        it { should_not output(/test_password2/).to_stdout }
+        it { should_not output(/test_password3/).to_stdout }
+      end
     end
 
-    it "should include user name" do
-      ret = bin_exec "list sites"
-      (1..3).each {|x| expect(ret).to include "test_user#{x}" }
-    end
-
-    it "should include driver name" do
-      ret = bin_exec "list sites"
-      (1..3).each {|x| expect(ret).to include "test_driver#{x}" }
-    end
-
-    it "should NOT include password" do
-      ret = bin_exec "list sites"
-      (1..3).each {|x| expect(ret).not_to include "test_password#{x}" }
-    end
   end
 
   context "git-contest-list drivers" do
@@ -87,13 +102,22 @@ EOF
       end
     end
 
-    it "contains plugins" do
-      ret = bin_exec "list drivers"
-      expect(ret).to include "Test01Driver"
-      expect(ret).to include "test01_desc"
-      expect(ret).to include "Test02Driver"
-      expect(ret).to include "test02_desc"
+    context "$ git contest list drivers" do
+
+      subject { lambda { call_main(["list", "drivers"]).run } }
+
+      context "class" do
+        it { should output(/Test01Driver/).to_stdout }
+        it { should output(/Test02Driver/).to_stdout }
+      end
+
+      context "desc" do
+        it { should output(/test01_desc/).to_stdout }
+        it { should output(/test02_desc/).to_stdout }
+      end
+
     end
+
   end
 
 end
