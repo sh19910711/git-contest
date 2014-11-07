@@ -4,7 +4,7 @@ module CommandLine
 
     attr_reader :sub_commands
 
-    def initialize(new_args)
+    def initialize(new_args, new_input_stream = STDIN)
       super
       @sub_commands = SubCommands.all.freeze
     end
@@ -29,7 +29,7 @@ module CommandLine
     def call_subcommand(command_name)
       sub_command = to_command_class_sym(command_name)
       if sub_commands.include?(sub_command)
-        cli = SubCommands.const_get(sub_command).new(args)
+        cli = SubCommands.const_get(sub_command).new(args, input_stream)
         cli.init
         cli.run
       else

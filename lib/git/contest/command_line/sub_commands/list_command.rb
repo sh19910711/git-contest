@@ -12,7 +12,7 @@ module CommandLine
 
     class ListCommand < Command
 
-      def initialize(new_args)
+      def initialize(new_args, new_input_stream = STDIN)
         super
 
         Contest::Driver::Utils.load_plugins

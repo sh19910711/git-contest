@@ -34,14 +34,6 @@ module SpecHelpers
     ENV['GIT_CONTEST_DEBUG'] = 'ON'
   end
 
-  def bin_exec(args, input=nil)
-    puts "Commmand: #{bin_path('git-contest')} #{args}" if ENV['GIT_CONTEST_DEBUG'] == 'ON'
-    pipe_cmd = ""
-    pipe_cmd = "printf \" #{input}\" | " unless input.nil?
-    ret = `#{pipe_cmd}#{bin_path('git-contest')} #{args} 2>&1`
-    ret
-  end
-
   def set_git_contest_config(body)
     ENV['GIT_CONTEST_CONFIG'] = "#{@temp_dir}/home/config.yml"
     File.open ENV['GIT_CONTEST_CONFIG'], "w" do |file|

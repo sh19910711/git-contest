@@ -12,7 +12,7 @@ module CommandLine
 
     class InitCommand < Command
 
-      def initialize(new_args)
+      def initialize(new_args, new_input_stream = STDIN)
         super
       end
 
@@ -49,7 +49,7 @@ module CommandLine
         elsif options[:defaults]
           master_branch = 'master'
         else
-          master_branch = ask('Master branch name: ') do |q|
+          master_branch = terminal.ask('Master branch name: ') do |q|
             q.default = 'master'
           end
         end
@@ -57,7 +57,7 @@ module CommandLine
         if options[:defaults]
           prefix = 'contest'
         else
-          prefix = ask('Prefix of contest branch name:  ') do |q|
+          prefix = terminal.ask('Prefix of contest branch name:  ') do |q|
             q.default = 'contest'
           end
         end

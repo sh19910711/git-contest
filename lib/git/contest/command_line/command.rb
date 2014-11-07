@@ -16,15 +16,20 @@
 module CommandLine
 
   require "optparse"
+  require "highline"
 
   class Command
 
+    attr_reader :input_stream
+    attr_reader :terminal
     attr_reader :args
     attr_reader :tokens
     attr_reader :options
     attr_reader :opt_parser
 
-    def initialize(new_args)
+    def initialize(new_args, new_input_stream = STDIN)
+      @input_stream = new_input_stream
+      @terminal = ::HighLine.new(new_input_stream)
       init_global # TODO: remove
       init_home   # TODO:remove
       @args = new_args.clone

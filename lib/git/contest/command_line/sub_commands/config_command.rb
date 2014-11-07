@@ -6,7 +6,6 @@
 
 require 'git/contest/common'
 require 'active_support/core_ext/hash'
-require 'highline/import'
 
 module CommandLine
 
@@ -14,7 +13,7 @@ module CommandLine
 
     class ConfigCommand < Command
 
-      def initialize(new_args)
+      def initialize(new_args, new_input_stream = STDIN)
         super
       end
 
@@ -46,10 +45,10 @@ module CommandLine
 
                 # input site info
                 # TODO: to check not found
-                config["sites"][site_name]["driver"] = ask("%10s > " % "driver").to_s
+                config["sites"][site_name]["driver"] = terminal.ask("%10s > " % "driver").to_s
                 # TODO: to depend on above driver
-                config["sites"][site_name]["user"] = ask("%10s > " % "user id").to_s
-                config["sites"][site_name]["password"] = ask("%10s > " % "password") do |q|
+                config["sites"][site_name]["user"] = terminal.ask("%10s > " % "user id").to_s
+                config["sites"][site_name]["password"] = terminal.ask("%10s > " % "password") do |q|
                   q.echo = false
                 end.to_s
 
@@ -70,7 +69,7 @@ module CommandLine
                 site_name = tokens.shift.to_s.strip
 
                 puts "Are you sure you want to remove `#{site_name}`?"
-                this_is_yes = ask("when you remove the site, type `yes` > ").to_s
+                this_is_yes = terminal.ask("when you remove the site, type `yes` > ").to_s
 
                 if this_is_yes == "yes"
                   # update config
@@ -126,7 +125,7 @@ module CommandLine
             # read values
             keys = next_token.split('.')
             puts "input value"
-            value = STDIN.gets.strip
+            value = input_stream.gets.strip
 
             # update yaml value
             config = get_config
