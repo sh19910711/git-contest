@@ -12,7 +12,7 @@ module CommandLine
 
     class RebaseCommand < Command
 
-      def initialize(new_args)
+      def initialize(new_args, new_input_stream = STDIN)
         super
       end
 
