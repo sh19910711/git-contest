@@ -54,6 +54,9 @@ RSpec.configure do |config|
     Dir.mkdir "home"
     init_env
   end
+  config.after :suite do
+    WebMock.disable_net_connect!(:allow => 'codeclimate.com')
+  end
   config.order = 'random'
 end
 
