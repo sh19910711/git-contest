@@ -1,4 +1,5 @@
 # Git::Contest
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/sh19910711/git-contest?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 **git-contest** is _the Git Extension for online judges_ (Codeforces, etc...)
 
 [![Gem Version](https://badge.fury.io/rb/git-contest.png)](http://badge.fury.io/rb/git-contest)
