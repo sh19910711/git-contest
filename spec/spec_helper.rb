@@ -48,7 +48,7 @@ end
 RSpec.configure do |config|
   config.include SpecHelpers
   config.before :each do
-    WebMock.disable_net_connect!
+    WebMock.disable_net_connect!(:allow => "codeclimate.com")
     @temp_dir = `mktemp -d /tmp/XXXXXXXXXXXXX`.strip
     Dir.chdir "#{@temp_dir}"
     Dir.mkdir "home"
