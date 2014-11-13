@@ -33,3 +33,11 @@ deploy:
 notifications:
   slack:
     secure: I9NClP5cpphb55oc1n7rNEUyxDIKbVBl2F2BrHOsnvWgAYKtNv//rEtkenwouEfXLeKc8UrmM4WhM6JbT04QbHnsxZzMpUJp4du/r/8SoTWpBRN/TKYKsbUCMWp0PHYN5G/cgVrnRm1zbSaxjliMgUhNiZDBPUP9bEA5XvuAVNY=
+
+  webhooks:
+    urls:
+      # gitter
+      secure: "HR3uIFiN/vzmXFnUJLa2ie7dQcaZw4zOXqULyQqHewGSU/nrwHNCchWSWFJJOLlRtqcxWnOrDm4V9eTXgCqLLpCn10xrAqHRfZ8ZusO+2dc3RyCz6yc+ftwil9NK3RkZ7/J/T0ox1ElE6ARzqMtVQ9nJp309Xsh0zCLjDN7LBB8="
+    on_success: always # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: true # default: false
