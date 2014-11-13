@@ -54,8 +54,11 @@ RSpec.configure do |config|
     Dir.mkdir "home"
     init_env
   end
+  config.before :suite do
+    @saved_pwd = FileUtils.pwd
+  end
   config.after :suite do
-    WebMock.disable_net_connect!(:allow => 'codeclimate.com')
+    FileUtils.cd @saved_pwd
   end
   config.order = 'random'
 end
