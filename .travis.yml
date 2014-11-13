@@ -1,9 +1,9 @@
 language: ruby
 
 rvm:
-  - "2.1"
-  - "2.0"
-  - "1.9"
+  - '2.1'
+  - '2.0'
+  - '1.9'
 
 before_install:
   - git config --global user.email "dummy@localhost"
@@ -20,13 +20,16 @@ script:
 env:
   global:
     - CI=true
-    - secure: "kJC5T1sv5HgT1VIZYmApzivxpvp9NpQFlED4/eQMDIV80f1v0YiQe8HkL3flstPczEhsCZYemnGN5Vy4elZXs6HJeu/VlZVGFwPqRxlYCs8SijikgNNsCb3Ybi/svJ4mV6jsbrOyK/MTRdyUwsR2VBbB+7W4amEyqkORWX8cMOs="
+    - secure: kJC5T1sv5HgT1VIZYmApzivxpvp9NpQFlED4/eQMDIV80f1v0YiQe8HkL3flstPczEhsCZYemnGN5Vy4elZXs6HJeu/VlZVGFwPqRxlYCs8SijikgNNsCb3Ybi/svJ4mV6jsbrOyK/MTRdyUwsR2VBbB+7W4amEyqkORWX8cMOs=
 
 deploy:
   provider: rubygems
   api_key:
     master:
-      secure: "LjL6NrPR/KdkSKgUgixtsWiPH7LZrgZrMG9d66G0CY1HLDUXOY17W7HyAP0PYFVLVrJDM7CRx66PSuadYtyuIY1s0iM5hpEA81MlenxZQoApGcbJb2Zd647SPNk4NM+mZCRt9xJyRqrvHHg1d5+4pQVSHl/lGvuQRGXrYXocGLg="
+      secure: LjL6NrPR/KdkSKgUgixtsWiPH7LZrgZrMG9d66G0CY1HLDUXOY17W7HyAP0PYFVLVrJDM7CRx66PSuadYtyuIY1s0iM5hpEA81MlenxZQoApGcbJb2Zd647SPNk4NM+mZCRt9xJyRqrvHHg1d5+4pQVSHl/lGvuQRGXrYXocGLg=
   gem:
     master: git-contest
 
+notifications:
+  slack:
+    secure: I9NClP5cpphb55oc1n7rNEUyxDIKbVBl2F2BrHOsnvWgAYKtNv//rEtkenwouEfXLeKc8UrmM4WhM6JbT04QbHnsxZzMpUJp4du/r/8SoTWpBRN/TKYKsbUCMWp0PHYN5G/cgVrnRm1zbSaxjliMgUhNiZDBPUP9bEA5XvuAVNY=
