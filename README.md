@@ -3,6 +3,8 @@
 
 [![Gem Version](https://badge.fury.io/rb/git-contest.png)](http://badge.fury.io/rb/git-contest)
 [![Build Status](https://travis-ci.org/sh19910711/git-contest.png?branch=develop)](https://travis-ci.org/sh19910711/git-contest)
+[![Code Climate](https://codeclimate.com/github/sh19910711/git-contest/badges/gpa.svg)](https://codeclimate.com/github/sh19910711/git-contest)
+[![Test Coverage](https://codeclimate.com/github/sh19910711/git-contest/badges/coverage.svg)](https://codeclimate.com/github/sh19910711/git-contest)
 
 Currently support the following online judges:
 
