@@ -5,6 +5,9 @@ require "git/contest/command_line"
 require 'git/contest/common'
 require 'contest/driver'
 
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
+
 module SpecHelpers
   def read_file path
     File.read get_path(path)
