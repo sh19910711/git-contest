@@ -5,6 +5,7 @@
 [![Build Status](https://travis-ci.org/sh19910711/git-contest.png?branch=develop)](https://travis-ci.org/sh19910711/git-contest)
 [![Code Climate](https://codeclimate.com/github/sh19910711/git-contest/badges/gpa.svg)](https://codeclimate.com/github/sh19910711/git-contest)
 [![Test Coverage](https://codeclimate.com/github/sh19910711/git-contest/badges/coverage.svg)](https://codeclimate.com/github/sh19910711/git-contest)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/sh19910711/git-contest?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Currently support the following online judges:
 
