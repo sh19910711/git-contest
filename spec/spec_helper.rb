@@ -1,12 +1,12 @@
+require "codeclimate-test-reporter"
+CodeClimate::TestReporter.start
+
 require 'webmock'
 
 $:.unshift File.expand_path('../../lib', __FILE__)
 require "git/contest/command_line"
 require 'git/contest/common'
 require 'contest/driver'
-
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
 
 module SpecHelpers
   def read_file path
