@@ -17,6 +17,11 @@ install:
 script:
   - bundle exec rake spec
 
+env:
+  global:
+    - CI=true
+    - secure: "kJC5T1sv5HgT1VIZYmApzivxpvp9NpQFlED4/eQMDIV80f1v0YiQe8HkL3flstPczEhsCZYemnGN5Vy4elZXs6HJeu/VlZVGFwPqRxlYCs8SijikgNNsCb3Ybi/svJ4mV6jsbrOyK/MTRdyUwsR2VBbB+7W4amEyqkORWX8cMOs="
+
 deploy:
   provider: rubygems
   api_key:
