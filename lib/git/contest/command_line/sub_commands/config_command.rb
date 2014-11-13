@@ -179,74 +179,68 @@ module CommandLine
       end
 
       def show_get_usage
-        res = ""
-        res += "usage: git contest config get [key]\n"
-        res += "\n"
-        res += "Example Usage:\n"
-        res += "  $ git contest config get key1\n"
-        res += "  $ git contest config get namespace1.key1\n"
-        res += "  $ git contest config get sites.some_judge.user\n"
-        res += " \n"
-        puts res
+        puts ""\
+          "usage: git contest config get [key]\n"\
+          "\n"\
+          "Example Usage:\n"\
+          "  $ git contest config get key1\n"\
+          "  $ git contest config get namespace1.key1\n"\
+          "  $ git contest config get sites.some_judge.user\n"\
+          " \n"
       end
 
       def show_set_usage
-        res = ""
-        res += "usage: git contest config set [key] <value>\n"
-        res += "\n"
-        res += "Example Usage:\n"
-        res += "  $ git contest config set key1 value1\n"
-        res += "    -> key1 = value1\n"
-        res += "  $ git contest config set key1\n"
-        res += "    -> set value from command-line\n"
-        res += "  $ git contest config set namespace1.key1 value1\n"
-        res += "  $ git contest config set sites.some_judge.user username\n"
-        res += " \n"
-        puts res
+        puts ""\
+          "usage: git contest config set [key] <value>\n"\
+          "\n"\
+          "Example Usage:\n"\
+          "  $ git contest config set key1 value1\n"\
+          "    -> key1 = value1\n"\
+          "  $ git contest config set key1\n"\
+          "    -> set value from command-line\n"\
+          "  $ git contest config set namespace1.key1 value1\n"\
+          "  $ git contest config set sites.some_judge.user username\n"\
+          " \n"
       end
 
       def show_site_usage
-        res = ""
-        res += "usage: git contest config site <type>\n"
-        res += "\n"
-        res += "Available types are:\n"
-        res += "  %-8s: add site\n" % "add"
-        res += " \n"
-        puts res
+        puts ""\
+          "usage: git contest config site <type>\n"\
+          "\n"\
+          "Available types are:\n"\
+          "  %-8s: add site\n"\
+          " \n" % ["add"]
       end
 
       def show_site_add_usage
-        res = ""
-        res += "usage: git contest config site add <site-name>\n"
-        res += "\n"
-        res += "Example Usage:\n"
-        res += "  $ git contest config site add site1\n"
-        res += "  -> input information\n"
-        res += " \n"
-        puts res
+        puts ""\
+          "usage: git contest config site add <site-name>\n"\
+          "\n"\
+          "Example Usage:\n"\
+          "  $ git contest config site add site1\n"\
+          "  -> input information\n"\
+          " \n"
       end
 
       def show_site_rm_usage
-        res = ""
-        res += "usage: git contest config site rm <site-name>\n"
-        res += "\n"
-        res += "Example Usage:\n"
-        res += "  $ git contest config site rm site1\n"
-        res += " \n"
-        puts res
+        puts ""\
+          "usage: git contest config site rm <site-name>\n"\
+          "\n"\
+          "Example Usage:\n"\
+          "  $ git contest config site rm site1\n"\
+          " \n"
       end
 
       # Get Banner Text
       def get_banner
-        res = ""
-        res += "usage: git contest config [type]\n"
-        res += "\n"
-        res += "Available types are:\n"
-        res += "  %-8s: set value\n" % "set"
-        res += "  %-8s: get value\n" % "get"
-        res += "  %-8s: set site info\n" % "site"
-        res += " \n"
-        return res
+        ""\
+          "usage: git contest config [type]\n"\
+          "\n"\
+          "Available types are:\n"\
+          "  %-8s: set value\n"\
+          "  %-8s: get value\n"\
+          "  %-8s: set site info\n"\
+          " \n" % ["set", "get", "site"]
       end
 
       # Show Banner
