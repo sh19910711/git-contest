@@ -1,5 +1,9 @@
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
+require "bundler/setup"
+
+if ENV['TRAVIS'] === "true"
+  require "codeclimate-test-reporter"
+  CodeClimate::TestReporter.start
+end
 
 require 'webmock'
 
