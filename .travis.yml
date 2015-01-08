@@ -6,6 +6,8 @@ rvm:
   - '2.0'
   - '1.9'
 
+sudo: false
+
 before_install:
   - git config --global user.email "dummy@localhost"
   - git config --global user.name "This Is Dummyyy"
