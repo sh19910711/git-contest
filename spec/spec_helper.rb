@@ -1,5 +1,9 @@
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
+require "bundler/setup"
+
+if ENV['TRAVIS'] === "true"
+  require "codeclimate-test-reporter"
+  CodeClimate::TestReporter.start
+end
 
 require 'webmock'
 
@@ -49,16 +53,16 @@ RSpec.configure do |config|
   config.include SpecHelpers
   config.before :each do
     WebMock.disable_net_connect!(:allow => "codeclimate.com")
-    @temp_dir = `mktemp -d /tmp/XXXXXXXXXXXXX`.strip
+    @temp_dir = Dir.mktmpdir
     Dir.chdir "#{@temp_dir}"
     Dir.mkdir "home"
     init_env
   end
   config.before :suite do
-    @saved_pwd = FileUtils.pwd
+    $saved_pwd = FileUtils.pwd
   end
   config.after :suite do
-    FileUtils.cd @saved_pwd
+    FileUtils.cd $saved_pwd
   end
   config.order = 'random'
 end
