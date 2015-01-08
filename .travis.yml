@@ -1,10 +1,10 @@
 language: ruby
 
 rvm:
-  - '2.2'
-  - '2.1'
-  - '2.0'
-  - '1.9'
+  - "2.2"
+  - "2.1"
+  - "2.0"
+  - "1.9"
 
 sudo: false
 
@@ -13,12 +13,16 @@ before_install:
   - git config --global user.name "This Is Dummyyy"
 
 install:
-  - export NOKOGIRI_USE_SYSTEM_LIBRARIES="YES"
-  - travis_retry bundle install --jobs=3
+  - bundle config build.nokogiri --use-system-libraries
+  - travis_retry bundle install --jobs 4 --path vendor/bundle
   - bundle exec rake install
 
 script:
   - bundle exec rake spec
+
+cache:
+  directories:
+    - vendor/bundle
 
 deploy:
   provider: rubygems
