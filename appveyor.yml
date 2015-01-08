@@ -1,0 +1,19 @@
+version: "{build}"
+
+environment:
+  matrix:
+    - ruby_version: "21"
+    - ruby_version: "20"
+    - ruby_version: "19"
+
+cache:
+  - vendor/bundle
+
+install:
+  - cmd: bundle install --jobs 4 --path vendor/bundle
+
+test_script:
+  - cmd: bundle exec rake spec
+
+build: "off"
+
