@@ -1,7 +1,9 @@
 require 'spec_helper'
 require 'yaml'
 
-describe "T013: git-contest-config" do
+describe "T013: git-contest-config", :current => true do
+
+  let(:config_file) { File.join @temp_dir, "config.yml" }
 
   def call_main(args, new_stdin = STDIN)
     cli = CommandLine::MainCommand.new(args, new_stdin)
@@ -10,13 +12,13 @@ describe "T013: git-contest-config" do
   end
 
   before do
-    ENV['GIT_CONTEST_CONFIG'] = "#{@temp_dir}/config.yml"
+    ENV['GIT_CONTEST_CONFIG'] = config_file
   end
 
   context "git contest config set" do
     before(:each) do
       # create config file
-      File.open "#{@temp_dir}/config.yml", 'w' do |file|
+      File.open config_file, 'w' do |file|
         file.write <<EOF
 key1: value1
 sites:
@@ -35,7 +37,7 @@ EOF
       before { expect { call_main(["config", "set", "key1"], fake_input).run }.to output(/input value/).to_stdout }
 
       context "load config" do
-        let(:conf) { YAML.load_file "#{@temp_dir}/config.yml" }
+        let(:conf) { YAML.load_file config_file }
 
         it { expect(conf["key1"]).to eq "value2" }
       end
@@ -44,7 +46,7 @@ EOF
     it "git contest config set sites.test_site1.driver test_driver2" do
       expect { call_main(["config", "set", "sites.test_site1.driver", "test_driver2"]).run }.to output(/.*/).to_stdout
 
-      ret1 = YAML.load_file "#{@temp_dir}/config.yml"
+      ret1 = YAML.load_file(config_file)
       expect(ret1["sites"]["test_site1"]["driver"]).to eq "test_driver2"
     end
   end
@@ -52,7 +54,7 @@ EOF
   context "git contest config get" do
     before(:each) do
       # create config file
-      File.open "#{@temp_dir}/config.yml", 'w' do |file|
+      File.open config_file, 'w' do |file|
         file.write <<EOF
 key1: value1
 sites:
@@ -90,7 +92,7 @@ EOF
   context "git contest config site add" do
     before(:each) do
       # create config
-      File.open "#{@temp_dir}/config.yml", "w" do |file|
+      File.open config_file, "w" do |file|
         file.write <<EOF
 sites:
   test_site1:
@@ -104,11 +106,18 @@ EOF
 
     context "$ git contest config site add test_site2" do
 
-      let(:fake_input) { ::StringIO.new("test_driver2\ntest_user2\ntest_password2") }
+      let(:fake_input) do
+        ::StringIO.new([
+          "test_driver2",
+          "test_user2",
+          "test_password2",
+        ].join($/) + $/)
+      end
+
       before { expect { call_main(["config", "site", "add", "test_site2"], fake_input).run }.to output(/.*/).to_stdout }
 
       context "load config" do
-        let(:conf) { YAML.load_file "#{@temp_dir}/config.yml" }
+        let(:conf) { YAML.load_file config_file }
         it { expect(conf["sites"]["test_site1"]["driver"]).to eq "test_driver1" }
         it { expect(conf["sites"]["test_site1"]["user"]).to eq "test_user1" }
         it { expect(conf["sites"]["test_site1"]["password"]).to eq "test_password1" }
@@ -124,7 +133,7 @@ EOF
   context "git contest config site rm" do
     before(:each) do
       # create config
-      File.open "#{@temp_dir}/config.yml", "w" do |file|
+      File.open config_file, "w" do |file|
         file.write <<EOF
 sites:
   test_site1:
@@ -145,7 +154,7 @@ EOF
       before { expect { call_main(["config", "site", "rm", "test_site1"], fake_input).run }.to output(/.*/).to_stdout }
 
       context "load config" do
-        let(:conf) { YAML.load_file "#{@temp_dir}/config.yml" }
+        let(:conf) { YAML.load_file config_file }
         it { expect(conf["sites"]["test_site1"]).to be_nil }
         it { expect(conf["sites"]["test_site2"]["driver"]).to eq "test_driver2" }
         it { expect(conf["sites"]["test_site2"]["user"]).to eq "test_user2" }
@@ -160,7 +169,7 @@ EOF
       before { expect { call_main(["config", "site", "rm", "test_site1"], fake_input).run }.to output(/.*/).to_stdout }
 
       context "load config" do
-        let(:conf) { YAML.load_file "#{@temp_dir}/config.yml" }
+        let(:conf) { YAML.load_file config_file }
         it { expect(conf["sites"]["test_site1"]["driver"]).to eq "test_driver1" }
         it { expect(conf["sites"]["test_site1"]["user"]).to eq "test_user1" }
         it { expect(conf["sites"]["test_site1"]["password"]).to eq "test_password1" }

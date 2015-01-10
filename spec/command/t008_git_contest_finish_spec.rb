@@ -11,10 +11,10 @@ describe "T008: git-contest-finish" do
   end
 
   context "A001: --keep" do
-    it "001: init -> start -> empty-commits -> finish", :current => true do
+    it "001: init -> start -> empty-commits -> finish" do
       expect { call_main(["init", "--defaults"]).run }.to output(/.*/).to_stdout
       expect { call_main(["start", "branch1"]).run }.to output(/.*/).to_stdout
-      Git.do "commit --allow-empty -m 'this is commit'"
+      Git.do "commit --allow-empty -m \"this is commit\""
       expect { call_main(["finish", "--no-edit"]).run }.to output(/.*/).to_stdout
       ret1 = Git.do "branch"
       ret_log1 = Git.do "log --oneline master"
@@ -25,7 +25,7 @@ describe "T008: git-contest-finish" do
     it "002: init -> start -> empty-commits -> finish --keep" do
       expect { call_main(["init", "--defaults"]).run }.to output(/.*/).to_stdout
       expect { call_main(["start", "branch1"]).run }.to output(/.*/).to_stdout
-      Git.do "commit --allow-empty -m 'this is commit'"
+      Git.do "commit --allow-empty -m \"this is commit\""
       expect { call_main(["finish", "--no-edit", "--keep"]).run }.to output(/.*/).to_stdout
       ret1 = Git.do "branch"
       ret_log1 = Git.do "log --oneline master"
@@ -36,7 +36,7 @@ describe "T008: git-contest-finish" do
     it "003: init -> start -> empty-commits -> finish -k" do
       expect { call_main(["init", "--defaults"]).run }.to output(/.*/).to_stdout
       expect { call_main(["start", "branch1"]).run }.to output(/.*/).to_stdout
-      Git.do "commit --allow-empty -m 'this is commit'"
+      Git.do "commit --allow-empty -m \"this is commit\""
       expect { call_main(["finish", "--no-edit", "-k"]).run }.to output(/.*/).to_stdout
       ret1 = Git.do "branch"
       ret_log1 = Git.do "log --oneline master"
@@ -55,21 +55,21 @@ describe "T008: git-contest-finish" do
         name = "test-1.#{x}"
         FileUtils.touch name
         Git.do "add #{name}"
-        Git.do "commit -m 'Add #{name}'"
+        Git.do "commit -m \"Add #{name}\""
       }
       expect { call_main(["start", "branch2"]).run }.to output(/.*/).to_stdout
       3.times {|x|
         name = "test-2.#{x}"
         FileUtils.touch name
         Git.do "add #{name}"
-        Git.do "commit -m 'Add #{name}'"
+        Git.do "commit -m \"Add #{name}\""
       }
       expect { call_main(["start", "branch3"]).run }.to output(/.*/).to_stdout
       3.times {|x|
         name = "test-3.#{x}"
         FileUtils.touch name
         Git.do "add #{name}"
-        Git.do "commit -m 'Add #{name}'"
+        Git.do "commit -m \"Add #{name}\""
       }
       # finish branches
       ret_branch_1 = Git.do "branch"
@@ -96,7 +96,7 @@ describe "T008: git-contest-finish" do
       expect { call_main(["init", "--defaults"]).run }.to output(/.*/).to_stdout
       FileUtils.touch "test.txt"
       Git.do "add test.txt"
-      Git.do "commit -m 'Add test.txt'"
+      Git.do "commit -m \"Add test.txt\""
       expect { call_main(["start", "branch1"]).run }.to output(/.*/).to_stdout
       expect { call_main(["start", "branch2"]).run }.to output(/.*/).to_stdout
       Git.do "checkout contest/branch1"
@@ -104,13 +104,13 @@ describe "T008: git-contest-finish" do
         file.write "test1"
       end
       # Git.do "add test.txt"
-      # Git.do "commit -m 'Edit test.txt @ branch1'"
+      # Git.do "commit -m \"Edit test.txt @ branch1\""
       Git.do "checkout contest/branch2"
       File.open "test.txt", "w" do |file|
         file.write "test2"
       end
       Git.do "add test.txt"
-      Git.do "commit -m 'Edit test.txt @ branch2'"
+      Git.do "commit -m \"Edit test.txt @ branch2\""
       # finish
       expect { call_main(["finish", "--no-edit", "branch1"]).run }.to output(/.*/).to_stdout
       expect { call_main(["finish", "--no-edit", "--force-delete", "branch2"]).run }.to output(/.*/).to_stdout
@@ -128,7 +128,7 @@ describe "T008: git-contest-finish" do
         filename = "test#{x}.txt"
         FileUtils.touch filename
         Git.do "add #{filename}"
-        Git.do "commit -m 'this is commit #{x}'"
+        Git.do "commit -m \"this is commit #{x}\""
       end
       expect { call_main(["finish", "--no-edit", "--squash", "branch1"]).run }.to output(/.*/).to_stdout
       ret_log1 = Git.do "log --oneline"
@@ -145,7 +145,7 @@ describe "T008: git-contest-finish" do
       Dir.chdir "src"
       expect { call_main(["init", "--defaults"]).run }.to output(/.*/).to_stdout
       expect { call_main(["start", "branch1"]).run }.to output(/.*/).to_stdout
-      3.times {|x| Git.do "commit --allow-empty -m 'this is commit #{x}'" }
+      3.times {|x| Git.do "commit --allow-empty -m \"this is commit #{x}\"" }
       Dir.chdir ".."
       Git.do "clone --single-branch -b master src dest"
       Dir.chdir "dest"

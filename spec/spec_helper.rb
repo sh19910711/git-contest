@@ -18,7 +18,7 @@ module SpecHelpers
   end
 
   def get_path path
-    File.expand_path(File.dirname(__FILE__) + path)
+    File.expand_path(File.join File.dirname(__FILE__), path)
   end
 
   def bin_path path
@@ -54,7 +54,7 @@ RSpec.configure do |config|
   config.before :each do
     WebMock.disable_net_connect!(:allow => "codeclimate.com")
     @temp_dir = Dir.mktmpdir
-    Dir.chdir "#{@temp_dir}"
+    Dir.chdir @temp_dir
     Dir.mkdir "home"
     init_env
   end

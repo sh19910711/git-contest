@@ -9,13 +9,14 @@ module Git
 
   def self.do(*args)
     puts "git #{args.join(' ')}" if ENV['GIT_CONTEST_DEBUG'] == 'ON'
-    return `git #{args.join(' ')} 2>&1`.strip
+    `git #{args.join(' ')} 2>&1`.strip
   end
 
   # use return value
   def self.do_no_echo(*args)
     puts "git #{args.join(' ')}" if ENV['GIT_CONTEST_DEBUG'] == 'ON'
-    system "git #{args.join(' ')} >/dev/null 2>&1"
+    `git #{args.join(' ')} 2>&1`
+    $?.success?
   end
 
   #
