@@ -15,7 +15,7 @@ describe "T007: git-contest-start" do
 
     it "001" do
       Git.do "checkout -b base1"
-      Git.do "commit --allow-empty -m 'this is commit'"
+      Git.do "commit --allow-empty -m \"this is commit\""
       Git.do "checkout master"
       expect { call_main(["start", "test1"]).run }.to output(/.*/).to_stdout
       ret1 = Git.do "log --oneline"
@@ -27,7 +27,7 @@ describe "T007: git-contest-start" do
 
     it "002" do
       Git.do "checkout -b base1"
-      Git.do "commit --allow-empty -m 'this is commit'"
+      Git.do "commit --allow-empty -m \"this is commit\""
       Git.do "checkout master"
       expect { call_main(["start", "test1", "base1"]).run }.to output(/.*/).to_stdout
       ret1 = Git.do "log --oneline"
@@ -39,7 +39,7 @@ describe "T007: git-contest-start" do
 
     it "003" do
       Git.do "checkout -b base1"
-      Git.do "commit --allow-empty -m 'this is commit'"
+      Git.do "commit --allow-empty -m \"this is commit\""
       expect { call_main(["start", "test1", "base1"]).run }.to output(/.*/).to_stdout
       ret1 = Git.do "log --oneline"
       expect(ret1).to include "this is commit"
@@ -50,7 +50,7 @@ describe "T007: git-contest-start" do
 
     it "004" do
       Git.do "checkout -b base1"
-      Git.do "commit --allow-empty -m 'this is commit'"
+      Git.do "commit --allow-empty -m \"this is commit\""
       expect { call_main(["start", "test1"]).run }.to output(/.*/).to_stdout
       ret1 = Git.do "log --oneline"
       expect(ret1).not_to include "this is commit"
@@ -69,7 +69,7 @@ describe "T007: git-contest-start" do
       Dir.chdir ".."
       Git.do "clone -b master test1 test2"
       Dir.chdir "test1"
-      3.times {|x| Git.do "commit --allow-empty -m 'this is commit'" }
+      3.times {|x| Git.do "commit --allow-empty -m \"this is commit\"" }
       ret1 = Git.do "log --oneline"
       expect(ret1).to include "this is commit"
 

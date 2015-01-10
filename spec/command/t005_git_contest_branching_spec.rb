@@ -23,7 +23,7 @@ EOF
       end
     end
 
-    context "$ git contest init", :current => true do
+    context "$ git contest init" do
 
       before { expect {call_main(["init", "--defaults"]).run}.to output("").to_stdout }
       it { expect(Git.current_branch).to eq "master" }
