@@ -3,14 +3,16 @@ version: "{build}"
 environment:
   matrix:
     - ruby_version: "21"
-    - ruby_version: "20"
-    - ruby_version: "19"
+#    - ruby_version: "200"
+#    - ruby_version: "193"
 
 cache:
   - vendor/bundle
 
 install:
-  - cmd: bundle install --jobs 4 --path vendor/bundle
+  - cmd: git config --global user.email "dummy@localhost"
+  - cmd: git config --global user.name "This Is Dummyyy"
+  - cmd: bundle install --path vendor/bundle
 
 test_script:
   - cmd: bundle exec rake spec
