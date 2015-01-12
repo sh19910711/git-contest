@@ -16,6 +16,7 @@ describe "T013: git-contest-config", :current => true do
   end
 
   context "git contest config set" do
+
     before(:each) do
       # create config file
       File.open config_file, 'w' do |file|
@@ -32,7 +33,7 @@ EOF
 
     context "git contest config set key value1" do
 
-      let(:fake_input) { ::StringIO.new("value2") }
+      let(:fake_input) { ::StringIO.new("value2" + $/) }
 
       before { expect { call_main(["config", "set", "key1"], fake_input).run }.to output(/input value/).to_stdout }
 
@@ -90,6 +91,7 @@ EOF
   end
 
   context "git contest config site add" do
+
     before(:each) do
       # create config
       File.open config_file, "w" do |file|
@@ -102,7 +104,6 @@ sites:
 EOF
       end
     end
-
 
     context "$ git contest config site add test_site2" do
 
@@ -150,7 +151,7 @@ EOF
 
     context "git contest config site rm test_site1 (input = yes)" do
 
-      let(:fake_input) { ::StringIO.new("yes") }
+      let(:fake_input) { ::StringIO.new("yes" + $/) }
       before { expect { call_main(["config", "site", "rm", "test_site1"], fake_input).run }.to output(/.*/).to_stdout }
 
       context "load config" do
@@ -165,7 +166,7 @@ EOF
 
     context "git contest config site rm test_site1 (input no)" do
 
-      let(:fake_input) { ::StringIO.new("no") }
+      let(:fake_input) { ::StringIO.new("no" + $/) }
       before { expect { call_main(["config", "site", "rm", "test_site1"], fake_input).run }.to output(/.*/).to_stdout }
 
       context "load config" do
