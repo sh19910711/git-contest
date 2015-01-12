@@ -140,7 +140,7 @@ module CommandLine
             if Git.contest_is_initialized
               puts "@commit"
               Git.do "add #{get_git_add_target($config["submit_rules"]["add"] || ".")}"
-              Git.do "commit --allow-empty -m '#{submission_info[:result]}'"
+              Git.do "commit --allow-empty -m \"#{submission_info[:result]}\""
             end
           end
         )

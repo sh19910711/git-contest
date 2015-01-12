@@ -84,7 +84,9 @@ describe "T008: git-contest-finish" do
       expect(ret_branch_2.split(/\s+/)).not_to include /branch1/
       expect(ret_branch_2.split(/\s+/)).not_to include /branch2/
       expect(ret_branch_2.split(/\s+/)).not_to include /branch3/
-      expect(ret_log).to match /test-2.*test-3.*test-1/m
+      expect(ret_log).to match /test-1/m
+      expect(ret_log).to match /test-2/m
+      expect(ret_log).to match /test-3/m
     end
 
   end

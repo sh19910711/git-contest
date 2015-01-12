@@ -164,7 +164,9 @@ module CommandLine
           # TODO: to depend on above driver
           config["sites"][site_name]["user"] = terminal.ask("%10s > " % "user id").to_s
           config["sites"][site_name]["password"] = terminal.ask("%10s > " % "password") do |q|
-            q.echo = false
+            unless /mswin(?!ce)|mingw|cygwin|bccwin/ === RUBY_PLATFORM
+              q.echo = "*"
+            end
           end.to_s
 
           # set config
