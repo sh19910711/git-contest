@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'yaml'
 
-describe "T013: git-contest-config", :current => true do
+describe "T013: git-contest-config" do
 
   let(:config_file) { File.join @temp_dir, "config.yml" }
 
