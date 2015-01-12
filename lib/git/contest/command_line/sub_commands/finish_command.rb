@@ -93,7 +93,7 @@ module CommandLine
           if options[:squash]
             Git.do "merge --squash \"#{$BRANCH}\" #{merge_options}"
             unless options[:edit]
-              Git.do "commit -m 'Squashed commit'"
+              Git.do "commit -m \"Squashed commit\""
             else
               Git.do "commit"
             end
