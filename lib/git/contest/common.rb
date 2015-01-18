@@ -43,6 +43,8 @@ end
 
 def get_config
   config_path = File.expand_path($git_contest_config)
-  YAML.load_file config_path
+  res = YAML.load_file(config_path) || {}
+  res["sites"] ||= {}
+  res
 end
 
