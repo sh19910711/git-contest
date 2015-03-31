@@ -1,11 +1,15 @@
 # Git::Contest
 **git-contest** is _the Git Extension for online judges_ (Codeforces, etc...)
 
-[![Gem Version](https://badge.fury.io/rb/git-contest.png)](http://badge.fury.io/rb/git-contest)
-[![Build Status](https://travis-ci.org/sh19910711/git-contest.png?branch=develop)](https://travis-ci.org/sh19910711/git-contest)
-[![Code Climate](https://codeclimate.com/github/sh19910711/git-contest/badges/gpa.svg)](https://codeclimate.com/github/sh19910711/git-contest)
-[![Test Coverage](https://codeclimate.com/github/sh19910711/git-contest/badges/coverage.svg)](https://codeclimate.com/github/sh19910711/git-contest)
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/sh19910711/git-contest?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Gem Version](https://img.shields.io/gem/v/git-contest.svg?style=flat-square)](https://rubygems.org/gems/git-contest)
+[![Build Status](https://img.shields.io/travis/sh19910711/git-contest.svg?style=flat-square)](https://travis-ci.org/sh19910711/git-contest)
+[![Code Climate](https://img.shields.io/codeclimate/github/sh19910711/git-contest.svg?style=flat-square)](https://codeclimate.com/github/sh19910711/git-contest)
+[![Test Coverage](https://img.shields.io/codeclimate/coverage/github/sh19910711/git-contest.svg?style=flat-square)](https://codeclimate.com/github/sh19910711/git-contest)
+[![API Doc](http://img.shields.io/badge/RubyDocs-API-green.svg?style=flat-square)](http://www.rubydoc.info/github/sh19910711/git-contest)
+[![Dependencies Status](https://img.shields.io/gemnasium/sh19910711/git-contest.svg?style=flat-square)](https://gemnasium.com/sh19910711/git-contest)
+[![Gitter](http://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg?style=flat-square)](https://gitter.im/sh19910711/git-contest?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+
 
 Currently support the following online judges:
 
